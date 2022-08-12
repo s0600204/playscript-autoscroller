@@ -72,12 +72,6 @@ class MainWindow(QMainWindow):
         self.text_scroll_timer.start()
 
         self.retranslate_ui()
-        self.load_config()
-
-    def load_config(self):
-        # @todo: Actually save and load a config
-        self.scroll_controller.midpoint = 63
-        self.text_slider.setValue(60)
 
     def slider_change(self, *_):
         self.scroll_controller.update(self.text_slider.value())

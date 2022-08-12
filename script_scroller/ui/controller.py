@@ -32,6 +32,9 @@ class Controller(QWidget):
         self._ignore_button.setChecked(True)
         self.layout().addWidget(self._ignore_button, 0, 1, 2, 1)
 
+        # Default position
+        self.midpoint = 63
+
     @property
     def midpoint(self):
         """Value that is the midpoint of the input."""
@@ -41,6 +44,10 @@ class Controller(QWidget):
     def midpoint(self, new_midpoint):
         self._midpoint.setValue(new_midpoint)
         self._status.setValue(new_midpoint)
+
+    @property
+    def midpoint_changed(self):
+        return self._midpoint.valueChanged
 
     def retranslate_ui(self):
         self._ignore_button.setText('Ignore')
