@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import (
 from script_scroller import __app_name__
 # ~ from script_scroller.i18n import translate
 
+from .controller import Controller
 # ~ from .menus.about_menu import AboutMenu
 # ~ from .menus.edit_menu import EditMenu
 from .menus.file_menu import FileMenu
@@ -50,8 +51,9 @@ class MainWindow(QMainWindow):
         # Content
         self.text_slider = QSlider(Qt.Horizontal, self)
         self.text_slider.setTickPosition(QSlider.TicksBelow)
-        self.text_slider.setMinimum(-16)
-        self.text_slider.setMaximum(16)
+        self.text_slider.setMinimum(0)
+        self.text_slider.setMaximum(127)
+        self.text_slider.valueChanged.connect(self.slider_change)
         self.centralWidget().layout().addWidget(self.text_slider)
 
         self.text_holder = QTextEdit(self)
@@ -61,16 +63,28 @@ class MainWindow(QMainWindow):
         self.text_holder.setText(_text)
         self.centralWidget().layout().addWidget(self.text_holder)
 
+        self.scroll_controller = Controller(self)
+        self.centralWidget().layout().addWidget(self.scroll_controller)
+
         self.text_scroll_timer = QTimer()
         self.text_scroll_timer.setInterval(100)
         self.text_scroll_timer.timeout.connect(self.slider_scroll_tick)
         self.text_scroll_timer.start()
 
         self.retranslate_ui()
+        self.load_config()
+
+    def load_config(self):
+        # @todo: Actually save and load a config
+        self.scroll_controller.midpoint = 63
+        self.text_slider.setValue(60)
+
+    def slider_change(self, *_):
+        self.scroll_controller.update(self.text_slider.value())
 
     def slider_scroll_tick(self):
         scrollbar = self.text_holder.verticalScrollBar()
-        scrollbar.setValue(scrollbar.value() + self.text_slider.value())
+        scrollbar.setValue(scrollbar.value() + self.scroll_controller.value())
 
     def retranslate_ui(self):
         self.setWindowTitle(__app_name__)
@@ -79,6 +93,8 @@ class MainWindow(QMainWindow):
         self.menu_file.retranslate_ui()
         # ~ self.menu_edit.retranslate_ui()
         # ~ self.menu_about.retranslate_ui()
+
+        self.scroll_controller.retranslate_ui()
 
     def set_fullscreen(self, enable):
         if enable:
