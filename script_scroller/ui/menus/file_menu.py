@@ -14,6 +14,12 @@ class FileMenu(ApplicationMenu):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self._actions['midi_config'] = QAction(self)
+        self._actions['midi_config'].triggered.connect(self._window.open_midi_config)
+        self.addAction(self._actions['midi_config'])
+
+        self.addSeparator()
+
         self._actions['fullscreen'] = QAction(self)
         self._actions['fullscreen'].setCheckable(True)
         self._actions['fullscreen'].triggered.connect(self._window.set_fullscreen)
@@ -27,6 +33,9 @@ class FileMenu(ApplicationMenu):
 
     def retranslate_ui(self):
         self.setTitle(translate("MainWindow", "&File"))
+
+        self._actions['midi_config'].setText(translate("MainWindow", "Settings"))
+        self._actions['midi_config'].setStatusTip(translate("MainWindow", "Open MIDI Config"))
 
         self._actions['fullscreen'].setText(translate("MainWindow", "Full Screen"))
         self._actions['fullscreen'].setStatusTip(translate("MainWindow", "Toggle Full Screen"))

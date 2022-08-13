@@ -18,6 +18,7 @@ from .controller import Controller
 # ~ from .menus.about_menu import AboutMenu
 # ~ from .menus.edit_menu import EditMenu
 from .menus.file_menu import FileMenu
+from .midi_config import MidiConfigDialog
 
 
 class MainWindow(QMainWindow):
@@ -34,6 +35,7 @@ class MainWindow(QMainWindow):
         self._was_maximized = None
 
         self._application = application
+        self._midi_config_dialog = None
 
         # Menu Bar
         self.menubar = QMenuBar(self)
@@ -72,6 +74,12 @@ class MainWindow(QMainWindow):
         self.text_scroll_timer.start()
 
         self.retranslate_ui()
+
+    def open_midi_config(self):
+        if not self._midi_config_dialog:
+            self._midi_config_dialog = MidiConfigDialog(self)
+
+        self._midi_config_dialog.show()
 
     def slider_change(self, *_):
         self.scroll_controller.update(self.text_slider.value())
