@@ -26,3 +26,10 @@ class DeviceSelector(QComboBox):
             self.add_subheader(dev.ui_name)
             for port in dev.in_ports:
                 self.addItem(port.ui_name, port.mido_name)
+
+    def setValue(self, new_value):
+        idx = self.findData(new_value)
+        self.setCurrentIndex(idx)
+
+    def value(self):
+        return self.itemData(self.currentIndex())

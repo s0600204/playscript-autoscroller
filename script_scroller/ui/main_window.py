@@ -35,7 +35,9 @@ class MainWindow(QMainWindow):
         self._was_maximized = None
 
         self._application = application
+
         self._midi_config_dialog = None
+        self._midi_config_getter = self._application.register_config('midi', MidiConfigDialog.Defaults)
 
         # Menu Bar
         self.menubar = QMenuBar(self)
@@ -75,10 +77,15 @@ class MainWindow(QMainWindow):
 
         self.retranslate_ui()
 
+    def on_midi_config_change(self):
+        self._application.save_config('midi', self._midi_config_dialog.serialise())
+
     def open_midi_config(self):
         if not self._midi_config_dialog:
             self._midi_config_dialog = MidiConfigDialog(self)
+            self._midi_config_dialog.accepted.connect(self.on_midi_config_change)
 
+        self._midi_config_dialog.deserialise(self._midi_config_getter())
         self._midi_config_dialog.show()
 
     def slider_change(self, *_):
