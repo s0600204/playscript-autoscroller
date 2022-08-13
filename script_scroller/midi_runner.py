@@ -51,7 +51,13 @@ class MidiRunner(QObject):
         self._config_dialog.show()
 
     def start(self):
-        self._port = mido.open_input(self._config['device'])
+        try:
+            self._port = mido.open_input(self._config['device'])
+        except IOError:
+            self._application.window.show_status_message(
+                "MIDI Device not connected!")
+            return
+
         self._port.callback = self.on_midi_message
         self._application.window.show_status_message(
             "Started MIDI Runner")
