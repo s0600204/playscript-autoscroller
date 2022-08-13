@@ -5,6 +5,7 @@ from .file_io import (
     load_config_file,
     save_config_file,
 )
+from .midi_runner import MidiRunner
 from .ui.main_window import MainWindow
 
 
@@ -16,9 +17,18 @@ class Application(QObject):
         super().__init__()
         self._config = None
 
+        self._midi_runner = MidiRunner(self)
         self._mainwindow = MainWindow(self)
 
         self.load_config()
+
+    @property
+    def runner(self):
+        return self._midi_runner
+
+    @property
+    def window(self):
+        return self._mainwindow
 
     def load_config(self):
         config = load_config_file()

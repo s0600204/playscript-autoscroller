@@ -42,6 +42,7 @@ class Controller(QWidget):
 
         self._application.config_restored.connect(self.deserialise)
         self._midpoint.valueChanged.connect(self.serialise)
+        self._application.runner.valueReceived.connect(self.update)
 
     @property
     def midpoint(self):
