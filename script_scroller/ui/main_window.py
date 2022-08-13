@@ -35,7 +35,6 @@ class MainWindow(QMainWindow):
 
         self._application = application
 
-
         # Menu Bar
         self.menubar = QMenuBar(self)
 
@@ -48,15 +47,7 @@ class MainWindow(QMainWindow):
         # ~ self.menubar.addMenu(self.menu_about)
         self.setMenuBar(self.menubar)
 
-
         # Content
-        self.text_slider = QSlider(Qt.Horizontal, self)
-        self.text_slider.setTickPosition(QSlider.TicksBelow)
-        self.text_slider.setMinimum(0)
-        self.text_slider.setMaximum(127)
-        self.text_slider.valueChanged.connect(self.slider_change)
-        self.centralWidget().layout().addWidget(self.text_slider)
-
         self.text_holder = QTextEdit(self)
         _text = ""
         for i in range(128):
@@ -76,9 +67,6 @@ class MainWindow(QMainWindow):
 
     def open_midi_config(self):
         self._application.runner.open_config_dialog(self)
-
-    def slider_change(self, *_):
-        self.scroll_controller.update(self.text_slider.value())
 
     def slider_scroll_tick(self):
         scrollbar = self.text_holder.verticalScrollBar()
