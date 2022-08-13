@@ -1,4 +1,6 @@
 
+from PyQt5.QtCore import pyqtSignal, QObject
+
 from .file_io import (
     load_config_file,
     save_config_file,
@@ -6,30 +8,44 @@ from .file_io import (
 from .ui.main_window import MainWindow
 
 
-class Application:
+class Application(QObject):
+
+    config_restored = pyqtSignal()
 
     def __init__(self):
+        super().__init__()
+        self._config = None
+
         self._mainwindow = MainWindow(self)
 
-        self._config = None
         self.load_config()
 
-        self._mainwindow.scroll_controller.midpoint_changed.connect(self.save_midpoint)
-
     def load_config(self):
-        self._config = load_config_file()
-        if not self._config:
+        config = load_config_file()
+        if not config:
             self._mainwindow.show_status_message(
                 "No valid configuration found")
             return
 
+        self._config = config
         self._mainwindow.show_status_message(
             "Configuration restored")
 
-        self._mainwindow.scroll_controller.midpoint = self._config['midpoint']
+        self.config_restored.emit()
 
-    def save_midpoint(self, new_midpoint):
-        self._config['midpoint'] = new_midpoint
+    def register_config(self, section, default_values):
+        if not self._config:
+            self._config = {}
+
+        if section not in self._config:
+            self._config[section] = default_values
+
+        def getter():
+            return self._config[section]
+        return getter
+
+    def save_config(self, section, serialised_values):
+        self._config[section] = serialised_values
         save_config_file(self._config)
 
     def start(self):

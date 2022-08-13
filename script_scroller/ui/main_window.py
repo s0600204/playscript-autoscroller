@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
         self.text_holder.setText(_text)
         self.centralWidget().layout().addWidget(self.text_holder)
 
-        self.scroll_controller = Controller(self)
+        self.scroll_controller = Controller(self._application, parent=self)
         self.centralWidget().layout().addWidget(self.scroll_controller)
 
         self.text_scroll_timer = QTimer()

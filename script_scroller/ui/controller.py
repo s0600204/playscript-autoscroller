@@ -11,8 +11,13 @@ from PyQt5.QtWidgets import (
 
 class Controller(QWidget):
 
-    def __init__(self, *args, **kwargs):
+    Default = 63
+
+    def __init__(self, application, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self._application = application
+        self._config_getter = self._application.register_config('midpoint', self.Default)
 
         self.setLayout(QGridLayout())
 
@@ -33,7 +38,10 @@ class Controller(QWidget):
         self.layout().addWidget(self._ignore_button, 0, 1, 2, 1)
 
         # Default position
-        self.midpoint = 63
+        self.midpoint = self.Default
+
+        self._application.config_restored.connect(self.deserialise)
+        self._midpoint.valueChanged.connect(self.serialise)
 
     @property
     def midpoint(self):
@@ -45,9 +53,11 @@ class Controller(QWidget):
         self._midpoint.setValue(new_midpoint)
         self._status.setValue(new_midpoint)
 
-    @property
-    def midpoint_changed(self):
-        return self._midpoint.valueChanged
+    def serialise(self, new_midpoint):
+        self._application.save_config('midpoint', new_midpoint)
+
+    def deserialise(self):
+        self.midpoint = self._config_getter()
 
     def retranslate_ui(self):
         self._ignore_button.setText('Ignore')
