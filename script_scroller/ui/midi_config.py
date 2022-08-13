@@ -54,7 +54,7 @@ class MidiConfigDialog(QDialog):
 
     def deserialise(self, config):
         self._device_selector.setValue(config['device'])
-        self._channel_selector.setValue(config['channel'])
+        self._channel_selector.setValue(config['channel'] + 1)
         self._control_selector.setValue(config['control'])
 
     def retranslate_ui(self):
@@ -65,6 +65,6 @@ class MidiConfigDialog(QDialog):
     def serialise(self):
         return {
             'device': self._device_selector.value(),
-            'channel': self._channel_selector.value(),
+            'channel': self._channel_selector.value() - 1,
             'control': self._control_selector.value(),
         }
