@@ -15,6 +15,7 @@ from script_scroller import __app_name__
 # ~ from script_scroller.i18n import translate
 
 from .controller import Controller
+from .main_text import MainText
 # ~ from .menus.about_menu import AboutMenu
 # ~ from .menus.edit_menu import EditMenu
 from .menus.file_menu import FileMenu
@@ -47,13 +48,10 @@ class MainWindow(QMainWindow):
         # ~ self.menubar.addMenu(self.menu_about)
         self.setMenuBar(self.menubar)
 
-        # Content
-        self.text_holder = QTextEdit(self)
-        _text = ""
-        for i in range(128):
-            _text += str(i) + "\n"
-        self.text_holder.setText(_text)
-        self.centralWidget().layout().addWidget(self.text_holder)
+        # Content (w. Toolbar)
+        self.main_text = MainText(application, parent=self)
+        self.centralWidget().layout().addWidget(self.main_text)
+        self.addToolBar(self.main_text.toolbar)
 
         self.scroll_controller = Controller(self._application, parent=self)
         self.centralWidget().layout().addWidget(self.scroll_controller)
@@ -69,8 +67,7 @@ class MainWindow(QMainWindow):
         self._application.runner.open_config_dialog(self)
 
     def slider_scroll_tick(self):
-        scrollbar = self.text_holder.verticalScrollBar()
-        scrollbar.setValue(scrollbar.value() + self.scroll_controller.value())
+        self.main_text.scroll(self.scroll_controller.value())
 
     def retranslate_ui(self):
         self.setWindowTitle(__app_name__)
@@ -79,6 +76,8 @@ class MainWindow(QMainWindow):
         self.menu_file.retranslate_ui()
         # ~ self.menu_edit.retranslate_ui()
         # ~ self.menu_about.retranslate_ui()
+
+        self.main_text.retranslate_ui()
 
         self.scroll_controller.retranslate_ui()
 
