@@ -69,6 +69,9 @@ class MainText(QTextEdit):
             self.setMarkdown(self.toPlainText())
             self._toolbar.set_text_formatting_enabled(True)
 
+            self._application.window.outline_model.determine_outline(self.document())
+            self._application.window.outline_tree.expandAll()
+
         cursor = self.textCursor()
         cursor.setPosition(int(position))
         self.setTextCursor(cursor)
