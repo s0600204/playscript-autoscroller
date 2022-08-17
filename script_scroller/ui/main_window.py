@@ -23,6 +23,7 @@ from .main_toolbar import MainToolbar
 # ~ from .menus.about_menu import AboutMenu
 # ~ from .menus.edit_menu import EditMenu
 from .menus.file_menu import FileMenu
+from .outline_tree_view import OutlineTreeView
 
 
 class MainWindow(QMainWindow):
@@ -62,10 +63,7 @@ class MainWindow(QMainWindow):
             QSizePolicy.MinimumExpanding)
 
         self.outline_model = OutlineTreeModel()
-        self.outline_tree = QTreeView(parent=self.splitter)
-        self.outline_tree.setModel(self.outline_model)
-        self.outline_tree.setItemsExpandable(False)
-        self.outline_tree.expandAll()
+        self.outline_tree = OutlineTreeView(self.outline_model, parent=self.splitter)
         self.splitter.addWidget(self.outline_tree)
         self.splitter.setStretchFactor(0, 1)
 
