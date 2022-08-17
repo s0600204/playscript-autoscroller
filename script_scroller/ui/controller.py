@@ -18,6 +18,7 @@ class Controller(QWidget):
 
         self._application = application
         self._config_getter = self._application.register_config('midpoint', self.Default)
+        self._cached_value = 0
 
         self.setLayout(QGridLayout())
 
@@ -34,8 +35,14 @@ class Controller(QWidget):
 
         self._ignore_button = QPushButton(self)
         self._ignore_button.setCheckable(True)
-        self._ignore_button.setChecked(True)
-        self.layout().addWidget(self._ignore_button, 0, 1, 2, 1)
+        self._ignore_button.setChecked(False)
+        self._ignore_button.pressed.connect(self.on_ignore)
+        self.layout().addWidget(self._ignore_button, 0, 1)
+
+        self._pause_button = QPushButton(self)
+        self._pause_button.setCheckable(True)
+        self._pause_button.setChecked(True)
+        self.layout().addWidget(self._pause_button, 1, 1)
 
         # Default position
         self.midpoint = self.Default
@@ -54,6 +61,10 @@ class Controller(QWidget):
         self._midpoint.setValue(new_midpoint)
         self._status.setValue(new_midpoint)
 
+    def on_ignore(self):
+        self._status.setEnabled(
+            self._ignore_button.isChecked())
+
     def serialise(self, new_midpoint):
         self._application.save_config('midpoint', new_midpoint)
 
@@ -62,13 +73,23 @@ class Controller(QWidget):
 
     def retranslate_ui(self):
         self._ignore_button.setText('Ignore')
+        self._ignore_button.setToolTip('Ignore input from MIDI device')
+
+        self._pause_button.setText('Pause')
+        self._pause_button.setToolTip('Pause scrolling')
 
     def update(self, new_value):
+        if self._ignore_button.isChecked():
+            return
         self._status.setValue(new_value)
 
     def value(self):
-        if self._ignore_button.isChecked():
+        if self._pause_button.isChecked():
             return 0
 
+        if self._ignore_button.isChecked():
+            return self._cached_value
+
         # @todo: Implement a better way of translating values to something that can used to scroll
-        return round((self._status.value() - self._midpoint.value()) / 4)
+        self._cached_value = round((self._status.value() - self._midpoint.value()) / 4)
+        return self._cached_value
