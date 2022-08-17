@@ -8,15 +8,13 @@ from PyQt5.QtWidgets import (
 )
 
 
-class MainTextToolbar(QToolBar):
+class MainToolbar(QToolBar):
 
-    def __init__(self, textfield, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._textfield = textfield
 
         self.setFloatable(False)
         self.setMovable(False)
-
 
         self._action_bold = QAction(parent=self)
         self._action_bold.setCheckable(True)
@@ -24,7 +22,6 @@ class MainTextToolbar(QToolBar):
             QIcon.fromTheme(
                 'format-text-bold',
                 QIcon.fromTheme('format-text-bold-symbolic')))
-        self._action_bold.triggered.connect(self.on_bold_action)
 
         self._action_italic = QAction(parent=self)
         self._action_italic.setCheckable(True)
@@ -32,7 +29,6 @@ class MainTextToolbar(QToolBar):
             QIcon.fromTheme(
                 'format-text-italic',
                 QIcon.fromTheme('format-text-italic-symbolic')))
-        self._action_italic.triggered.connect(self._textfield.setFontItalic)
 
         self._action_underline = QAction(parent=self)
         self._action_underline.setCheckable(True)
@@ -40,7 +36,6 @@ class MainTextToolbar(QToolBar):
             QIcon.fromTheme(
                 'format-text-underline',
                 QIcon.fromTheme('format-text-underline-symbolic')))
-        self._action_underline.triggered.connect(self._textfield.setFontUnderline)
 
         self._action_strikethrough = QAction(parent=self)
         self._action_strikethrough.setCheckable(True)
@@ -48,14 +43,12 @@ class MainTextToolbar(QToolBar):
             QIcon.fromTheme(
                 'format-text-strikethrough',
                 QIcon.fromTheme('format-text-strikethrough-symbolic')))
-        self._action_strikethrough.triggered.connect(self.on_strikethrough_action)
 
         self._action_source_view = QAction(parent=self)
         self._action_source_view.setCheckable(True)
         self._action_source_view.setIcon(
             QIcon(
                 f"{path.dirname(__file__)}/icons/view-source.svg"))
-        self._action_source_view.triggered.connect(textfield.show_source_view)
 
         self.addAction(self._action_bold)
         self.addAction(self._action_italic)
@@ -64,6 +57,13 @@ class MainTextToolbar(QToolBar):
         self.addSeparator()
         self.addAction(self._action_source_view)
 
+    def connect_textfield(self, textfield):
+        self._action_bold.triggered.connect(textfield.setFontBold)
+        self._action_italic.triggered.connect(textfield.setFontItalic)
+        self._action_underline.triggered.connect(textfield.setFontUnderline)
+        self._action_strikethrough.triggered.connect(textfield.setFontStrikeThrough)
+        self._action_source_view.triggered.connect(textfield.show_source_view)
+
     def set_text_formatting_enabled(self, enabled):
         # It might be nice to not disable the buttons in "source view", but instead add/remove
         # the appropriate character strings around the selected text.
@@ -71,17 +71,6 @@ class MainTextToolbar(QToolBar):
         self._action_italic.setEnabled(enabled)
         self._action_underline.setEnabled(enabled)
         self._action_strikethrough.setEnabled(enabled)
-
-    def on_bold_action(self, checked):
-        if checked:
-            self._textfield.setFontWeight(self._textfield.BoldWeight)
-        else:
-            self._textfield.setFontWeight(self._textfield.NormalWeight)
-
-    def on_strikethrough_action(self, checked):
-        style = self._textfield.currentCharFormat()
-        style.setFontStrikeOut(checked)
-        self._textfield.setCurrentCharFormat(style)
 
     def retranslate_ui(self):
         self._action_bold.setText("Bold")
@@ -96,3 +85,9 @@ class MainTextToolbar(QToolBar):
         self._action_strikethrough.setText("Strikethrough")
 
         self._action_source_view.setText("View Source")
+
+    def update_style_buttons(self, style):
+        self._action_bold.setChecked(style["bold"])
+        self._action_italic.setChecked(style["italic"])
+        self._action_underline.setChecked(style["underline"])
+        self._action_strikethrough.setChecked(style["strikethrough"])

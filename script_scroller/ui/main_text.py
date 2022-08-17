@@ -8,8 +8,6 @@ from PyQt5.QtWidgets import (
     QTextEdit,
 )
 
-from .main_text_toolbar import MainTextToolbar
-
 
 class MainText(QTextEdit):
 
@@ -17,10 +15,10 @@ class MainText(QTextEdit):
     BoldWeight = 75
     NormalWeight = 50
 
-    def __init__(self, application, *args, **kwargs):
+    def __init__(self, application, toolbar, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._application = application
-        self._toolbar = MainTextToolbar(self)
+        self._toolbar = toolbar
 
         self.cursorPositionChanged.connect(self.on_cursor_move)
 
@@ -33,19 +31,29 @@ class MainText(QTextEdit):
         return self._toolbar
 
     def on_cursor_move(self):
-        self._toolbar._action_bold.setChecked(self.fontWeight() == self.BoldWeight)
-        self._toolbar._action_italic.setChecked(self.fontItalic())
-        self._toolbar._action_underline.setChecked(self.fontUnderline())
-
-        style = self.currentCharFormat()
-        self._toolbar._action_strikethrough.setChecked(style.fontStrikeOut())
-
-    def retranslate_ui(self):
-        self._toolbar.retranslate_ui()
+        char_format = self.currentCharFormat()
+        style = {
+            "bold": char_format.fontWeight() == self.BoldWeight,
+            "italic": char_format.fontItalic(),
+            "underline": char_format.fontUnderline(),
+            "strikethrough": char_format.fontStrikeOut(),
+        }
+        self._toolbar.update_style_buttons(style)
 
     def scroll(self, step):
         scrollbar = self.verticalScrollBar()
         scrollbar.setValue(scrollbar.value() + step)
+
+    def setFontBold(self, checked):
+        if checked:
+            self.setFontWeight(self.BoldWeight)
+        else:
+            self.setFontWeight(self.NormalWeight)
+
+    def setFontStrikeThrough(self, checked):
+        style = self.currentCharFormat()
+        style.setFontStrikeOut(checked)
+        self.setCurrentCharFormat(style)
 
     def show_source_view(self, show):
         # The position multiplication is used to roughly place the cursor back where it was.

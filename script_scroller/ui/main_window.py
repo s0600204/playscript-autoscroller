@@ -19,6 +19,7 @@ from script_scroller import __app_name__
 from script_scroller.outline_tree_model import OutlineTreeModel
 from .controller import Controller
 from .main_text import MainText
+from .main_toolbar import MainToolbar
 # ~ from .menus.about_menu import AboutMenu
 # ~ from .menus.edit_menu import EditMenu
 from .menus.file_menu import FileMenu
@@ -51,6 +52,10 @@ class MainWindow(QMainWindow):
         # ~ self.menubar.addMenu(self.menu_about)
         self.setMenuBar(self.menubar)
 
+        # Toolbar
+        self.toolbar = MainToolbar(self)
+        self.addToolBar(self.toolbar)
+
         self.splitter = QSplitter(parent=self)
         self.splitter.setSizePolicy(
             self.splitter.sizePolicy().horizontalPolicy(),
@@ -64,11 +69,11 @@ class MainWindow(QMainWindow):
         self.splitter.addWidget(self.outline_tree)
         self.splitter.setStretchFactor(0, 1)
 
-        # Content (w. Toolbar)
-        self.main_text = MainText(application, parent=self.splitter)
+        # Content
+        self.main_text = MainText(application, self.toolbar, parent=self.splitter)
         self.splitter.addWidget(self.main_text)
         self.splitter.setStretchFactor(1, 2)
-        self.addToolBar(self.main_text.toolbar)
+        self.toolbar.connect_textfield(self.main_text)
 
         self.centralWidget().layout().addWidget(self.splitter)
 
@@ -96,7 +101,7 @@ class MainWindow(QMainWindow):
         # ~ self.menu_edit.retranslate_ui()
         # ~ self.menu_about.retranslate_ui()
 
-        self.main_text.retranslate_ui()
+        self.toolbar.retranslate_ui()
 
         self.scroll_controller.retranslate_ui()
 
