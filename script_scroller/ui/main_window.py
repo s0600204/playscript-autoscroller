@@ -117,10 +117,11 @@ class MainWindow(QMainWindow):
         self.toolbar.set_text_formatting_enabled(not show)
 
         if show:
-            pass
+            self.outline_tree.hide()
         else:
             self.outline_model.determine_outline(self.main_text.document())
             self.outline_tree.expandAll()
+            self.outline_tree.show()
 
     def show_status_message(self, message):
         self.statusBar().showMessage(
