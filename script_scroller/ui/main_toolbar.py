@@ -52,7 +52,7 @@ class MainToolbar(QToolBar):
 
         self.addAction(self._action_bold)
         self.addAction(self._action_italic)
-        self.addAction(self._action_underline)
+        #self.addAction(self._action_underline) # MarkDown doesn't support underlined text
         self.addAction(self._action_strikethrough)
         self.addSeparator()
         self.addAction(self._action_source_view)
