@@ -1,5 +1,6 @@
 
 from PyQt5.QtGui import (
+    QFontMetrics,
     QTextCharFormat,
     QTextCursor,
     QTextDocument,
@@ -19,6 +20,13 @@ class MainText(QTextEdit):
         super().__init__(*args, **kwargs)
         self._application = application
         self._toolbar = toolbar
+
+        # According to the CommonMark MarkDown spec, tabs used at the start of a line as
+        # indentation should each be replaced with an indent of four spaces.
+        # The replacement is done by Qt5, but this also gives a reference for how wide tabs
+        # should be.
+        fm = QFontMetrics(self.currentFont())
+        self.setTabStopDistance(fm.horizontalAdvance(" ") * 4)
 
         self.cursorPositionChanged.connect(self.on_cursor_move)
 
@@ -70,7 +78,7 @@ class MainText(QTextEdit):
 
             position *= 1.5
             self.setCurrentCharFormat(QTextCharFormat())
-            self.setPlainText(self.toMarkdown())
+            self.setPlainText(self.toMarkdown(QTextDocument.MarkdownDialectCommonMark))
         else:
             position /= 1.5
             self.setMarkdown(self.toPlainText())
