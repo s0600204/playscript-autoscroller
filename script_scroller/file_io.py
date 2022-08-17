@@ -21,6 +21,16 @@ def load_yaml_file(filepath, schema):
             label=path.basename(filepath)
         ).data
 
+def read_document_file(filepath):
+    with open(filepath, mode='r', encoding='utf-8') as filehandle:
+        return filehandle.read()
+
+def write_document_file(filepath, content):
+    with open(filepath, mode='w', encoding='utf-8') as filehandle:
+        return filehandle.write(
+            content
+        )
+
 def write_yaml_file(filepath, schema, content):
     yaml = as_document(content, schema)
     with open(filepath, mode='w', encoding='utf-8') as filehandle:

@@ -29,6 +29,11 @@ class MainText(QTextEdit):
         self.setTabStopDistance(fm.horizontalAdvance(" ") * 4)
 
         self.cursorPositionChanged.connect(self.on_cursor_move)
+        self.textChanged.connect(application.set_dirty)
+
+    @property
+    def content(self):
+        return self.toMarkdown(QTextDocument.MarkdownDialectCommonMark)
 
     @property
     def cursor(self):

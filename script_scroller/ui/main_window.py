@@ -1,8 +1,12 @@
 
+from os import path
+
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import (
+    QFileDialog,
     QMainWindow,
     QMenuBar,
+    QMessageBox,
     QSizePolicy,
     QSplitter,
     QTreeView,
@@ -86,11 +90,87 @@ class MainWindow(QMainWindow):
     def open_midi_config(self):
         self._application.runner.open_config_dialog(self)
 
+    def prompt_open_filename(self):
+        # parent = nullptr,
+        # caption = QString(),
+        # directory = QString(),
+        # filter = QString(),
+        # selectedFilter = nullptr,
+        # options = Options()
+        response = QFileDialog.getOpenFileName(
+            parent=self,
+            caption="Select file to open...",
+            directory="~/",
+            filter="Scripts (*.md)")
+
+        return response[0] or None
+
+    def prompt_save_filename(self):
+        # parent = nullptr,
+        # caption = QString()
+        # directory = QString()
+        # filter = QString()
+        # selectedFilter = nullptr
+        # options = Options()
+        response = QFileDialog.getSaveFileName(
+            parent=self,
+            caption="Save as...",
+            directory="~/",
+            filter="Scripts (*.md)")
+
+        if not response[0]:
+            return None
+
+        if response[0][-3:] == '.md':
+            return response[0]
+
+        return response[0] + '.md'
+
+    def prompt_unsaved(self):
+        if not self._application.is_dirty():
+            return True
+
+        # Prompt user if the want to save/saveAs
+        question = QMessageBox()
+        question.setText("The document has been modified.")
+        question.setInformativeText("Do you want to save your changes?")
+        question.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
+        question.setDefaultButton(QMessageBox.Save)
+        response = question.exec()
+
+        # If they do,
+        if response == QMessageBox.Cancel:
+            return False
+        if response == QMessageBox.Discard:
+            return True
+
+        return self.file_save()
+
     def slider_scroll_tick(self):
         self.main_text.scroll(self.scroll_controller.value())
 
+    def rebuild_outline(self):
+        self.outline_model.determine_outline(self.main_text.document())
+        self.outline_tree.expandAll()
+
+    def reset_content(self):
+        self.main_text.clear()
+        self.outline_model.clear()
+
+    def restore_content(self, filecontent):
+        self.reset_content()
+        self.show_source_view(False)
+        self.main_text.setMarkdown(filecontent)
+        self.rebuild_outline()
+
+    def retranslate_title(self):
+        filename = self._application.current_filename
+        filename = path.basename(filename) if filename else 'Untitled'
+        dirty = '*' if self._application.is_dirty() else ''
+        self.setWindowTitle(f"{__app_name__} - {filename}{dirty}")
+
     def retranslate_ui(self):
-        self.setWindowTitle(__app_name__)
+        self.retranslate_title()
 
         # Menus
         self.menu_file.retranslate_ui()
@@ -112,13 +192,13 @@ class MainWindow(QMainWindow):
 
     def show_source_view(self, show):
         self.main_text.show_source_view(show)
+        self.toolbar.set_source_view_checked(show)
         self.toolbar.set_text_formatting_enabled(not show)
 
         if show:
             self.outline_tree.hide()
         else:
-            self.outline_model.determine_outline(self.main_text.document())
-            self.outline_tree.expandAll()
+            self.rebuild_outline()
             self.outline_tree.show()
 
     def show_status_message(self, message):

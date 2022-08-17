@@ -64,6 +64,9 @@ class MainToolbar(QToolBar):
         self._action_strikethrough.triggered.connect(textfield.setFontStrikeThrough)
         self._action_source_view.triggered.connect(self.parent().show_source_view)
 
+    def set_source_view_checked(self, checked):
+        self._action_source_view.setChecked(checked)
+
     def set_text_formatting_enabled(self, enabled):
         # It might be nice to not disable the buttons in "source view", but instead add/remove
         # the appropriate character strings around the selected text.
