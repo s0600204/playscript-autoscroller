@@ -112,6 +112,16 @@ class MainWindow(QMainWindow):
         else:
             self.showNormal()
 
+    def show_source_view(self, show):
+        self.main_text.show_source_view(show)
+        self.toolbar.set_text_formatting_enabled(not show)
+
+        if show:
+            pass
+        else:
+            self.outline_model.determine_outline(self.main_text.document())
+            self.outline_tree.expandAll()
+
     def show_status_message(self, message):
         self.statusBar().showMessage(
             message,

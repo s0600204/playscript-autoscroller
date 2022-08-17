@@ -71,14 +71,9 @@ class MainText(QTextEdit):
             position *= 1.5
             self.setCurrentCharFormat(QTextCharFormat())
             self.setPlainText(self.toMarkdown())
-            self._toolbar.set_text_formatting_enabled(False)
         else:
             position /= 1.5
             self.setMarkdown(self.toPlainText())
-            self._toolbar.set_text_formatting_enabled(True)
-
-            self._application.window.outline_model.determine_outline(self.document())
-            self._application.window.outline_tree.expandAll()
 
         cursor = self.textCursor()
         cursor.setPosition(int(position))
