@@ -83,8 +83,6 @@ class MainWindow(QMainWindow):
         self.text_scroll_timer.timeout.connect(self.slider_scroll_tick)
         self.text_scroll_timer.start()
 
-        self.retranslate_ui()
-
     def open_midi_config(self):
         self._application.runner.open_config_dialog(self)
 

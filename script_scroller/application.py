@@ -59,4 +59,5 @@ class Application(QObject):
         save_config_file(self._config)
 
     def start(self):
+        self._mainwindow.retranslate_ui()
         self._mainwindow.show()
