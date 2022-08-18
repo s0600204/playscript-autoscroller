@@ -196,6 +196,12 @@ class MainWindow(QMainWindow):
         else:
             self.showNormal()
 
+    def show_outline(self, show):
+        if show:
+            self.outline_tree.show()
+        else:
+            self.outline_tree.hide()
+
     def show_source_view(self, show):
         self.main_text.show_source_view(show)
         self.toolbar.set_source_view_checked(show)
@@ -205,7 +211,8 @@ class MainWindow(QMainWindow):
             self.outline_tree.hide()
         else:
             self.rebuild_outline()
-            self.outline_tree.show()
+            if self.toolbar.should_show_outline():
+                self.outline_tree.show()
 
     def show_status_message(self, message):
         self.statusBar().showMessage(

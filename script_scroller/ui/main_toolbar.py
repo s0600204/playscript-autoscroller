@@ -16,6 +16,16 @@ class MainToolbar(QToolBar):
         self.setFloatable(False)
         self.setMovable(False)
 
+        self._action_outline = QAction(parent=self)
+        self._action_outline.setCheckable(True)
+        self._action_outline.setChecked(True)
+        self._action_outline.setIcon(
+            QIcon.fromTheme(
+                'sidebar-show',
+                QIcon.fromTheme(
+                    'sidebar-show-symbolic',
+                    QIcon(f"{path.dirname(__file__)}/icons/sidebar-show.svg"))))
+
         self._action_bold = QAction(parent=self)
         self._action_bold.setCheckable(True)
         self._action_bold.setIcon(
@@ -68,6 +78,8 @@ class MainToolbar(QToolBar):
             QIcon(
                 f"{path.dirname(__file__)}/icons/view-source.svg"))
 
+        self.addAction(self._action_outline)
+        self.addSeparator()
         self.addAction(self._action_bold)
         self.addAction(self._action_italic)
         #self.addAction(self._action_underline) # MarkDown doesn't support underlined text
@@ -80,6 +92,7 @@ class MainToolbar(QToolBar):
         self.addAction(self._action_source_view)
 
     def connect_textfield(self, textfield):
+        self._action_outline.triggered.connect(self.parent().show_outline)
         self._action_bold.triggered.connect(textfield.setFontBold)
         self._action_italic.triggered.connect(textfield.setFontItalic)
         self._action_underline.triggered.connect(textfield.setFontUnderline)
@@ -93,6 +106,7 @@ class MainToolbar(QToolBar):
         self._action_source_view.setChecked(checked)
 
     def set_text_formatting_enabled(self, enabled):
+        self._action_outline.setEnabled(enabled)
         # It might be nice to not disable the buttons in "source view", but instead add/remove
         # the appropriate character strings around the selected text.
         self._action_bold.setEnabled(enabled)
@@ -101,6 +115,8 @@ class MainToolbar(QToolBar):
         self._action_strikethrough.setEnabled(enabled)
 
     def retranslate_ui(self):
+        self._action_outline.setText("Toggle Outline")
+
         self._action_bold.setText("Bold")
         self._action_bold.setShortcut(QKeySequence.Bold)
 
@@ -117,6 +133,9 @@ class MainToolbar(QToolBar):
         self._action_zoom_reset.setText("Zoom Reset")
 
         self._action_source_view.setText("View Source")
+
+    def should_show_outline(self):
+        return self._action_outline.isChecked()
 
     def update_style_buttons(self, style):
         self._action_bold.setChecked(style["bold"])
