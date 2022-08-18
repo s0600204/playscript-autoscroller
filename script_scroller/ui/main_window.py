@@ -161,6 +161,7 @@ class MainWindow(QMainWindow):
         self.reset_content()
         self.show_source_view(False)
         self.main_text.setMarkdown(filecontent)
+        self.main_text.respace_text()
         self.rebuild_outline()
 
     def retranslate_title(self):

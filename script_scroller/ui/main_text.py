@@ -1,6 +1,7 @@
 
 from PyQt5.QtGui import (
     QFontMetrics,
+    QTextBlockFormat,
     QTextCharFormat,
     QTextCursor,
     QTextDocument,
@@ -28,6 +29,7 @@ class MainText(QTextEdit):
         fm = QFontMetrics(self.currentFont())
         self.setTabStopDistance(fm.horizontalAdvance(" ") * 4)
 
+        self.respace_text()
         self.cursorPositionChanged.connect(self.on_cursor_move)
         self.textChanged.connect(application.set_dirty)
 
@@ -52,6 +54,26 @@ class MainText(QTextEdit):
             "strikethrough": char_format.fontStrikeOut(),
         }
         self._toolbar.update_style_buttons(style)
+
+    def respace_text(self):
+        # Set Paragraph Spacing
+        #   This is dependant on each paragraph's formatting (header, normal text).
+        #   A better way of doing this might be to subclass QAbstractTextDocumentLayout.
+        block = self.document().begin()
+        level_spacing = {}
+        while block.isValid():
+            block_cursor = QTextCursor(block)
+            block_format = block.blockFormat()
+            block_level = block_format.headingLevel()
+
+            if block_level not in level_spacing:
+                char_format = block_cursor.charFormat()
+                font = char_format.font()
+                level_spacing[block_level] = QFontMetrics(font).height() * 0.8
+
+            block_format.setTopMargin(level_spacing[block_level])
+            block_cursor.setBlockFormat(block_format)
+            block = block.next()
 
     def scroll(self, step):
         scrollbar = self.verticalScrollBar()
@@ -87,7 +109,7 @@ class MainText(QTextEdit):
         else:
             position /= 1.5
             self.setMarkdown(self.toPlainText())
+            self.respace_text()
 
-        cursor = self.textCursor()
         cursor.setPosition(int(position))
         self.setTextCursor(cursor)
