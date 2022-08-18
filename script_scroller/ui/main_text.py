@@ -34,7 +34,6 @@ class MainText(QTextEdit):
         self._zoom_level = self._application.register_config('zoom', self.DefaultZoom)
         self._application.config_restored.connect(self.zoom)
 
-        self.respace_text()
         self.cursorPositionChanged.connect(self.on_cursor_move)
         self.textChanged.connect(application.set_dirty)
 
@@ -134,6 +133,7 @@ class MainText(QTextEdit):
         font = self.document().defaultFont()
         font.setPointSize(self._base_font_size + self._zoom_level())
         self.document().setDefaultFont(font)
+        self.respace_text()
 
     def zoom_in(self, _):
         level = self._zoom_level()
