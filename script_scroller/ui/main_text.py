@@ -66,6 +66,7 @@ class MainText(QTextEdit):
         #   A better way of doing this might be to subclass QAbstractTextDocumentLayout.
         block = self.document().begin()
         level_spacing = {}
+        was_dirty = self._application.is_dirty()
         while block.isValid():
             block_cursor = QTextCursor(block)
             block_format = block.blockFormat()
@@ -74,11 +75,16 @@ class MainText(QTextEdit):
             if block_level not in level_spacing:
                 char_format = block_cursor.charFormat()
                 font = char_format.font()
-                level_spacing[block_level] = QFontMetrics(font).height() * 0.8
+                level_spacing[block_level] = QFontMetrics(font).height() * 0.5
 
             block_format.setTopMargin(level_spacing[block_level])
             block_cursor.setBlockFormat(block_format)
             block = block.next()
+
+        # Annoyingly, the above is considered "changing the text", thus when the above is run
+        # as part of the application init, the supposedly "new" document is considered dirty.
+        if not was_dirty:
+            self._application.set_clean()
 
     def scroll(self, step):
         scrollbar = self.verticalScrollBar()
@@ -101,6 +107,7 @@ class MainText(QTextEdit):
         # when a transition occurs.
         cursor = self.textCursor()
         position = cursor.position()
+        was_dirty = self._application.is_dirty()
 
         if (show):
             # We have to set the position to 0 before clearing the text formatting, else any
@@ -115,6 +122,10 @@ class MainText(QTextEdit):
             position /= 1.5
             self.setMarkdown(self.toPlainText())
             self.respace_text()
+
+        # Reset to clean if the document content hadn't actually been changed previously
+        if not was_dirty:
+            self._application.set_clean()
 
         cursor.setPosition(int(position))
         self.setTextCursor(cursor)
