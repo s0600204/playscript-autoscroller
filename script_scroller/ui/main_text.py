@@ -49,6 +49,17 @@ class MainText(QTextEdit):
     def toolbar(self):
         return self._toolbar
 
+    def go_to_position(self, position):
+        cursor = self.textCursor()
+
+        # Jump to the end of the document before going where we want,
+        # so that we end up with where we want at the top of the viewport.
+        cursor.setPosition(self.document().lastBlock().position())
+        self.setTextCursor(cursor)
+
+        cursor.setPosition(int(position))
+        self.setTextCursor(cursor)
+
     def on_cursor_move(self):
         char_format = self.currentCharFormat()
         style = {

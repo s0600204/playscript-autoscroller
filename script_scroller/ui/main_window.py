@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import (
 from script_scroller import __app_name__
 # ~ from script_scroller.i18n import translate
 
-from script_scroller.outline_tree_model import OutlineTreeModel
+from script_scroller.outline_tree_model import OutlineTreeModel, POSITION_ROLE
 from .controller import Controller
 from .main_text import MainText
 from .main_toolbar import MainToolbar
@@ -76,6 +76,7 @@ class MainWindow(QMainWindow):
         self.splitter.addWidget(self.main_text)
         self.splitter.setStretchFactor(1, 2)
         self.toolbar.connect_textfield(self.main_text)
+        self.outline_tree.pressed.connect(self.on_outline_press)
 
         self.centralWidget().layout().addWidget(self.splitter)
 
@@ -86,6 +87,10 @@ class MainWindow(QMainWindow):
         self.text_scroll_timer.setInterval(100)
         self.text_scroll_timer.timeout.connect(self.slider_scroll_tick)
         self.text_scroll_timer.start()
+
+    def on_outline_press(self, index):
+        self.main_text.go_to_position(
+            self.outline_model.data(index, POSITION_ROLE))
 
     def open_midi_config(self):
         self._application.runner.open_config_dialog(self)
