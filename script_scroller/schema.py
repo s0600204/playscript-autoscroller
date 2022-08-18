@@ -13,6 +13,7 @@ midi:
   device: "DeviceName:PortName DeviceNum:PortNum"
   channel: 1
   control: 7
+zoom: 2
 """
 
 config_schema = Map({
@@ -23,4 +24,5 @@ config_schema = Map({
       "channel": Int(),
       "control": Int(),
     }),
+    "zoom": Int(),
 })

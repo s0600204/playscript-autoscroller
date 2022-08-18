@@ -44,6 +44,24 @@ class MainToolbar(QToolBar):
                 'format-text-strikethrough',
                 QIcon.fromTheme('format-text-strikethrough-symbolic')))
 
+        self._action_zoom_in = QAction(parent=self)
+        self._action_zoom_in.setIcon(
+            QIcon.fromTheme(
+                'zoom-in',
+                QIcon.fromTheme('zoom-in-symbolic')))
+
+        self._action_zoom_out = QAction(parent=self)
+        self._action_zoom_out.setIcon(
+            QIcon.fromTheme(
+                'zoom-out',
+                QIcon.fromTheme('zoom-out-symbolic')))
+
+        self._action_zoom_reset = QAction(parent=self)
+        self._action_zoom_reset.setIcon(
+            QIcon.fromTheme(
+                'zoom-original',
+                QIcon.fromTheme('zoom-original-symbolic')))
+
         self._action_source_view = QAction(parent=self)
         self._action_source_view.setCheckable(True)
         self._action_source_view.setIcon(
@@ -55,6 +73,10 @@ class MainToolbar(QToolBar):
         #self.addAction(self._action_underline) # MarkDown doesn't support underlined text
         self.addAction(self._action_strikethrough)
         self.addSeparator()
+        self.addAction(self._action_zoom_in)
+        self.addAction(self._action_zoom_out)
+        self.addAction(self._action_zoom_reset)
+        self.addSeparator()
         self.addAction(self._action_source_view)
 
     def connect_textfield(self, textfield):
@@ -62,6 +84,9 @@ class MainToolbar(QToolBar):
         self._action_italic.triggered.connect(textfield.setFontItalic)
         self._action_underline.triggered.connect(textfield.setFontUnderline)
         self._action_strikethrough.triggered.connect(textfield.setFontStrikeThrough)
+        self._action_zoom_in.triggered.connect(textfield.zoom_in)
+        self._action_zoom_out.triggered.connect(textfield.zoom_out)
+        self._action_zoom_reset.triggered.connect(textfield.zoom_reset)
         self._action_source_view.triggered.connect(self.parent().show_source_view)
 
     def set_source_view_checked(self, checked):
@@ -86,6 +111,10 @@ class MainToolbar(QToolBar):
         self._action_underline.setShortcut(QKeySequence.Underline)
 
         self._action_strikethrough.setText("Strikethrough")
+
+        self._action_zoom_in.setText("Zoom In")
+        self._action_zoom_out.setText("Zoom Out")
+        self._action_zoom_reset.setText("Zoom Reset")
 
         self._action_source_view.setText("View Source")
 

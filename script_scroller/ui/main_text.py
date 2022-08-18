@@ -16,6 +16,7 @@ class MainText(QTextEdit):
     # @todo: Extract these from the active StyleSheet/Theme somehow
     BoldWeight = 75
     NormalWeight = 50
+    DefaultZoom = 1
 
     def __init__(self, application, toolbar, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -28,6 +29,10 @@ class MainText(QTextEdit):
         # should be.
         fm = QFontMetrics(self.currentFont())
         self.setTabStopDistance(fm.horizontalAdvance(" ") * 4)
+
+        self._base_font_size = self.currentFont().pointSize()
+        self._zoom_level = self._application.register_config('zoom', self.DefaultZoom)
+        self._application.config_restored.connect(self.zoom)
 
         self.respace_text()
         self.cursorPositionChanged.connect(self.on_cursor_move)
@@ -113,3 +118,26 @@ class MainText(QTextEdit):
 
         cursor.setPosition(int(position))
         self.setTextCursor(cursor)
+
+    def zoom(self):
+        font = self.document().defaultFont()
+        font.setPointSize(self._base_font_size + self._zoom_level())
+        self.document().setDefaultFont(font)
+
+    def zoom_in(self, _):
+        level = self._zoom_level()
+        if level >= 50:
+            return
+        self._application.save_config('zoom', level + 1)
+        self.zoom()
+
+    def zoom_out(self, _):
+        level = self._zoom_level()
+        if level <= 1:
+            return
+        self._application.save_config('zoom', level - 1)
+        self.zoom()
+
+    def zoom_reset(self, _):
+        self._application.save_config('zoom', 1)
+        self.zoom()
