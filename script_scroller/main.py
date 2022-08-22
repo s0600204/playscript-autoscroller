@@ -6,7 +6,7 @@ from PyQt5.QtCore import QTimer
 #from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
-#import qdarkstyle
+import qdarkstyle
 
 from . import __app_name__
 from .application import Application
@@ -17,7 +17,7 @@ def main():
     qt_app.setApplicationName(__app_name__)
     qt_app.setQuitOnLastWindowClosed(True)
 
-    # ~ qt_app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
+    qt_app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
 
     # ~ qt_app.setWindowIcon(
         # ~ QIcon(f"{path.dirname(__file__)}/ui/icons/mic_rx_monitor.svg")
