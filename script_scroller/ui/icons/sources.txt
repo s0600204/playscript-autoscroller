@@ -1,0 +1,5 @@
+format-* - Tango
+zoom-* - Gnome
+edit-clear - Gnome
+sidebar-show - feather (orig: sidebar.svg)
+view-source - feather (orig: code.svg)

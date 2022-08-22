@@ -8,6 +8,15 @@ from PyQt5.QtWidgets import (
 )
 
 
+class ToolbarAction(QAction):
+    def set_icon(self, icon_name):
+        self.setIcon(
+            QIcon.fromTheme(
+                icon_name,
+                QIcon.fromTheme(
+                    f"{icon_name}-symbolic",
+                    QIcon(f"{path.dirname(__file__)}/icons/{icon_name}.svg"))))
+
 class MainToolbar(QToolBar):
 
     def __init__(self, *args, **kwargs):
@@ -16,61 +25,35 @@ class MainToolbar(QToolBar):
         self.setFloatable(False)
         self.setMovable(False)
 
-        self._action_outline = QAction(parent=self)
+        self._action_outline = ToolbarAction(parent=self)
         self._action_outline.setCheckable(True)
         self._action_outline.setChecked(True)
-        self._action_outline.setIcon(
-            QIcon.fromTheme(
-                'sidebar-show',
-                QIcon.fromTheme(
-                    'sidebar-show-symbolic',
-                    QIcon(f"{path.dirname(__file__)}/icons/sidebar-show.svg"))))
+        self._action_outline.set_icon('sidebar-show')
 
-        self._action_bold = QAction(parent=self)
+        self._action_bold = ToolbarAction(parent=self)
         self._action_bold.setCheckable(True)
-        self._action_bold.setIcon(
-            QIcon.fromTheme(
-                'format-text-bold',
-                QIcon.fromTheme('format-text-bold-symbolic')))
+        self._action_bold.set_icon('format-text-bold')
 
-        self._action_italic = QAction(parent=self)
+        self._action_italic = ToolbarAction(parent=self)
         self._action_italic.setCheckable(True)
-        self._action_italic.setIcon(
-            QIcon.fromTheme(
-                'format-text-italic',
-                QIcon.fromTheme('format-text-italic-symbolic')))
+        self._action_italic.set_icon('format-text-italic')
 
-        self._action_underline = QAction(parent=self)
+        self._action_underline = ToolbarAction(parent=self)
         self._action_underline.setCheckable(True)
-        self._action_underline.setIcon(
-            QIcon.fromTheme(
-                'format-text-underline',
-                QIcon.fromTheme('format-text-underline-symbolic')))
+        self._action_underline.set_icon('format-text-underline')
 
-        self._action_strikethrough = QAction(parent=self)
+        self._action_strikethrough = ToolbarAction(parent=self)
         self._action_strikethrough.setCheckable(True)
-        self._action_strikethrough.setIcon(
-            QIcon.fromTheme(
-                'format-text-strikethrough',
-                QIcon.fromTheme('format-text-strikethrough-symbolic')))
+        self._action_strikethrough.set_icon('format-text-strikethrough')
 
-        self._action_zoom_in = QAction(parent=self)
-        self._action_zoom_in.setIcon(
-            QIcon.fromTheme(
-                'zoom-in',
-                QIcon.fromTheme('zoom-in-symbolic')))
+        self._action_zoom_in = ToolbarAction(parent=self)
+        self._action_zoom_in.set_icon('zoom-in')
 
-        self._action_zoom_out = QAction(parent=self)
-        self._action_zoom_out.setIcon(
-            QIcon.fromTheme(
-                'zoom-out',
-                QIcon.fromTheme('zoom-out-symbolic')))
+        self._action_zoom_out = ToolbarAction(parent=self)
+        self._action_zoom_out.set_icon('zoom-out')
 
-        self._action_zoom_reset = QAction(parent=self)
-        self._action_zoom_reset.setIcon(
-            QIcon.fromTheme(
-                'zoom-original',
-                QIcon.fromTheme('zoom-original-symbolic')))
+        self._action_zoom_reset = ToolbarAction(parent=self)
+        self._action_zoom_reset.set_icon('zoom-original')
 
         self._action_source_view = QAction(parent=self)
         self._action_source_view.setCheckable(True)
