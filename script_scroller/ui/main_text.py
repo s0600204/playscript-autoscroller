@@ -26,8 +26,8 @@ class MainText(QTextEdit):
         # indentation should each be replaced with an indent of four spaces.
         # The replacement is done by Qt5, but this also gives a reference for how wide tabs
         # should be.
-        fm = QFontMetrics(self.currentFont())
-        self.setTabStopDistance(fm.horizontalAdvance(" ") * 4)
+        metrics = QFontMetrics(self.currentFont())
+        self.setTabStopDistance(metrics.horizontalAdvance(" ") * 4)
 
         self._base_font_size = self.currentFont().pointSize()
         self._zoom_level = self._application.register_config('zoom', self.DefaultZoom)
@@ -100,12 +100,14 @@ class MainText(QTextEdit):
         scrollbar.setValue(scrollbar.value() + step)
 
     def setFontBold(self, checked):
+        # pylint: disable=invalid-name
         if checked:
             self.setFontWeight(self.BoldWeight)
         else:
             self.setFontWeight(self.NormalWeight)
 
     def setFontStrikeThrough(self, checked):
+        # pylint: disable=invalid-name
         style = self.currentCharFormat()
         style.setFontStrikeOut(checked)
         self.setCurrentCharFormat(style)

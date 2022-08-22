@@ -28,6 +28,7 @@ class DeviceSelector(QComboBox):
                 self.addItem(port.ui_name, port.mido_name)
 
     def setValue(self, new_value):
+        # pylint: disable=invalid-name
         idx = self.findData(new_value)
         self.setCurrentIndex(idx)
 

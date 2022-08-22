@@ -25,13 +25,13 @@ class OutlineTreeNode:
     def parent(self):
         return self._parent
 
-    def addChild(self, child):
+    def append_child(self, child):
         self._children.append(child)
 
     def child(self, child_num):
         return self._children[child_num]
 
-    def childCount(self):
+    def child_count(self):
         return len(self._children)
 
     def data(self, role=Qt.DisplayRole):
@@ -65,7 +65,7 @@ class OutlineTreeNode:
             return self._parent.children[self.rownum() - 1]
         return None
 
-    def removeChild(self, row):
+    def remove_child(self, row):
         return self._children.pop(row)
 
     def rownum(self):
@@ -73,7 +73,7 @@ class OutlineTreeNode:
             return self._parent.children.index(self)
         return -1
 
-    def setData(self, value, role=Qt.DisplayRole):
+    def set_data(self, value, role=Qt.DisplayRole):
         if role == Qt.DisplayRole:
             self._text = value
             return True
@@ -91,7 +91,7 @@ class OutlineTreeNode:
     def value(self):
         if self.rownum() > -1:
             return self.rownum()
-        return self._parent.childCount()
+        return self._parent.child_count()
 
 
 class OutlineTreeRoot(OutlineTreeNode):
@@ -113,20 +113,21 @@ class OutlineTreeModel(QAbstractItemModel):
         self._root = OutlineTreeRoot(self)
 
     def __len__(self):
-        return self._root.childCount()
+        return self._root.child_count()
 
     def childCount(self, index):
+        # pylint: disable=invalid-name
         node = index.internalPointer() if index.isValid() else self._root
-        return node.childCount()
+        return node.child_count()
 
     def clear(self):
-        self.beginRemoveRows(QModelIndex(), 0, self._root.childCount())
-        while self._root.childCount() > 0:
-            self._root.removeChild(0)
+        self.beginRemoveRows(QModelIndex(), 0, self._root.child_count())
+        while self._root.child_count() > 0:
+            self._root.remove_child(0)
         self.endRemoveRows()
 
     def columnCount(self, index):
-        # pylint: disable=no-self-use, unused-argument
+        # pylint: disable=invalid-name, unused-argument
         return 1
 
     def data(self, index, role=Qt.DisplayRole):
@@ -135,10 +136,10 @@ class OutlineTreeModel(QAbstractItemModel):
         return index.internalPointer().data(role)
 
     def setData(self, index, value, role):
-        # pylint: disable=no-self-use
+        # pylint: disable=invalid-name
         if not index.isValid():
             return False
-        return index.internalPointer().setData(value, role)
+        return index.internalPointer().set_data(value, role)
 
     def flags(self, index):
         if not index.isValid():
@@ -167,6 +168,7 @@ class OutlineTreeModel(QAbstractItemModel):
         return self.createIndex(parent.rownum(), 0, parent)
 
     def rowCount(self, index):
+        # pylint: disable=invalid-name
         return self.childCount(index)
 
     def determine_outline(self, document):
@@ -185,14 +187,14 @@ class OutlineTreeModel(QAbstractItemModel):
                 new_parent = new_parent.parent
 
             new_node = OutlineTreeNode(parent=new_parent)
-            new_node.setData(block.text(), Qt.DisplayRole)
-            new_node.setData(block.position(), POSITION_ROLE)
-            new_node.setData(level, LEVEL_ROLE)
+            new_node.set_data(block.text(), Qt.DisplayRole)
+            new_node.set_data(block.position(), POSITION_ROLE)
+            new_node.set_data(level, LEVEL_ROLE)
 
-            rownum = new_parent.childCount()
+            rownum = new_parent.child_count()
 
             self.beginInsertRows(new_parent.index(), rownum, rownum)
-            new_parent.addChild(new_node)
+            new_parent.append_child(new_node)
             self.endInsertRows()
 
             last_node = new_node
