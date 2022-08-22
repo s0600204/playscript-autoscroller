@@ -1,7 +1,6 @@
 
 from PyQt5.QtGui import (
     QFontMetrics,
-    QTextBlockFormat,
     QTextCharFormat,
     QTextCursor,
     QTextDocument,

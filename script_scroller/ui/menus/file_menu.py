@@ -1,6 +1,6 @@
 
 from PyQt5.QtGui import QKeySequence
-from PyQt5.QtWidgets import QAction, QMessageBox
+from PyQt5.QtWidgets import QAction
 
 from script_scroller import __app_name__
 #from script_scroller.i18n import translate

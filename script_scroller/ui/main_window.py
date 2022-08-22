@@ -9,12 +9,8 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QSizePolicy,
     QSplitter,
-    QTreeView,
     QVBoxLayout,
     QWidget,
-
-    QSlider,
-    QTextEdit,
 )
 
 from script_scroller import __app_name__
