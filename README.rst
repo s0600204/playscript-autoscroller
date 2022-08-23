@@ -13,6 +13,7 @@ Gnome 3.2 and the ``mask`` icon from the Lucide_ iconset.
   format-text-bold.svg
   format-text-italic.svg
   format-text-strikethrough.svg
+  format-text-underline.svg
 
 `Gnome Project (3.2)`_ (CC BY-SA 3.0) ::
 

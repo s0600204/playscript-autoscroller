@@ -221,6 +221,7 @@ class MainText(QRstTextEdit):
                 self.setFontWeight(QFont.Bold)
             self.setFontItalic(False)
             self.setFontStrikeThrough(False)
+            self.setFontUnderline(False)
         else:
             if self.fontWeight() != QFont.Normal:
                 self.setFontWeight(QFont.Normal)
@@ -232,6 +233,7 @@ class MainText(QRstTextEdit):
         if checked:
             self.setFontBold(False)
             self.setFontStrikeThrough(False)
+            self.setFontUnderline(False)
         self.on_cursor_move()
 
     def setFontStrikeThrough(self, checked):
@@ -243,6 +245,17 @@ class MainText(QRstTextEdit):
         if checked:
             self.setFontBold(False)
             self.setFontItalic(False)
+            self.setFontUnderline(False)
+        self.on_cursor_move()
+
+    def setFontUnderline(self, checked):
+        # pylint: disable=invalid-name
+        if self.fontUnderline() != checked:
+            super().setFontUnderline(checked)
+        if checked:
+            self.setFontBold(False)
+            self.setFontItalic(False)
+            self.setFontStrikeThrough(False)
         self.on_cursor_move()
 
     def show_source_view(self, show):

@@ -29,6 +29,10 @@ class MainToolbar(QToolBar):
         self._actions["italic"].setCheckable(True)
         self._actions["italic"].set_icon('format-text-italic')
 
+        self._actions["underline"] = ToolbarAction(parent=self)
+        self._actions["underline"].setCheckable(True)
+        self._actions["underline"].set_icon('format-text-underline')
+
         self._actions["strikethrough"] = ToolbarAction(parent=self)
         self._actions["strikethrough"].setCheckable(True)
         self._actions["strikethrough"].set_icon('format-text-strikethrough')
@@ -59,6 +63,7 @@ class MainToolbar(QToolBar):
         self.addSeparator()
         self.addAction(self._actions["bold"])
         self.addAction(self._actions["italic"])
+        self.addAction(self._actions["underline"])
         self.addAction(self._actions["strikethrough"])
         self.addSeparator()
         self.addAction(self._actions["dedent"])
@@ -76,6 +81,7 @@ class MainToolbar(QToolBar):
         self._actions["outline"].enabled.connect(self.parent().enable_outline)
         self._actions["bold"].triggered.connect(textfield.setFontBold)
         self._actions["italic"].triggered.connect(textfield.setFontItalic)
+        self._actions["underline"].triggered.connect(textfield.setFontUnderline)
         self._actions["strikethrough"].triggered.connect(textfield.setFontStrikeThrough)
         self._actions["zoom_in"].triggered.connect(self.parent().zoom_in)
         self._actions["zoom_out"].triggered.connect(self.parent().zoom_out)
@@ -103,6 +109,9 @@ class MainToolbar(QToolBar):
 
         self._actions["italic"].setText("Italic")
         self._actions["italic"].setShortcut(QKeySequence.Italic)
+
+        self._actions["underline"].setText("Underline")
+        self._actions["underline"].setShortcut(QKeySequence.Underline)
 
         self._actions["strikethrough"].setText("Strikethrough")
 
@@ -134,6 +143,7 @@ class MainToolbar(QToolBar):
         # the appropriate character strings around the selected text.
         self._actions["bold"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["italic"].setEnabled(not pdf_view_active and not source_view_active)
+        self._actions["underline"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["strikethrough"].setEnabled(not pdf_view_active and not source_view_active)
 
         # Dedent starts "off" even in non-pdf mode, as the cursor is at the start of a line.
@@ -152,5 +162,6 @@ class MainToolbar(QToolBar):
     def update_style_buttons(self, style):
         self._actions["bold"].setChecked(style["bold"])
         self._actions["italic"].setChecked(style["italic"])
+        self._actions["underline"].setChecked(style["underline"])
         self._actions["strikethrough"].setChecked(style["strikethrough"])
         self._actions["dedent"].setEnabled(style["indent"])
