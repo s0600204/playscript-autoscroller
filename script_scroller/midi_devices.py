@@ -73,8 +73,7 @@ class MidiDevices:
         self._ports = {}
 
     def devices(self):
-        for num in self._devices:
-            yield self._devices[num]
+        return self._devices.values()
 
     def refresh(self):
         processed = []

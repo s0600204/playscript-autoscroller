@@ -7,7 +7,7 @@ from strictyaml import (
 )
 
 """
-lastSave: [[ISO-8601 DateTime]],
+lastSave: [[ISO-8601 DateTime]]
 midpoint: 63
 midi:
   device: "DeviceName:PortName DeviceNum:PortNum"

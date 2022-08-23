@@ -1,0 +1,18 @@
+[MAIN]
+extension-pkg-allow-list=
+    PyQt5.QtCore,
+    PyQt5.QtGui,
+    PyQt5.QtWidgets,
+
+ignored-modules=
+    mido,
+
+recursive=yes
+
+[MESSAGES CONTROL]
+disable=
+    #import-error,
+    pointless-string-statement,
+    missing-class-docstring,
+    missing-module-docstring,
+    missing-function-docstring,

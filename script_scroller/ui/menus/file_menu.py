@@ -65,7 +65,8 @@ class FileMenu(ApplicationMenu):
         self._actions['save'].setShortcut(QKeySequence.Save)
 
         self._actions['save_as'].setText(translate("MainWindow", "Save As..."))
-        self._actions['save_as'].setStatusTip(translate("MainWindow", "Save the Current File with a Specific Name"))
+        self._actions['save_as'].setStatusTip(
+                translate("MainWindow", "Save the Current File with a Specific Name"))
         self._actions['save_as'].setShortcut(QKeySequence.SaveAs)
 
         self._actions['midi_config'].setText(translate("MainWindow", "Settings"))

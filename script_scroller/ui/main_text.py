@@ -120,7 +120,7 @@ class MainText(QTextEdit):
         position = cursor.position()
         was_dirty = self._application.is_dirty()
 
-        if (show):
+        if show:
             # We have to set the position to 0 before clearing the text formatting, else any
             # text selected before the transition will have its formatting stripped.
             cursor.setPosition(0)

@@ -14,5 +14,3 @@ class OutlineTreeView(QTreeView):
         self.setItemsExpandable(False)
         self.setHeaderHidden(True)
         self.expandAll()
-
-    

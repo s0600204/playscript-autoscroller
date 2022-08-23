@@ -76,9 +76,11 @@ class MainWindow(QMainWindow):
 
         self.centralWidget().layout().addWidget(self.splitter)
 
+        # Controller
         self.scroll_controller = Controller(self._application, parent=self)
         self.centralWidget().layout().addWidget(self.scroll_controller)
 
+        # Scroll Timer
         self.text_scroll_timer = QTimer()
         self.text_scroll_timer.setInterval(100)
         self.text_scroll_timer.timeout.connect(self.slider_scroll_tick)
