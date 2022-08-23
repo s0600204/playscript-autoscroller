@@ -34,6 +34,7 @@ class MainWindow(QMainWindow):
         super().__init__(**kwargs)
 
         self.setMinimumSize(640, 480)
+        self.resize(1024, 768)
         self.setCentralWidget(QWidget())
         self.centralWidget().setLayout(QVBoxLayout())
         self.centralWidget().layout().setContentsMargins(4, 4, 4, 4)
@@ -70,7 +71,7 @@ class MainWindow(QMainWindow):
         # Content
         self.main_text = MainText(application, self.toolbar, parent=self.splitter)
         self.splitter.addWidget(self.main_text)
-        self.splitter.setStretchFactor(1, 2)
+        self.splitter.setStretchFactor(1, 5)
         self.toolbar.connect_textfield(self.main_text)
         self.outline_tree.pressed.connect(self.on_outline_press)
 
