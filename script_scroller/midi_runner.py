@@ -14,12 +14,12 @@ class MidiRunner(QObject):
     def __init__(self, application):
         super().__init__()
         self._application = application
-        self._config = None
         self._port = None
 
         self._config_dialog = None
         self._config_getter = self._application.register_config(
             self.ConfigKey, MidiConfigDialog.Defaults)
+        self._config = self._config_getter()
 
         self._application.config_restored.connect(self.restore_from_config)
 
