@@ -2,6 +2,52 @@
 Playscript Autoscroller
 =======================
 
+The **Script Scroller** is a utility permitting a play-script to scroll slowly
+up the screen, with the speed and direction controllable via an external MIDI
+controller.
+
+Thus, a sound operator may make use of an expression pedal to keep their place
+in the script, whilst keeping both hands on the faders of the sound desk. 
+
+
+Dependencies
+------------
+
+As a baseline, you will need ``python`` 3.8 or better, along with ``pip`` for
+that version.
+
+All other dependencies are installed automatically by ``pip``; the full list of
+run-time dependencies may be found in the ``setup.cfg`` file (build dependencies
+in ``pyproject.toml``).
+
+
+Installation
+------------
+
+From Source
+"""""""""""
+
+* Clone this repository locally,
+* In its root directory, run ``pip install .``.
+
+  - (You may need to use ``pip3`` on systems where that matters.)
+
+
+From PyPI
+"""""""""
+
+Planned, but not yet available.
+
+
+Running
+-------
+
+Once installed successfully, the program may be run by invoking
+``script-scroller`` from a terminal window.
+
+A linux ``.desktop`` file is planned for a later date.
+
+
 Icon Credits
 ------------
 
