@@ -1,6 +1,5 @@
 [build-system]
 requires = [
-    "appdirs",
     "setuptools>=45",
     "setuptools_scm",
     "wheel"
