@@ -2,4 +2,4 @@ format-* - Tango
 zoom-* - Gnome
 edit-clear - Gnome
 sidebar-* - Lucide
-view-source - feather (orig: code.svg)
+file-code - Lucide

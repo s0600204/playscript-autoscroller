@@ -22,14 +22,13 @@ Gnome 3.2 and the ``mask`` icon from the Lucide_ iconset.
   zoom-original.svg
   zoom-out.svg
 
-Feather_ (MIT) ::
+Lucide_ (ISC) ::
 
-  sidebar-show.svg (original name: sidebar.svg)
-  view-source.svg  (original name: code.svg)
+  file-code.svg
+  sidebar-close.svg
+  sidebar-open.svg
 
-Lucide_ (ISC)
 
-.. _Feather: https://github.com/feathericons/feather
 .. _Gnome Project (3.2): https://github.com/GNOME/adwaita-icon-theme/tree/gnome-3-20/src/fullcolor
 .. _Lucide: https://github.com/lucide-icons/lucide
 .. _Tango Project: https://www.tango-project.org/
