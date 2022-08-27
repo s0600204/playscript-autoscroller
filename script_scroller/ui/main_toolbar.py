@@ -25,10 +25,10 @@ class MainToolbar(QToolBar):
         self.setFloatable(False)
         self.setMovable(False)
 
-        self._action_outline = ToolbarAction(parent=self)
+        self._action_outline = QAction(parent=self)
         self._action_outline.setCheckable(True)
         self._action_outline.setChecked(True)
-        self._action_outline.set_icon('sidebar-show')
+        self.set_outline_button_icon(True)
 
         self._action_bold = ToolbarAction(parent=self)
         self._action_bold.setCheckable(True)
@@ -75,7 +75,7 @@ class MainToolbar(QToolBar):
         self.addAction(self._action_source_view)
 
     def connect_textfield(self, textfield):
-        self._action_outline.triggered.connect(self.parent().show_outline)
+        self._action_outline.triggered.connect(self.toggle_outline)
         self._action_bold.triggered.connect(textfield.setFontBold)
         self._action_italic.triggered.connect(textfield.setFontItalic)
         self._action_underline.triggered.connect(textfield.setFontUnderline)
@@ -120,8 +120,17 @@ class MainToolbar(QToolBar):
     def should_show_outline(self):
         return self._action_outline.isChecked()
 
+    def toggle_outline(self, checked):
+        self.set_outline_button_icon(checked)
+        self.parent().show_outline(checked)
+
     def update_style_buttons(self, style):
         self._action_bold.setChecked(style["bold"])
         self._action_italic.setChecked(style["italic"])
         self._action_underline.setChecked(style["underline"])
         self._action_strikethrough.setChecked(style["strikethrough"])
+
+    def set_outline_button_icon(self, checked):
+        icon_action = 'close' if checked else 'open'
+        self._action_outline.setIcon(
+            QIcon(f"{path.dirname(__file__)}/icons/sidebar-{icon_action}.svg"))
