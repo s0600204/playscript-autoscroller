@@ -1,9 +1,9 @@
 
-#from os import path
+from os import path
 import sys
 
 from PyQt5.QtCore import QTimer
-#from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
 import qdarkstyle
@@ -19,9 +19,9 @@ def main():
 
     qt_app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
 
-    # ~ qt_app.setWindowIcon(
-        # ~ QIcon(f"{path.dirname(__file__)}/ui/icons/mic_rx_monitor.svg")
-    # ~ )
+    qt_app.setWindowIcon(
+        QIcon(f"{path.dirname(__file__)}/ui/icons/script-scroller.svg")
+    )
 
     # Initialize the application
     app = Application()
