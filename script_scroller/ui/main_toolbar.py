@@ -28,10 +28,6 @@ class MainToolbar(QToolBar):
         self._action_italic.setCheckable(True)
         self._action_italic.set_icon('format-text-italic')
 
-        self._action_underline = ToolbarAction(parent=self)
-        self._action_underline.setCheckable(True)
-        self._action_underline.set_icon('format-text-underline')
-
         self._action_strikethrough = ToolbarAction(parent=self)
         self._action_strikethrough.setCheckable(True)
         self._action_strikethrough.set_icon('format-text-strikethrough')
@@ -53,7 +49,6 @@ class MainToolbar(QToolBar):
         self.addSeparator()
         self.addAction(self._action_bold)
         self.addAction(self._action_italic)
-        #self.addAction(self._action_underline) # MarkDown doesn't support underlined text
         self.addAction(self._action_strikethrough)
         self.addSeparator()
         self.addAction(self._action_zoom_in)
@@ -66,7 +61,6 @@ class MainToolbar(QToolBar):
         self._action_outline.triggered.connect(self.parent().show_outline)
         self._action_bold.triggered.connect(textfield.setFontBold)
         self._action_italic.triggered.connect(textfield.setFontItalic)
-        self._action_underline.triggered.connect(textfield.setFontUnderline)
         self._action_strikethrough.triggered.connect(textfield.setFontStrikeThrough)
         self._action_zoom_in.triggered.connect(textfield.zoom_in)
         self._action_zoom_out.triggered.connect(textfield.zoom_out)
@@ -82,7 +76,6 @@ class MainToolbar(QToolBar):
         # the appropriate character strings around the selected text.
         self._action_bold.setEnabled(enabled)
         self._action_italic.setEnabled(enabled)
-        self._action_underline.setEnabled(enabled)
         self._action_strikethrough.setEnabled(enabled)
 
     def retranslate_ui(self):
@@ -93,9 +86,6 @@ class MainToolbar(QToolBar):
 
         self._action_italic.setText("Italic")
         self._action_italic.setShortcut(QKeySequence.Italic)
-
-        self._action_underline.setText("Underline")
-        self._action_underline.setShortcut(QKeySequence.Underline)
 
         self._action_strikethrough.setText("Strikethrough")
 
@@ -111,5 +101,4 @@ class MainToolbar(QToolBar):
     def update_style_buttons(self, style):
         self._action_bold.setChecked(style["bold"])
         self._action_italic.setChecked(style["italic"])
-        self._action_underline.setChecked(style["underline"])
         self._action_strikethrough.setChecked(style["strikethrough"])
