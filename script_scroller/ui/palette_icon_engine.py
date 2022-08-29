@@ -1,4 +1,6 @@
-# custom icon engine Qt plugin
+# "Palette Icon Engine"; transcoded and adapted from the original C++.
+# Original source: https://github.com/Kolcha/paletteicon
+#
 # Copyright (C) 2017-2020  Nick Korotysh <nick.korotysh@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,10 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Transcoded from the discontinued Palette Icon Engine by Kolcha:
-#   https://github.com/Kolcha/paletteicon   (GPL-3.0)
-
-# pylint: disable=invalid-name
 
 from os import path
 
@@ -57,8 +55,7 @@ class PaletteIconEngine(QIconEngine):
         return f"{filename}.svg"
 
     def _get_icon_color(self,
-                        mode: QIcon.Mode,
-                        state: QIcon.State) -> QColor:
+                        mode: QIcon.Mode) -> QColor:
         color_group = QPalette.Active
         if mode == QIcon.Disabled:
             color_group = QPalette.Disabled
@@ -67,6 +64,8 @@ class PaletteIconEngine(QIconEngine):
     def _get_icon_src(self,
                       mode: QIcon.Mode,
                       state: QIcon.State) -> str:
+        # pylint: disable=too-many-branches, too-many-return-statements
+
         def _find(key, icon):
             if key in self._src_files:
                 icon.append(self._src_files[key])
@@ -135,20 +134,24 @@ class PaletteIconEngine(QIconEngine):
 
     def addFile(self,
                 filename: str,
-                size: QSize,
+                _, # (size: QSize)
                 mode: QIcon.Mode,
                 state: QIcon.State):
+        # pylint: disable=invalid-name
+
         filename = self._actual_filename(filename)
         key = (mode, state)
         if key in self._src_files and filename == self._src_files[key]:
             return
         self._src_files[key] = filename
 
-    def availableSizes(self,
-                       mode: QIcon.Mode,
-                       state: QIcon.State) -> list(QSize):
+    # (Unused Args:: mode: QIcon.Mode, state: QIcon.State)
+    # (Actual return:: list of QSize)
+    def availableSizes(self, *_) -> list:
+        # pylint: disable=invalid-name
+
         return [
-            # KOLCHA COMMENT:
+            # ORIGINAL AUTHOR COMMENT:
             #   just workaround to make tray icon visible on KDE
             QSize(512, 512),
         ]
@@ -158,12 +161,12 @@ class PaletteIconEngine(QIconEngine):
               rect: QRect,
               mode: QIcon.Mode,
               state: QIcon.State):
-        # KOLCHA COMMENT:
+        # ORIGINAL AUTHOR COMMENT:
         #   "direct rendereng" using given painter is not possible
         #   because colorization logic modifies already painted area
         #   such behavior is not acceptable, so render icon to pixmap first
         filename = self._get_icon_src(mode, state)
-        color = self._get_icon_color(mode, state)
+        color = self._get_icon_color(mode)
         out = self._render_icon(
             filename,
             rect.size() * painter.device().devicePixelRatioF(),
@@ -176,7 +179,9 @@ class PaletteIconEngine(QIconEngine):
                mode: QIcon.Mode,
                state: QIcon.State) -> QPixmap:
         filename = self._get_icon_src(mode, state)
-        color = self._get_icon_color(mode, state)
+        color = self._get_icon_color(mode)
+
+        # pylint: disable=consider-using-f-string
         pmckey = "pie_{}:{}x{}:{}-{}{}".format(
             filename,
             size.width(),
