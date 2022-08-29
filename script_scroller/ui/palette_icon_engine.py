@@ -115,8 +115,7 @@ class PaletteIconEngine(QIconEngine):
 
         return None
 
-    @staticmethod
-    def _render_icon(renderer: QSvgRenderer,
+    def _render_icon(self,
                      filename: str,
                      size: QSize,
                      brush: QBrush) -> QPixmap:
@@ -124,8 +123,8 @@ class PaletteIconEngine(QIconEngine):
         output.fill(Qt.transparent)
 
         painter = QPainter(output)
-        renderer.load(filename)
-        renderer.render(painter)
+        self._renderer.load(filename)
+        self._renderer.render(painter)
 
         painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
         painter.setPen(Qt.NoPen)
@@ -166,7 +165,6 @@ class PaletteIconEngine(QIconEngine):
         filename = self._get_icon_src(mode, state)
         color = self._get_icon_color(mode, state)
         out = self._render_icon(
-            self._renderer,
             filename,
             rect.size() * painter.device().devicePixelRatioF(),
             color)
@@ -189,6 +187,6 @@ class PaletteIconEngine(QIconEngine):
 
         pxm = QPixmapCache.find(pmckey)
         if not pxm:
-            pxm = self._render_icon(self._renderer, filename, size, color)
+            pxm = self._render_icon(filename, size, color)
             QPixmapCache.insert(pmckey, pxm)
         return pxm
