@@ -46,7 +46,7 @@ class PaletteIconEngine(QIconEngine):
 
         self._palette = palette_getter
         self._renderer = QSvgRenderer()
-        self._src_file = None
+        self._src_files = {}
 
     # @param filename string
     # @return string
@@ -64,16 +64,68 @@ class PaletteIconEngine(QIconEngine):
             color_group = QPalette.Disabled
         return self._palette().color(color_group, QPalette.WindowText)
 
+    # @param mode    QIcon.Mode
+    # @param state   QIcon.state
+    def _get_icon_src(self, mode, state):
+        def _find(key, icon):
+            if key in self._src_files:
+                icon.append(self._src_files[key])
+            return icon
+
+        response = []
+        # If we have a specific image to have, use it.
+        if _find((mode, state), response):
+            return response[0]
+
+        # Else find a suitable alternative, based on the table found on
+        # https://doc.qt.io/qt-5/qtwidgets-widgets-icons-example.html
+        opposite_state = QIcon.Off if state == QIcon.On else QIcon.Off
+        if mode in (QIcon.Normal, QIcon.Active):
+            opposite_mode = QIcon.Active if mode == QIcon.Normal else QIcon.Normal
+            if _find((opposite_mode, state), response):
+                return response[0]
+            if _find((mode, opposite_state), response):
+                return response[0]
+            if _find((opposite_mode, opposite_state), response):
+                return response[0]
+            if _find((QIcon.Disabled, state), response):
+                return response[0]
+            if _find((QIcon.Selected, state), response):
+                return response[0]
+            if _find((QIcon.Disabled, opposite_state), response):
+                return response[0]
+            if _find((QIcon.Selected, opposite_state), response):
+                return response[0]
+        else:
+            opposite_mode = QIcon.Disabled if QIcon.Selected else QIcon.Selected
+            if _find((QIcon.Normal, state), response):
+                return response[0]
+            if _find((QIcon.Active, state), response):
+                return response[0]
+            if _find((mode, opposite_state), response):
+                return response[0]
+            if _find((QIcon.Normal, opposite_state), response):
+                return response[0]
+            if _find((QIcon.Active, opposite_state), response):
+                return response[0]
+            if _find((opposite_mode, state), response):
+                return response[0]
+            if _find((opposite_mode, opposite_state), response):
+                return response[0]
+
+        return None
+
     # @param renderer QSvgRenderer
     # @param size     QSize
     # @param brush    QBrush
     # @return QPixmap
     @staticmethod
-    def renderIcon(renderer, size, brush):
+    def _render_icon(renderer, filename, size, brush):
         output = QPixmap(size)
         output.fill(Qt.transparent)
 
         painter = QPainter(output)
+        renderer.load(filename)
         renderer.render(painter)
 
         painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
@@ -85,14 +137,14 @@ class PaletteIconEngine(QIconEngine):
 
     # @param filename string
     # @param size     QSize (UNUSED)
-    # @param mode     QIcon.Mode (UNUSED)
-    # @param state    QIcon.State (UNUSED)
+    # @param mode     QIcon.Mode
+    # @param state    QIcon.State
     def addFile(self, filename, size, mode, state):
         filename = self._actual_filename(filename)
-        if filename == self._src_file:
+        key = (mode, state)
+        if key in self._src_files and filename == self._src_files[key]:
             return
-        if self._renderer.load(filename):
-            self._src_file = filename
+        self._src_files[key] = filename
 
     # @param mode  QIcon.Mode (UNUSED)
     # @param state QIcon.State (UNUSED)
@@ -113,9 +165,11 @@ class PaletteIconEngine(QIconEngine):
         #   "direct rendereng" using given painter is not possible
         #   because colorization logic modifies already painted area
         #   such behavior is not acceptable, so render icon to pixmap first
+        filename = self._get_icon_src(mode, state)
         color = self._get_icon_color(mode, state)
-        out = self.renderIcon(
+        out = self._render_icon(
             self._renderer,
+            filename,
             rect.size() * painter.device().devicePixelRatioF(),
             color)
         out.setDevicePixelRatio(painter.device().devicePixelRatioF())
@@ -126,9 +180,10 @@ class PaletteIconEngine(QIconEngine):
     # @param state QIcon.State
     # @return QPixmap
     def pixmap(self, size, mode, state):
+        filename = self._get_icon_src(mode, state)
         color = self._get_icon_color(mode, state)
         pmckey = "pie_{}:{}x{}:{}-{}{}".format(
-            self._src_file,
+            filename,
             size.width(),
             size.height(),
             mode,
@@ -137,7 +192,7 @@ class PaletteIconEngine(QIconEngine):
 
         pxm = QPixmapCache.find(pmckey)
         if not pxm:
-            pxm = self.renderIcon(self._renderer, size, color)
+            pxm = self._render_icon(self._renderer, filename, size, color)
             QPixmapCache.insert(pmckey, pxm)
         return pxm
 
