@@ -4,6 +4,8 @@ from os import path
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction
 
+from .palette_icon_engine import PaletteIconEngine
+
 
 class ToolbarAction(QAction):
 
@@ -14,7 +16,8 @@ class ToolbarAction(QAction):
         if not bundled_name:
             return QIcon(path.join(path.dirname(__file__), self.BundledIconSubPath, system_name))
 
-        icon = QIcon(path.join(path.dirname(__file__), self.BundledIconSubPath, bundled_name))
+        icon = QIcon(PaletteIconEngine())
+        icon.addFile(path.join(path.dirname(__file__), self.BundledIconSubPath, bundled_name))
 
         if bundled_name_checked:
             icon.addFile(
