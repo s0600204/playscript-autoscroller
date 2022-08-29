@@ -38,7 +38,8 @@ class MidiConfigDialog(QDialog):
 
         self._control_label = QLabel(self)
         self._control_selector = QSpinBox(self)
-        self._control_selector.setRange(0, 127)
+        # CC 120 - 127 are Channel Mode Messages; and shouldn't be used arbitrarily.
+        self._control_selector.setRange(0, 119)
         self._control_selector.setValue(self.Defaults['control'])
         self.layout().addRow(self._control_label, self._control_selector)
 
