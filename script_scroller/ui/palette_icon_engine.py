@@ -48,9 +48,17 @@ class PaletteIconEngine(QIconEngine):
         self._renderer = QSvgRenderer()
         self._src_file = None
 
-        if other and other._renderer.isValid():
-            self._renderer.load(other._src_file)
-            self._src_file = other._src_file
+        if other and other.renderer.isValid():
+            self._renderer.load(other.src_filename)
+            self._src_file = other.src_filename
+
+    @property
+    def renderer(self):
+        return self._renderer
+
+    @property
+    def src_filename(self):
+        return self._src_file
 
     # @param filename string
     # @return string
