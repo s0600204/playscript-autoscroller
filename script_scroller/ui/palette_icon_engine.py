@@ -19,8 +19,9 @@
 
 # pylint: disable=invalid-name
 
+from os import path
+
 from PyQt5.QtCore import (
-    QFile,
     QSize,
     Qt,
 )
@@ -53,18 +54,10 @@ class PaletteIconEngine(QIconEngine):
     # @param filename string
     # @return string
     @staticmethod
-    def actualFilename(filename):
-        if QFile.exists(filename):
+    def _actual_filename(filename):
+        if path.exists(filename):
             return filename
-
-        try:
-            fn = filename[0:filename.rindex('.')]
-        except ValueError:
-            fn = filename
-        if QFile.exists(fn):
-            return fn
-
-        return f"{fn}.svg"
+        return f"{filename}.svg"
 
     # @param mode  QIcon.Mode
     # @param state QIcon.state (UNUSED)
@@ -99,7 +92,7 @@ class PaletteIconEngine(QIconEngine):
     # @param mode     QIcon.Mode (UNUSED)
     # @param state    QIcon.State (UNUSED)
     def addFile(self, filename, size, mode, state):
-        filename = self.actualFilename(filename)
+        filename = self._actual_filename(filename)
         if filename == self._src_file:
             return
         if self._renderer.load(filename):
