@@ -41,24 +41,12 @@ from PyQt5.QtSvg import (
 
 class PaletteIconEngine(QIconEngine):
 
-    def __init__(self, palette_getter, other=None, *args, **kwargs):
+    def __init__(self, palette_getter, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self._palette = palette_getter
         self._renderer = QSvgRenderer()
         self._src_file = None
-
-        if other and other.renderer.isValid():
-            self._renderer.load(other.src_filename)
-            self._src_file = other.src_filename
-
-    @property
-    def renderer(self):
-        return self._renderer
-
-    @property
-    def src_filename(self):
-        return self._src_file
 
     # @param filename string
     # @return string
@@ -105,10 +93,6 @@ class PaletteIconEngine(QIconEngine):
             return
         if self._renderer.load(filename):
             self._src_file = filename
-
-    # @return QIconEngine
-    def clone(self):
-        return PaletteIconEngine(self)
 
     # @param mode  QIcon.Mode (UNUSED)
     # @param state QIcon.State (UNUSED)
