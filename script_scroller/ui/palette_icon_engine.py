@@ -41,9 +41,10 @@ from PyQt5.QtSvg import (
 
 class PaletteIconEngine(QIconEngine):
 
-    def __init__(self, other=None, *args, **kwargs):
+    def __init__(self, palette_getter, other=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self._palette = palette_getter
         self._renderer = QSvgRenderer()
         self._src_file = None
 
@@ -59,14 +60,13 @@ class PaletteIconEngine(QIconEngine):
             return filename
         return f"{filename}.svg"
 
-    # @param mode  QIcon.Mode
-    # @param state QIcon.state (UNUSED)
-    @staticmethod
-    def getIconColor(mode, state):
+    # @param mode    QIcon.Mode
+    # @param state   QIcon.state (UNUSED)
+    def _get_icon_color(self, mode, state):
         color_group = QPalette.Active
         if mode == QIcon.Disabled:
             color_group = QPalette.Disabled
-        return QPalette().color(color_group, QPalette.WindowText)
+        return self._palette().color(color_group, QPalette.WindowText)
 
     # @param renderer QSvgRenderer
     # @param size     QSize
@@ -121,7 +121,7 @@ class PaletteIconEngine(QIconEngine):
         #   "direct rendereng" using given painter is not possible
         #   because colorization logic modifies already painted area
         #   such behavior is not acceptable, so render icon to pixmap first
-        color = self.getIconColor(mode, state)
+        color = self._get_icon_color(mode, state)
         out = self.renderIcon(
             self._renderer,
             rect.size() * painter.device().devicePixelRatioF(),
@@ -134,7 +134,7 @@ class PaletteIconEngine(QIconEngine):
     # @param state QIcon.State
     # @return QPixmap
     def pixmap(self, size, mode, state):
-        color = self.getIconColor(mode, state)
+        color = self._get_icon_color(mode, state)
         pmckey = "pie_{}:{}x{}:{}-{}{}".format(
             self._src_file,
             size.width(),

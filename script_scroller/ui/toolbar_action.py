@@ -16,7 +16,7 @@ class ToolbarAction(QAction):
         if not bundled_name:
             return QIcon(path.join(path.dirname(__file__), self.BundledIconSubPath, system_name))
 
-        icon = QIcon(PaletteIconEngine())
+        icon = QIcon(PaletteIconEngine(self.parent().palette))
         icon.addFile(path.join(path.dirname(__file__), self.BundledIconSubPath, bundled_name))
 
         if bundled_name_checked:
