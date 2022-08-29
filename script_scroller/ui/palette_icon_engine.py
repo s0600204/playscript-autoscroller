@@ -22,10 +22,12 @@
 from os import path
 
 from PyQt5.QtCore import (
+    QRect,
     QSize,
     Qt,
 )
 from PyQt5.QtGui import (
+    QBrush,
     QColor,
     QIcon,
     QIconEngine,
@@ -48,25 +50,23 @@ class PaletteIconEngine(QIconEngine):
         self._renderer = QSvgRenderer()
         self._src_files = {}
 
-    # @param filename string
-    # @return string
     @staticmethod
-    def _actual_filename(filename):
+    def _actual_filename(filename: str) -> str:
         if path.exists(filename):
             return filename
         return f"{filename}.svg"
 
-    # @param mode    QIcon.Mode
-    # @param state   QIcon.state (UNUSED)
-    def _get_icon_color(self, mode, state):
+    def _get_icon_color(self,
+                        mode: QIcon.Mode,
+                        state: QIcon.State) -> QColor:
         color_group = QPalette.Active
         if mode == QIcon.Disabled:
             color_group = QPalette.Disabled
         return self._palette().color(color_group, QPalette.WindowText)
 
-    # @param mode    QIcon.Mode
-    # @param state   QIcon.state
-    def _get_icon_src(self, mode, state):
+    def _get_icon_src(self,
+                      mode: QIcon.Mode,
+                      state: QIcon.State) -> str:
         def _find(key, icon):
             if key in self._src_files:
                 icon.append(self._src_files[key])
@@ -115,12 +115,11 @@ class PaletteIconEngine(QIconEngine):
 
         return None
 
-    # @param renderer QSvgRenderer
-    # @param size     QSize
-    # @param brush    QBrush
-    # @return QPixmap
     @staticmethod
-    def _render_icon(renderer, filename, size, brush):
+    def _render_icon(renderer: QSvgRenderer,
+                     filename: str,
+                     size: QSize,
+                     brush: QBrush) -> QPixmap:
         output = QPixmap(size)
         output.fill(Qt.transparent)
 
@@ -135,32 +134,31 @@ class PaletteIconEngine(QIconEngine):
 
         return output
 
-    # @param filename string
-    # @param size     QSize (UNUSED)
-    # @param mode     QIcon.Mode
-    # @param state    QIcon.State
-    def addFile(self, filename, size, mode, state):
+    def addFile(self,
+                filename: str,
+                size: QSize,
+                mode: QIcon.Mode,
+                state: QIcon.State):
         filename = self._actual_filename(filename)
         key = (mode, state)
         if key in self._src_files and filename == self._src_files[key]:
             return
         self._src_files[key] = filename
 
-    # @param mode  QIcon.Mode (UNUSED)
-    # @param state QIcon.State (UNUSED)
-    # @return list(QSize)
-    def availableSizes(self, mode, state):
+    def availableSizes(self,
+                       mode: QIcon.Mode,
+                       state: QIcon.State) -> list(QSize):
         return [
             # KOLCHA COMMENT:
             #   just workaround to make tray icon visible on KDE
             QSize(512, 512),
         ]
 
-    # @param painter QPainter
-    # @param rect    QRect
-    # @param mode    QIcon.Mode
-    # @param state   QIcon.State
-    def paint(self, painter, rect, mode, state):
+    def paint(self,
+              painter: QPainter,
+              rect: QRect,
+              mode: QIcon.Mode,
+              state: QIcon.State):
         # KOLCHA COMMENT:
         #   "direct rendereng" using given painter is not possible
         #   because colorization logic modifies already painted area
@@ -175,11 +173,10 @@ class PaletteIconEngine(QIconEngine):
         out.setDevicePixelRatio(painter.device().devicePixelRatioF())
         painter.drawPixmap(rect, out)
 
-    # @param size  QSize
-    # @param mode  QIcon.Mode
-    # @param state QIcon.State
-    # @return QPixmap
-    def pixmap(self, size, mode, state):
+    def pixmap(self,
+               size: QSize,
+               mode: QIcon.Mode,
+               state: QIcon.State) -> QPixmap:
         filename = self._get_icon_src(mode, state)
         color = self._get_icon_color(mode, state)
         pmckey = "pie_{}:{}x{}:{}-{}{}".format(
