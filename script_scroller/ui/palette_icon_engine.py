@@ -195,12 +195,3 @@ class PaletteIconEngine(QIconEngine):
             pxm = self._render_icon(self._renderer, filename, size, color)
             QPixmapCache.insert(pmckey, pxm)
         return pxm
-
-    # @param id int
-    # @param data
-    def virtual_hook(self, id, data):
-        if id == QIconEngine.IsNullHook:
-            data = not self._renderer or not self._renderer.isValid()
-            return
-
-        super().virtual_hook(id, data)
