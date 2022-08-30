@@ -8,6 +8,7 @@ from strictyaml import (
 
 """
 lastSave: [[ISO-8601 DateTime]]
+lastLocation: "/home/user"
 midpoint: 63
 midi:
   device: "DeviceName:PortName DeviceNum:PortNum"
@@ -18,6 +19,7 @@ zoom: 2
 
 config_schema = Map({
     "lastSave": Datetime(),
+    "lastLocation": Str(),
     "midpoint": Int(),
     "midi": Map({
       "device": Str(),

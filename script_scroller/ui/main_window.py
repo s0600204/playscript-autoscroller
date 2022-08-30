@@ -1,4 +1,5 @@
 
+import os
 from os import path
 
 from PyQt5.QtCore import Qt, QTimer
@@ -28,6 +29,8 @@ from .outline_tree_view import OutlineTreeView
 
 class MainWindow(QMainWindow):
 
+    DefaultLocation = path.expanduser('~')
+    ConfigKey = 'lastLocation'
     STATUSBAR_MSG_DURATION = 3000 # ms
 
     def __init__(self, application, **kwargs):
@@ -41,6 +44,8 @@ class MainWindow(QMainWindow):
         self._was_maximized = None
 
         self._application = application
+        self._saved_location = self._application.register_config(
+            self.ConfigKey, self.DefaultLocation)
 
         # Menu Bar
         self.menubar = QMenuBar(self)
@@ -93,6 +98,18 @@ class MainWindow(QMainWindow):
             return event.accept()
         return event.ignore()
 
+    def get_valid_location(self):
+        candidate = self._saved_location()
+        if not candidate:
+            return self.DefaultLocation
+
+        while not path.exists(candidate):
+            candidate = path.dirname(candidate)
+        if os.access(candidate, os.R_OK | os.W_OK):
+            return candidate
+
+        return self.DefaultLocation
+
     def on_outline_press(self, index):
         self.main_text.go_to_position(
             self.outline_model.data(index, POSITION_ROLE))
@@ -101,6 +118,7 @@ class MainWindow(QMainWindow):
         self._application.runner.open_config_dialog(self)
 
     def prompt_open_filename(self):
+        location = self.get_valid_location()
         # parent = nullptr,
         # caption = QString(),
         # directory = QString(),
@@ -110,12 +128,20 @@ class MainWindow(QMainWindow):
         response = QFileDialog.getOpenFileName(
             parent=self,
             caption="Select file to open...",
-            directory="~/",
+            directory=location,
             filter="Scripts (*.md)")
 
-        return response[0] or None
+        if not response[0]:
+            return None
+
+        new_location = path.dirname(response[0])
+        if new_location != location:
+            self._application.save_config(self.ConfigKey, new_location)
+
+        return response[0]
 
     def prompt_save_filename(self):
+        location = self.get_valid_location()
         # parent = nullptr,
         # caption = QString()
         # directory = QString()
@@ -125,11 +151,15 @@ class MainWindow(QMainWindow):
         response = QFileDialog.getSaveFileName(
             parent=self,
             caption="Save as...",
-            directory="~/",
+            directory=location,
             filter="Scripts (*.md)")
 
         if not response[0]:
             return None
+
+        new_location = path.dirname(response[0])
+        if new_location != location:
+            self._application.save_config(self.ConfigKey, new_location)
 
         if response[0][-3:] == '.md':
             return response[0]
