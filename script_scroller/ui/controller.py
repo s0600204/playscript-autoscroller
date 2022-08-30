@@ -1,5 +1,8 @@
 
+from os import path
+
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QGridLayout,
     QProgressBar,
@@ -7,6 +10,8 @@ from PyQt5.QtWidgets import (
     QSlider,
     QWidget,
 )
+
+from .palette_icon_engine import PaletteIconEngine
 
 
 class Controller(QWidget):
@@ -33,15 +38,21 @@ class Controller(QWidget):
         self._midpoint.setTickPosition(QSlider.TicksAbove)
         self.layout().addWidget(self._midpoint, 1, 0)
 
+        _ignore_icon = QIcon(PaletteIconEngine(self.palette))
+        _ignore_icon.addFile(path.join(path.dirname(__file__), './icons/x.svg'))
         self._ignore_button = QPushButton(self)
         self._ignore_button.setCheckable(True)
         self._ignore_button.setChecked(False)
+        self._ignore_button.setIcon(_ignore_icon)
         self._ignore_button.pressed.connect(self.on_ignore)
         self.layout().addWidget(self._ignore_button, 0, 1)
 
+        _pause_icon = QIcon(PaletteIconEngine(self.palette))
+        _pause_icon.addFile(path.join(path.dirname(__file__), './icons/pause.svg'))
         self._pause_button = QPushButton(self)
         self._pause_button.setCheckable(True)
         self._pause_button.setChecked(True)
+        self._pause_button.setIcon(_pause_icon)
         self.layout().addWidget(self._pause_button, 1, 1)
 
         # Default position
