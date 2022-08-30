@@ -148,7 +148,7 @@ class MainWindow(QMainWindow):
         if response == QMessageBox.Discard:
             return True
 
-        return self.file_save()
+        return self._application.file_save()
 
     def slider_scroll_tick(self):
         self.main_text.scroll(self.scroll_controller.value())
