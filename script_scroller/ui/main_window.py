@@ -21,8 +21,7 @@ from script_scroller.outline_tree_model import OutlineTreeModel, POSITION_ROLE
 from .controller import Controller
 from .main_text import MainText
 from .main_toolbar import MainToolbar
-# ~ from .menus.about_menu import AboutMenu
-# ~ from .menus.edit_menu import EditMenu
+from .menus.about_menu import AboutMenu
 from .menus.file_menu import FileMenu
 from .outline_tree_view import OutlineTreeView
 
@@ -51,12 +50,10 @@ class MainWindow(QMainWindow):
         self.menubar = QMenuBar(self)
 
         self.menu_file = FileMenu(self)
-        # ~ self.menu_edit = EditMenu(self)
-        # ~ self.menu_about = AboutMenu(self)
+        self.menu_about = AboutMenu(self)
 
         self.menubar.addMenu(self.menu_file)
-        # ~ self.menubar.addMenu(self.menu_edit)
-        # ~ self.menubar.addMenu(self.menu_about)
+        self.menubar.addMenu(self.menu_about)
         self.setMenuBar(self.menubar)
 
         # Toolbar
@@ -213,10 +210,8 @@ class MainWindow(QMainWindow):
     def retranslate_ui(self):
         self.retranslate_title()
 
-        # Menus
         self.menu_file.retranslate_ui()
-        # ~ self.menu_edit.retranslate_ui()
-        # ~ self.menu_about.retranslate_ui()
+        self.menu_about.retranslate_ui()
 
         self.toolbar.retranslate_ui()
 

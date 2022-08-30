@@ -1,7 +1,9 @@
 [MAIN]
 extension-pkg-allow-list=
+    PyQt5.Qt,
     PyQt5.QtCore,
     PyQt5.QtGui,
+    PyQt5.QtSvg,
     PyQt5.QtWidgets,
 
 ignored-modules=
