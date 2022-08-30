@@ -1,5 +1,4 @@
 
-from os import path
 import sys
 
 from PyQt5.QtCore import QTimer
@@ -8,7 +7,7 @@ from PyQt5.QtWidgets import QApplication
 
 import qdarkstyle
 
-from . import __app_name__
+from . import __app_icon__, __app_name__
 from .application import Application
 
 def main():
@@ -18,10 +17,7 @@ def main():
     qt_app.setQuitOnLastWindowClosed(True)
 
     qt_app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
-
-    qt_app.setWindowIcon(
-        QIcon(f"{path.dirname(__file__)}/ui/icons/script-scroller.svg")
-    )
+    qt_app.setWindowIcon(QIcon(__app_icon__))
 
     # Initialize the application
     app = Application()

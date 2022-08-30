@@ -46,6 +46,7 @@ def _split_vers(vers):
 
 
 __app_name__ = "Script Scroller"
+__app_icon__ = f"{path.dirname(__file__)}/ui/icons/script-scroller.svg"
 __author__ = "s0600204"
 __doc__ = "MIDI-controllable Playscript Scroller"
 __config_file__ = path.join(_app_dirs.user_config_dir, "config.yaml")
