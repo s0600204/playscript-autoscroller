@@ -87,6 +87,12 @@ class MainWindow(QMainWindow):
         self.text_scroll_timer.timeout.connect(self.slider_scroll_tick)
         self.text_scroll_timer.start()
 
+    def closeEvent(self, event):
+        # pylint: disable=invalid-name
+        if self.prompt_unsaved():
+            return event.accept()
+        return event.ignore()
+
     def on_outline_press(self, index):
         self.main_text.go_to_position(
             self.outline_model.data(index, POSITION_ROLE))
