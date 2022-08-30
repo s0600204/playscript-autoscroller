@@ -38,6 +38,12 @@ class Application(QObject):
     def window(self):
         return self._mainwindow
 
+    def centre_on_screen(self, screen_geometry):
+        window_geometry = self._mainwindow.frameGeometry()
+        self._mainwindow.move(
+            int((screen_geometry.width() - window_geometry.width()) / 2 + screen_geometry.x()),
+            int((screen_geometry.height() - window_geometry.height()) / 2 + screen_geometry.y()))
+
     def file_new(self):
         if self.is_dirty() and not self._mainwindow.prompt_unsaved():
             return

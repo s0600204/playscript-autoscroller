@@ -21,6 +21,7 @@ def main():
 
     # Initialize the application
     app = Application()
+    app.centre_on_screen(qt_app.primaryScreen().geometry())
 
     # Run the application
     QTimer.singleShot(0, app.start)
