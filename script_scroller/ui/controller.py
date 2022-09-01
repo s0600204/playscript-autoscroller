@@ -83,11 +83,13 @@ class Controller(QWidget):
         self.midpoint = self._config_getter()
 
     def retranslate_ui(self):
-        self._ignore_button.setText('Ignore')
+        self._ignore_button.setText('I&gnore')
         self._ignore_button.setToolTip('Ignore input from MIDI device')
+        self._ignore_button.setShortcut('Ctrl+G')
 
-        self._pause_button.setText('Pause')
+        self._pause_button.setText('&Pause')
         self._pause_button.setToolTip('Pause scrolling')
+        self._pause_button.setShortcut('Ctrl+P')
 
     def update(self, new_value):
         if self._ignore_button.isChecked():
