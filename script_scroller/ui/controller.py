@@ -23,7 +23,7 @@ class Controller(QWidget):
 
         self._application = application
         self._config_getter = self._application.register_config('midpoint', self.Default)
-        self._cached_value = 0
+        self._cached_value = (0, 100)
 
         self.setLayout(QGridLayout())
 
@@ -95,12 +95,16 @@ class Controller(QWidget):
         self._status.setValue(new_value)
 
     def value(self):
+
         if self._pause_button.isChecked():
-            return 0
+            return (0, 100)
 
         if self._ignore_button.isChecked():
             return self._cached_value
 
-        # @todo: Implement a better way of translating values to something that can used to scroll
-        self._cached_value = round((self._status.value() - self._midpoint.value()) / 4)
+        diff = self._status.value() - self._midpoint.value()
+        self._cached_value = (
+            round(diff / 6),
+            round(1000 / (abs(diff / 2) + 10))
+        )
         return self._cached_value

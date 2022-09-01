@@ -184,7 +184,9 @@ class MainWindow(QMainWindow):
         return self._application.file_save()
 
     def slider_scroll_tick(self):
-        self.main_text.scroll(self.scroll_controller.value())
+        difference, interval = self.scroll_controller.value()
+        self.main_text.scroll(difference)
+        self.text_scroll_timer.setInterval(interval)
 
     def rebuild_outline(self):
         self.outline_model.determine_outline(self.main_text.document())
