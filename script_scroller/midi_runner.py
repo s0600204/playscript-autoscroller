@@ -26,7 +26,7 @@ class MidiRunner(QObject):
     def on_midi_message(self, message):
         if not message.is_cc() \
             or message.channel != self._config['channel'] \
-            or message.control != self._config['control']:
+            or message.control != self._config['scroll_control']:
             return
         self.ValueReceived.emit(message.value)
 

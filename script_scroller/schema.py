@@ -24,7 +24,10 @@ config_schema = Map({
     "midi": Map({
       "device": Str(),
       "channel": Int(),
-      "control": Int(),
+      "scroll_control": Int(),
+      "midpoint_control": Int(),
+      "ignore_note": Int(),
+      "pause_note": Int(),
     }),
     "zoom": Int(),
 })
