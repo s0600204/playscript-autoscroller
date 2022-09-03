@@ -59,6 +59,7 @@ class MidiConfigDialog(QDialog):
 
     def retranslate_ui(self):
         self._device_label.setText('MIDI Device')
+        self._device_selector.setPlaceholderText('Select...')
         self._channel_label.setText('MIDI Channel')
         self._control_label.setText('Control #')
 
