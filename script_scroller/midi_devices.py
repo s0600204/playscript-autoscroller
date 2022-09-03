@@ -1,4 +1,6 @@
 
+import os
+
 import mido
 
 
@@ -23,6 +25,8 @@ class MidiDevice:
 
     @property
     def ui_name(self):
+        if os.name == 'nt':
+            return self.name
         return f"{self.num} :: {self.name}"
 
     def register_in_port(self, port):
@@ -34,8 +38,18 @@ class InPort:
         self._mido_name = mido_name
 
         split_point = mido_name.rfind(' ')
-        self._device_name, self._name = mido_name[:split_point].split(':')
-        self._device_num, self._num = mido_name[split_point+1:].split(':')
+        if os.name == 'nt':
+            if mido_name.find('(') > -1:
+                self._device_name = mido_name[mido_name.find('(')+1:mido_name.find(')')]
+            else:
+                self._device_name = mido_name[:split_point]
+            self._name = 'Input'
+
+            self._device_num = None
+            self._num = int(mido_name[split_point+1:]) + 1
+        else:
+            self._device_name, self._name = mido_name[:split_point].split(':')
+            self._device_num, self._num = mido_name[split_point+1:].split(':')
 
     @property
     def device_name(self):
@@ -63,6 +77,8 @@ class InPort:
 
     @property
     def ui_name(self):
+        if os.name == 'nt':
+            return f"{self.name} {self._num}"
         return f"{self.port_id} :: {self.name}"
 
 
