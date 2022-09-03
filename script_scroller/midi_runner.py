@@ -9,7 +9,10 @@ from .ui.midi_config import MidiConfigDialog
 class MidiRunner(QObject):
 
     ConfigKey = 'midi'
-    ValueReceived = pyqtSignal(int, name='valueReceived')
+    ScrollUpdate = pyqtSignal(int, name='scrollUpdate')
+    MidpointUpdate = pyqtSignal(int, name='midpointUpdate')
+    PauseToggled = pyqtSignal(name='pauseToggled')
+    IgnoreToggled = pyqtSignal(name='ignoreToggled')
 
     def __init__(self, application):
         super().__init__()
@@ -24,11 +27,21 @@ class MidiRunner(QObject):
         self._application.config_restored.connect(self.restore_from_config)
 
     def on_midi_message(self, message):
-        if not message.is_cc() \
-            or message.channel != self._config['channel'] \
-            or message.control != self._config['scroll_control']:
+        if message.channel != self._config['channel']:
             return
-        self.ValueReceived.emit(message.value)
+
+        if message.type == 'control_change':
+            if message.control == self._config['scroll_control']:
+                self.ScrollUpdate.emit(message.value)
+            elif message.control == self._config['midpoint_control']:
+                self.MidpointUpdate.emit(message.value)
+            return
+
+        if message.type == 'note_on':
+            if message.note == self._config['ignore_note']:
+                self.IgnoreToggled.emit()
+            elif message.note == self._config['pause_note']:
+                self.PauseToggled.emit()
 
     def restore_from_config(self):
         self._config = self._config_getter()

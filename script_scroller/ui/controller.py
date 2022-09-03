@@ -60,7 +60,12 @@ class Controller(QWidget):
 
         self._application.config_restored.connect(self.deserialise)
         self._midpoint.valueChanged.connect(self.serialise)
-        self._application.runner.valueReceived.connect(self.update)
+
+        runner = self._application.runner
+        runner.ignoreToggled.connect(self.toggle_ignore)
+        runner.midpointUpdate.connect(self.update_midpoint)
+        runner.pauseToggled.connect(self.toggle_pause)
+        runner.scrollUpdate.connect(self.update_scroll)
 
     @property
     def midpoint(self):
@@ -91,7 +96,18 @@ class Controller(QWidget):
         self._pause_button.setToolTip('Pause scrolling')
         self._pause_button.setShortcut('Ctrl+P')
 
-    def update(self, new_value):
+    def toggle_ignore(self):
+        self._ignore_button.setChecked(
+            not self._ignore_button.isChecked())
+
+    def toggle_pause(self):
+        self._pause_button.setChecked(
+            not self._pause_button.isChecked())
+
+    def update_midpoint(self, new_value):
+        self._midpoint.setValue(new_value)
+
+    def update_scroll(self, new_value):
         if self._ignore_button.isChecked():
             return
         self._status.setValue(new_value)

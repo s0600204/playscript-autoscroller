@@ -20,7 +20,7 @@ class MidiConfigDialog(QDialog):
         'scroll_control': 7,
         'midpoint_control': 8,
         'ignore_note': 0,
-        'pause_note': 1,
+        'pause_note': 2,
     }
 
     def __init__(self, *args, **kwargs):
