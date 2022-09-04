@@ -44,6 +44,7 @@ class Controller(QWidget):
         self._ignore_button.setCheckable(True)
         self._ignore_button.setChecked(False)
         self._ignore_button.setIcon(_ignore_icon)
+        self._ignore_button.setStyleSheet("QPushButton:checked { background-color: #f70000; }")
         self._ignore_button.pressed.connect(self.on_ignore)
         self.layout().addWidget(self._ignore_button, 0, 1)
 
@@ -53,6 +54,7 @@ class Controller(QWidget):
         self._pause_button.setCheckable(True)
         self._pause_button.setChecked(True)
         self._pause_button.setIcon(_pause_icon)
+        self._pause_button.setStyleSheet("QPushButton:checked { background-color: #f70000; }")
         self.layout().addWidget(self._pause_button, 1, 1)
 
         # Default position
