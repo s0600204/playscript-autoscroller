@@ -29,7 +29,12 @@ Lucide_ (ISC) ::
   sidebar-close.svg
   sidebar-open.svg
 
+`Simple Icons`_ (CC0 1.0) ::
+
+  markdown.svg
+
 
 .. _Gnome Project (3.2): https://github.com/GNOME/adwaita-icon-theme/tree/gnome-3-20/src/fullcolor
 .. _Lucide: https://github.com/lucide-icons/lucide
+.. _Simple Icons: https://simpleicons.org/
 .. _Tango Project: https://www.tango-project.org/

@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QAction
 
 from playscript_autoscroller import __app_name__
 #from playscript_autoscroller.i18n import translate
+from .import_menu import ImportMenu
 from .menu import ApplicationMenu
 
 def translate(_, text):
@@ -29,6 +30,11 @@ class FileMenu(ApplicationMenu):
         self._actions['save_as'] = QAction(self)
         self._actions['save_as'].triggered.connect(self._application.file_save_as)
         self.addAction(self._actions['save_as'])
+
+        self.addSeparator()
+
+        self._import_menu = ImportMenu(self._window)
+        self.addMenu(self._import_menu)
 
         self.addSeparator()
 
@@ -68,6 +74,8 @@ class FileMenu(ApplicationMenu):
         self._actions['save_as'].setStatusTip(
                 translate("MainWindow", "Save the Current File with a Specific Name"))
         self._actions['save_as'].setShortcut(QKeySequence.SaveAs)
+
+        self._import_menu.retranslate_ui()
 
         self._actions['midi_config'].setText(translate("MainWindow", "Settings"))
         self._actions['midi_config'].setStatusTip(translate("MainWindow", "Open MIDI Config"))
