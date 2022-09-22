@@ -5,12 +5,11 @@ from PyQt5.QtGui import (
     QTextCursor,
     QTextDocument,
 )
-from PyQt5.QtWidgets import (
-    QTextEdit,
-)
+
+from pyqt5_rst import QRstTextEdit
 
 
-class MainText(QTextEdit):
+class MainText(QRstTextEdit):
 
     # @todo: Extract these from the active StyleSheet/Theme somehow
     BoldWeight = 75
