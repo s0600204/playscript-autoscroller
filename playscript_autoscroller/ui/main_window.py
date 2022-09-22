@@ -209,6 +209,8 @@ class MainWindow(QMainWindow):
         self.show_source_view(False)
         if filetype == 'markdown':
             self.main_text.setMarkdown(filecontent)
+        elif filetype == 'rst':
+            self.main_text.setReStructuredText(filecontent)
         self.main_text.respace_text()
         self.rebuild_outline()
 

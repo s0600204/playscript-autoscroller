@@ -15,6 +15,7 @@ from .schema import config_schema
 DEFAULT_FILE_TYPE = 'markdown'
 SUPPORTED_FILE_TYPES = {
     'markdown': ('Playscripts (*.md)', '.md'),
+    'rst': ('Playscripts (*.rst)', '.rst'),
 }
 
 def load_yaml_file(filepath, schema):
