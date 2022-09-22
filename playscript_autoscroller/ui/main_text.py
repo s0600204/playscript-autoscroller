@@ -127,10 +127,10 @@ class MainText(QRstTextEdit):
 
             position *= 1.5
             self.setCurrentCharFormat(QTextCharFormat())
-            self.setPlainText(self.toMarkdown(QTextDocument.MarkdownDialectCommonMark))
+            self.setPlainText(self.toReStructuredText())
         else:
             position /= 1.5
-            self.setMarkdown(self.toPlainText())
+            self.setReStructuredText(self.toPlainText())
             self.respace_text()
 
         # Reset to clean if the document content hadn't actually been changed previously
