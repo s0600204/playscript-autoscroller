@@ -12,6 +12,11 @@ from . import __config_file__
 from .schema import config_schema
 
 
+DEFAULT_FILE_TYPE = 'markdown'
+SUPPORTED_FILE_TYPES = {
+    'markdown': ('Playscripts (*.md)', '.md'),
+}
+
 def load_yaml_file(filepath, schema):
     """Note: this function does not perform any handling of Errors or Exceptions."""
     with open(filepath, mode='r', encoding='utf-8') as filehandle:

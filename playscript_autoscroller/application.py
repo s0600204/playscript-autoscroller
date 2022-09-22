@@ -2,6 +2,7 @@
 from PyQt5.QtCore import pyqtSignal, QObject
 
 from .file_io import (
+    DEFAULT_FILE_TYPE,
     load_config_file,
     read_document_file,
     save_config_file,
@@ -53,15 +54,18 @@ class Application(QObject):
         self.set_clean()
 
     def file_open(self):
+        self.file_open_with_type(DEFAULT_FILE_TYPE)
+
+    def file_open_with_type(self, filetype):
         if self.is_dirty() and not self._mainwindow.prompt_unsaved():
             return
 
-        filename = self._mainwindow.prompt_open_filename()
+        filename = self._mainwindow.prompt_open_filename(filetype)
         if not filename:
             return
 
         filecontent = read_document_file(filename)
-        self._mainwindow.restore_content(filecontent)
+        self._mainwindow.restore_content(filetype, filecontent)
 
         self._document_filename = filename
         self.set_clean()

@@ -18,6 +18,7 @@ from playscript_autoscroller import __app_name__
 # ~ from playscript_autoscroller.i18n import translate
 
 from playscript_autoscroller.outline_tree_model import OutlineTreeModel, POSITION_ROLE
+from playscript_autoscroller.file_io import DEFAULT_FILE_TYPE, SUPPORTED_FILE_TYPES
 from .controller import Controller
 from .main_text import MainText
 from .main_toolbar import MainToolbar
@@ -114,8 +115,13 @@ class MainWindow(QMainWindow):
     def open_midi_config(self):
         self._application.runner.open_config_dialog(self)
 
-    def prompt_open_filename(self):
+    def prompt_open_filename(self, filetype='markdown'):
         location = self.get_valid_location()
+        filetypedef = SUPPORTED_FILE_TYPES.get(filetype)
+        caption = "Select file to open..."
+        if filetype != DEFAULT_FILE_TYPE:
+            caption = "Select file to import..."
+
         # parent = nullptr,
         # caption = QString(),
         # directory = QString(),
@@ -124,9 +130,9 @@ class MainWindow(QMainWindow):
         # options = Options()
         response = QFileDialog.getOpenFileName(
             parent=self,
-            caption="Select file to open...",
+            caption=caption,
             directory=location,
-            filter="Scripts (*.md)")
+            filter=filetypedef[0])
 
         if not response[0]:
             return None
@@ -139,6 +145,7 @@ class MainWindow(QMainWindow):
 
     def prompt_save_filename(self):
         location = self.get_valid_location()
+        filetypedef = SUPPORTED_FILE_TYPES.get(DEFAULT_FILE_TYPE)
         # parent = nullptr,
         # caption = QString()
         # directory = QString()
@@ -149,7 +156,7 @@ class MainWindow(QMainWindow):
             parent=self,
             caption="Save as...",
             directory=location,
-            filter="Scripts (*.md)")
+            filter=filetypedef[0])
 
         if not response[0]:
             return None
@@ -158,10 +165,11 @@ class MainWindow(QMainWindow):
         if new_location != location:
             self._application.save_config(self.ConfigKey, new_location)
 
-        if response[0][-3:] == '.md':
+        file_ext = filetypedef[1]
+        if response[0][-len(file_ext):] == file_ext:
             return response[0]
 
-        return response[0] + '.md'
+        return f"{response[0]}{file_ext}"
 
     def prompt_unsaved(self):
         if not self._application.is_dirty():
@@ -196,10 +204,11 @@ class MainWindow(QMainWindow):
         self.main_text.clear()
         self.outline_model.clear()
 
-    def restore_content(self, filecontent):
+    def restore_content(self, filetype, filecontent):
         self.reset_content()
         self.show_source_view(False)
-        self.main_text.setMarkdown(filecontent)
+        if filetype == 'markdown':
+            self.main_text.setMarkdown(filecontent)
         self.main_text.respace_text()
         self.rebuild_outline()
 
