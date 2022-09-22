@@ -3,6 +3,7 @@ from PyQt5.QtCore import pyqtSignal, QObject
 
 from .file_io import (
     DEFAULT_FILE_TYPE,
+    SUPPORTED_FILE_TYPES,
     load_config_file,
     read_document_file,
     save_config_file,
@@ -74,7 +75,8 @@ class Application(QObject):
         return self.file_save_as(self.current_filename)
 
     def file_save_as(self, filename=None):
-        if not filename:
+        ext = SUPPORTED_FILE_TYPES.get(DEFAULT_FILE_TYPE)[1]
+        if not filename or filename[-len(ext):] != ext:
             filename = self._mainwindow.prompt_save_filename()
             if not filename:
                 return False
