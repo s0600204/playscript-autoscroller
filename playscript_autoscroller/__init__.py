@@ -6,7 +6,7 @@ from appdirs import AppDirs
 
 
 _app_dirs = AppDirs(
-    "ScriptScroller"
+    "PlayscriptAutoscroller"
 )
 
 # Not SemVer! (unfortunately)
@@ -45,10 +45,10 @@ def _split_vers(vers):
     return tuple(vers)
 
 
-__app_name__ = "Script Scroller"
-__app_icon__ = f"{path.dirname(__file__)}/ui/icons/script-scroller.svg"
+__app_name__ = "Playscript Autoscroller"
+__app_icon__ = f"{path.dirname(__file__)}/ui/icons/playscript-autoscroller.svg"
 __author__ = "s0600204"
-__doc__ = "MIDI-controllable Playscript Scroller"
+__doc__ = "MIDI-controllable autoscroller for theatre playscripts"
 __config_file__ = path.join(_app_dirs.user_config_dir, "config.yaml")
 __version__ = version(path.split(path.dirname(__file__))[-1])
 __version_info__ = _split_vers(__version__)

@@ -2,7 +2,7 @@
 from PyQt5.QtGui import QStandardItem
 from PyQt5.QtWidgets import QComboBox
 
-from script_scroller.midi_devices import MidiDevices
+from playscript_autoscroller.midi_devices import MidiDevices
 
 
 class DeviceSelector(QComboBox):

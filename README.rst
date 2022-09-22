@@ -1,6 +1,6 @@
 
-Script Scroller
-===============
+Playscript Autoscroller
+=======================
 
 Icon Credits
 ------------

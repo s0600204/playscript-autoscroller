@@ -14,10 +14,10 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from script_scroller import __app_name__
-# ~ from script_scroller.i18n import translate
+from playscript_autoscroller import __app_name__
+# ~ from playscript_autoscroller.i18n import translate
 
-from script_scroller.outline_tree_model import OutlineTreeModel, POSITION_ROLE
+from playscript_autoscroller.outline_tree_model import OutlineTreeModel, POSITION_ROLE
 from .controller import Controller
 from .main_text import MainText
 from .main_toolbar import MainToolbar

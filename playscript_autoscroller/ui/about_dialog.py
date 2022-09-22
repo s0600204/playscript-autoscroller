@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import (
     QLabel,
 )
 
-from script_scroller import (
+from playscript_autoscroller import (
     __app_icon__,
     __app_name__,
     __doc__,

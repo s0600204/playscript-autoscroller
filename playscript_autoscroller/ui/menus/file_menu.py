@@ -2,8 +2,8 @@
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QAction
 
-from script_scroller import __app_name__
-#from script_scroller.i18n import translate
+from playscript_autoscroller import __app_name__
+#from playscript_autoscroller.i18n import translate
 from .menu import ApplicationMenu
 
 def translate(_, text):

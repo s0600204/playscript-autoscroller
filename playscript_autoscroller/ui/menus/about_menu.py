@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (
     qApp,
 )
 
-from script_scroller import __app_name__
+from playscript_autoscroller import __app_name__
 from ..about_dialog import AboutDialog
 #from mic_rx_monitor.i18n import translate
 from .menu import ApplicationMenu
