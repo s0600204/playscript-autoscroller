@@ -12,7 +12,7 @@ from . import __config_file__
 from .schema import config_schema
 
 
-DEFAULT_FILE_TYPE = 'markdown'
+DEFAULT_FILE_TYPE = 'rst'
 SUPPORTED_FILE_TYPES = {
     'markdown': ('Playscripts (*.md)', '.md'),
     'rst': ('Playscripts (*.rst)', '.rst'),

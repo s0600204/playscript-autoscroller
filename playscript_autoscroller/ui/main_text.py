@@ -37,7 +37,7 @@ class MainText(QRstTextEdit):
 
     @property
     def content(self):
-        return self.toMarkdown(QTextDocument.MarkdownDialectCommonMark)
+        return self.toReStructuredText()
 
     @property
     def cursor(self):
