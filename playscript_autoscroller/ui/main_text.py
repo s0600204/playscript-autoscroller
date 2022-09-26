@@ -1,9 +1,15 @@
 
+import sys
+
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import (
     QFontMetrics,
     QTextCharFormat,
     QTextCursor,
     QTextDocument,
+)
+from PyQt5.QtWidgets import (
+    QShortcut
 )
 
 from pyqt5_rst import QRstTextEdit
@@ -28,6 +34,12 @@ class MainText(QRstTextEdit):
         metrics = QFontMetrics(self.currentFont())
         self.setTabStopDistance(metrics.horizontalAdvance(" ") * 4)
 
+        # See comment of connected method for explanation of this.
+        if sys.platform == "linux":
+            shifttab_shortcut = QShortcut("Shift+Tab", self)
+            shifttab_shortcut.setContext(Qt.WidgetShortcut)
+            shifttab_shortcut.activated.connect(self._tab_handling)
+
         self._base_font_size = self.currentFont().pointSize()
         self._zoom_level = self._application.register_config('zoom', self.DefaultZoom)
         self._application.config_restored.connect(self.zoom)
@@ -47,6 +59,40 @@ class MainText(QRstTextEdit):
     def toolbar(self):
         return self._toolbar
 
+    def _tab_handling(self, shift_down=True):
+        """
+        Does the actual work of tab customisation behaviour.
+
+        This exists because on Linux - even with `self.tabChangesFocus == False` - Shift+Tab
+        changes focus. (Works fine on Windows 10. macOS is untested at this time.)
+
+        Thus: on Linux we setup a widget-level shortcut that intercepts the Shift+Tab key
+        combination and diverts it here. The keyPressEvent method below hands off to this to
+        minimise code duplication.
+
+        If Qt ever fixes this, we can remove this work-around.
+        """
+        cursor = self.textCursor()
+        if cursor.atBlockStart():
+            block_format = cursor.blockFormat()
+            indent = block_format.indent()
+            if shift_down:
+                if indent == 0:
+                    return True
+                indent -= 1
+            else:
+                indent += 1
+            block_format.setIndent(indent)
+            cursor.setBlockFormat(block_format)
+            return True
+
+        if shift_down:
+            cursor.movePosition(QTextCursor.Left, n=4)
+            self.setTextCursor(cursor)
+            return True
+
+        return False
+
     def go_to_position(self, position):
         cursor = self.textCursor()
 
@@ -57,6 +103,21 @@ class MainText(QRstTextEdit):
 
         cursor.setPosition(int(position))
         self.setTextCursor(cursor)
+
+    def keyPressEvent(self, event): # pylint: disable=invalid-name
+        """
+        Function overridden so as to customise tab behaviour:
+
+        * Tabbing when at the *start* of a line will indent the text;
+        * Shift-tabbing when at the *start* of a line will deindent the text;
+        * Shift-tabbing in the *middle* of a line will move the cursor back.
+        """
+        if event.text() == "\t":
+            shift_down = event.modifiers() & Qt.ShiftModifier
+            if self._tab_handling(shift_down):
+                return
+
+        super().keyPressEvent(event)
 
     def on_cursor_move(self):
         char_format = self.currentCharFormat()
