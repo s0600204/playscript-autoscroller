@@ -1,5 +1,6 @@
 
 from PyQt5.QtGui import (
+    QFont,
     QFontMetrics,
     QTextCharFormat,
     QTextCursor,
@@ -12,9 +13,6 @@ from PyQt5.QtWidgets import (
 
 class MainText(QTextEdit):
 
-    # @todo: Extract these from the active StyleSheet/Theme somehow
-    BoldWeight = 75
-    NormalWeight = 50
     DefaultZoom = 1
 
     def __init__(self, application, toolbar, *args, **kwargs):
@@ -62,7 +60,7 @@ class MainText(QTextEdit):
     def on_cursor_move(self):
         char_format = self.currentCharFormat()
         style = {
-            "bold": char_format.fontWeight() == self.BoldWeight,
+            "bold": char_format.fontWeight() == QFont.Bold,
             "italic": char_format.fontItalic(),
             "underline": char_format.fontUnderline(),
             "strikethrough": char_format.fontStrikeOut(),
@@ -102,9 +100,9 @@ class MainText(QTextEdit):
     def setFontBold(self, checked):
         # pylint: disable=invalid-name
         if checked:
-            self.setFontWeight(self.BoldWeight)
+            self.setFontWeight(QFont.Bold)
         else:
-            self.setFontWeight(self.NormalWeight)
+            self.setFontWeight(QFont.Normal)
 
     def setFontStrikeThrough(self, checked):
         # pylint: disable=invalid-name
