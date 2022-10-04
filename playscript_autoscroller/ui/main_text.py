@@ -118,6 +118,9 @@ class MainText(QTextEdit):
         position = cursor.position()
         was_dirty = self._application.is_dirty()
 
+        # plaintext pastes only in Source View
+        self.setAcceptRichText(not show)
+
         if show:
             # We have to set the position to 0 before clearing the text formatting, else any
             # text selected before the transition will have its formatting stripped.
