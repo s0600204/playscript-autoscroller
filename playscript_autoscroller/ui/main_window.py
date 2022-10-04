@@ -45,6 +45,7 @@ class MainWindow(QMainWindow):
         self._application = application
         self._saved_location = self._application.register_config(
             self.ConfigKey, self.DefaultLocation)
+        self._source_view_active = False
 
         # Menu Bar
         self.menubar = QMenuBar(self)
@@ -88,6 +89,10 @@ class MainWindow(QMainWindow):
         self.text_scroll_timer.setInterval(100)
         self.text_scroll_timer.timeout.connect(self.slider_scroll_tick)
         self.text_scroll_timer.start()
+
+    @property
+    def source_view_active(self):
+        return self._source_view_active
 
     def closeEvent(self, event):
         # pylint: disable=invalid-name
@@ -235,6 +240,7 @@ class MainWindow(QMainWindow):
             self.outline_tree.hide()
 
     def show_source_view(self, show):
+        self._source_view_active = True
         self.main_text.show_source_view(show)
         self.toolbar.set_source_view_checked(show)
         self.toolbar.set_text_formatting_enabled(not show)
