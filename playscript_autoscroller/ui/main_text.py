@@ -1,6 +1,7 @@
 
 from PyQt5.QtGui import (
     QFont,
+    QFontDatabase,
     QFontMetrics,
     QTextCharFormat,
     QTextCursor,
@@ -26,6 +27,9 @@ class MainText(QTextEdit):
         # should be.
         metrics = QFontMetrics(self.currentFont())
         self.setTabStopDistance(metrics.horizontalAdvance(" ") * 4)
+
+        self._normal_font = self.font()
+        self._mono_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)
 
         self._base_font_size = self.currentFont().pointSize()
         self._zoom_level = self._application.register_config('zoom', self.DefaultZoom)
@@ -130,8 +134,10 @@ class MainText(QTextEdit):
             position *= 1.5
             self.setCurrentCharFormat(QTextCharFormat())
             self.setPlainText(self.toMarkdown(QTextDocument.MarkdownDialectCommonMark))
+            self.setFont(self._mono_font)
         else:
             position /= 1.5
+            self.setFont(self._normal_font)
             self.setMarkdown(self.toPlainText())
             self.respace_text()
 
@@ -143,9 +149,12 @@ class MainText(QTextEdit):
         self.setTextCursor(cursor)
 
     def zoom(self):
-        font = self.document().defaultFont()
-        font.setPointSize(self._base_font_size + self._zoom_level())
-        self.document().setDefaultFont(font)
+        self._normal_font.setPointSize(self._base_font_size + self._zoom_level())
+        self._mono_font.setPointSize(self._base_font_size + self._zoom_level())
+        if self._application.window.source_view_active:
+            self.setFont(self._mono_font)
+        else:
+            self.setFont(self._normal_font)
         self.respace_text()
 
     def zoom_in(self, _):
