@@ -125,6 +125,9 @@ class MainToolbar(QToolBar):
     def should_show_outline(self):
         return self._actions["outline"].isChecked()
 
+    def update_source_view_checked(self):
+        self._actions["source_view"].setChecked(self.parent().source_view_active)
+
     def update_style_buttons(self, style):
         self._actions["bold"].setChecked(style["bold"])
         self._actions["italic"].setChecked(style["italic"])

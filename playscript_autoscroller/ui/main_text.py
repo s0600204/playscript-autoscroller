@@ -4,6 +4,7 @@ import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import (
     QFont,
+    QFontDatabase,
     QFontMetrics,
     QTextCharFormat,
     QTextCursor,
@@ -37,6 +38,9 @@ class MainText(QRstTextEdit):
             shifttab_shortcut = QShortcut("Shift+Tab", self)
             shifttab_shortcut.setContext(Qt.WidgetShortcut)
             shifttab_shortcut.activated.connect(self._tab_handling)
+
+        self._normal_font = self.font()
+        self._mono_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)
 
         self._base_font_size = self.currentFont().pointSize()
         self._zoom_level = self._application.register_config('zoom', self.DefaultZoom)
@@ -161,6 +165,17 @@ class MainText(QRstTextEdit):
                 font = char_format.font()
                 level_spacing[block_level] = QFontMetrics(font).height() * 0.5
 
+            # Update the size of monospaced sections
+            for form in block.textFormats():
+                if form.format.font().family() == 'monospace':
+                    start = block.position() + form.start
+                    end = start + form.length
+                    block_cursor.setPosition(start)
+                    block_cursor.setPosition(end, QTextCursor.KeepAnchor)
+                    fmt = form.format
+                    fmt.setFont(self._mono_font)
+                    block_cursor.setCharFormat(fmt)
+
             block_format.setTopMargin(level_spacing[block_level])
             block_cursor.setBlockFormat(block_format)
             block = block.next()
@@ -200,6 +215,9 @@ class MainText(QRstTextEdit):
         position = cursor.position()
         was_dirty = self._application.is_dirty()
 
+        # plaintext pastes only in Source View
+        self.setAcceptRichText(not show)
+
         if show:
             # We have to set the position to 0 before clearing the text formatting, else any
             # text selected before the transition will have its formatting stripped.
@@ -209,8 +227,10 @@ class MainText(QRstTextEdit):
             position *= 1.5
             self.setCurrentCharFormat(QTextCharFormat())
             self.setPlainText(self.toReStructuredText())
+            self.setFont(self._mono_font)
         else:
             position /= 1.5
+            self.setFont(self._normal_font)
             self.setReStructuredText(self.toPlainText())
             self.respace_text()
 
@@ -222,9 +242,12 @@ class MainText(QRstTextEdit):
         self.setTextCursor(cursor)
 
     def zoom(self):
-        font = self.document().defaultFont()
-        font.setPointSize(self._base_font_size + self._zoom_level())
-        self.document().setDefaultFont(font)
+        self._normal_font.setPointSize(self._base_font_size + self._zoom_level())
+        self._mono_font.setPointSize(self._base_font_size + self._zoom_level())
+        if self._application.window.source_view_active:
+            self.setFont(self._mono_font)
+        else:
+            self.setFont(self._normal_font)
         self.respace_text()
 
     def zoom_in(self, _):
