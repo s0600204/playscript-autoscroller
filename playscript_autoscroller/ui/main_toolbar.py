@@ -13,90 +13,92 @@ class MainToolbar(QToolBar):
         self.setFloatable(False)
         self.setMovable(False)
 
-        self._action_outline = ToolbarAction(parent=self)
-        self._action_outline.setCheckable(True)
-        self._action_outline.setChecked(True)
-        self._action_outline.set_icon('sidebar-show', 'sidebar-open', 'sidebar-close')
+        self._actions = {}
 
-        self._action_bold = ToolbarAction(parent=self)
-        self._action_bold.setCheckable(True)
-        self._action_bold.set_icon('format-text-bold')
+        self._actions["outline"] = ToolbarAction(parent=self)
+        self._actions["outline"].setCheckable(True)
+        self._actions["outline"].setChecked(True)
+        self._actions["outline"].set_icon('sidebar-show', 'sidebar-open', 'sidebar-close')
 
-        self._action_italic = ToolbarAction(parent=self)
-        self._action_italic.setCheckable(True)
-        self._action_italic.set_icon('format-text-italic')
+        self._actions["bold"] = ToolbarAction(parent=self)
+        self._actions["bold"].setCheckable(True)
+        self._actions["bold"].set_icon('format-text-bold')
 
-        self._action_strikethrough = ToolbarAction(parent=self)
-        self._action_strikethrough.setCheckable(True)
-        self._action_strikethrough.set_icon('format-text-strikethrough')
+        self._actions["italic"] = ToolbarAction(parent=self)
+        self._actions["italic"].setCheckable(True)
+        self._actions["italic"].set_icon('format-text-italic')
 
-        self._action_zoom_in = ToolbarAction(parent=self)
-        self._action_zoom_in.set_icon('zoom-in')
+        self._actions["strikethrough"] = ToolbarAction(parent=self)
+        self._actions["strikethrough"].setCheckable(True)
+        self._actions["strikethrough"].set_icon('format-text-strikethrough')
 
-        self._action_zoom_out = ToolbarAction(parent=self)
-        self._action_zoom_out.set_icon('zoom-out')
+        self._actions["zoom_in"] = ToolbarAction(parent=self)
+        self._actions["zoom_in"].set_icon('zoom-in')
 
-        self._action_zoom_reset = ToolbarAction(parent=self)
-        self._action_zoom_reset.set_icon('zoom-original')
+        self._actions["zoom_out"] = ToolbarAction(parent=self)
+        self._actions["zoom_out"].set_icon('zoom-out')
 
-        self._action_source_view = ToolbarAction(parent=self)
-        self._action_source_view.setCheckable(True)
-        self._action_source_view.set_icon('text-x-source', 'file-code')
+        self._actions["zoom_reset"] = ToolbarAction(parent=self)
+        self._actions["zoom_reset"].set_icon('zoom-original')
 
-        self.addAction(self._action_outline)
+        self._actions["source_view"] = ToolbarAction(parent=self)
+        self._actions["source_view"].setCheckable(True)
+        self._actions["source_view"].set_icon('text-x-source', 'file-code')
+
+        self.addAction(self._actions["outline"])
         self.addSeparator()
-        self.addAction(self._action_bold)
-        self.addAction(self._action_italic)
-        self.addAction(self._action_strikethrough)
+        self.addAction(self._actions["bold"])
+        self.addAction(self._actions["italic"])
+        self.addAction(self._actions["strikethrough"])
         self.addSeparator()
-        self.addAction(self._action_zoom_in)
-        self.addAction(self._action_zoom_out)
-        self.addAction(self._action_zoom_reset)
+        self.addAction(self._actions["zoom_in"])
+        self.addAction(self._actions["zoom_out"])
+        self.addAction(self._actions["zoom_reset"])
         self.addSeparator()
-        self.addAction(self._action_source_view)
+        self.addAction(self._actions["source_view"])
 
     def connect_textfield(self, textfield):
-        self._action_outline.triggered.connect(self.parent().show_outline)
-        self._action_bold.triggered.connect(textfield.setFontBold)
-        self._action_italic.triggered.connect(textfield.setFontItalic)
-        self._action_strikethrough.triggered.connect(textfield.setFontStrikeThrough)
-        self._action_zoom_in.triggered.connect(textfield.zoom_in)
-        self._action_zoom_out.triggered.connect(textfield.zoom_out)
-        self._action_zoom_reset.triggered.connect(textfield.zoom_reset)
-        self._action_source_view.triggered.connect(self.parent().show_source_view)
+        self._actions["outline"].triggered.connect(self.parent().show_outline)
+        self._actions["bold"].triggered.connect(textfield.setFontBold)
+        self._actions["italic"].triggered.connect(textfield.setFontItalic)
+        self._actions["strikethrough"].triggered.connect(textfield.setFontStrikeThrough)
+        self._actions["zoom_in"].triggered.connect(textfield.zoom_in)
+        self._actions["zoom_out"].triggered.connect(textfield.zoom_out)
+        self._actions["zoom_reset"].triggered.connect(textfield.zoom_reset)
+        self._actions["source_view"].triggered.connect(self.parent().show_source_view)
 
     def set_source_view_checked(self, checked):
-        self._action_source_view.setChecked(checked)
+        self._actions["source_view"].setChecked(checked)
 
     def set_text_formatting_enabled(self, enabled):
-        self._action_outline.setEnabled(enabled)
+        self._actions["outline"].setEnabled(enabled)
         # It might be nice to not disable the buttons in "source view", but instead add/remove
         # the appropriate character strings around the selected text.
-        self._action_bold.setEnabled(enabled)
-        self._action_italic.setEnabled(enabled)
-        self._action_strikethrough.setEnabled(enabled)
+        self._actions["bold"].setEnabled(enabled)
+        self._actions["italic"].setEnabled(enabled)
+        self._actions["strikethrough"].setEnabled(enabled)
 
     def retranslate_ui(self):
-        self._action_outline.setText("Toggle Outline")
+        self._actions["outline"].setText("Toggle Outline")
 
-        self._action_bold.setText("Bold")
-        self._action_bold.setShortcut(QKeySequence.Bold)
+        self._actions["bold"].setText("Bold")
+        self._actions["bold"].setShortcut(QKeySequence.Bold)
 
-        self._action_italic.setText("Italic")
-        self._action_italic.setShortcut(QKeySequence.Italic)
+        self._actions["italic"].setText("Italic")
+        self._actions["italic"].setShortcut(QKeySequence.Italic)
 
-        self._action_strikethrough.setText("Strikethrough")
+        self._actions["strikethrough"].setText("Strikethrough")
 
-        self._action_zoom_in.setText("Zoom In")
-        self._action_zoom_out.setText("Zoom Out")
-        self._action_zoom_reset.setText("Zoom Reset")
+        self._actions["zoom_in"].setText("Zoom In")
+        self._actions["zoom_out"].setText("Zoom Out")
+        self._actions["zoom_reset"].setText("Zoom Reset")
 
-        self._action_source_view.setText("View Source")
+        self._actions["source_view"].setText("View Source")
 
     def should_show_outline(self):
-        return self._action_outline.isChecked()
+        return self._actions["outline"].isChecked()
 
     def update_style_buttons(self, style):
-        self._action_bold.setChecked(style["bold"])
-        self._action_italic.setChecked(style["italic"])
-        self._action_strikethrough.setChecked(style["strikethrough"])
+        self._actions["bold"].setChecked(style["bold"])
+        self._actions["italic"].setChecked(style["italic"])
+        self._actions["strikethrough"].setChecked(style["strikethrough"])
