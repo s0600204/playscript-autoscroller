@@ -25,6 +25,8 @@ Lucide_ (ISC) ::
 
   x.svg
   file-code.svg
+  indent.svg
+  outdent.svg
   pause.svg
   sidebar-close.svg
   sidebar-open.svg

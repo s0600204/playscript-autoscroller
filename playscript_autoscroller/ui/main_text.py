@@ -72,16 +72,11 @@ class MainText(QRstTextEdit):
         """
         cursor = self.textCursor()
         if cursor.atBlockStart():
-            block_format = cursor.blockFormat()
-            indent = block_format.indent()
             if shift_down:
-                if indent == 0:
-                    return True
-                indent -= 1
+                self.dedent()
             else:
-                indent += 1
-            block_format.setIndent(indent)
-            cursor.setBlockFormat(block_format)
+                self.indent()
+            self.on_cursor_move()
             return True
 
         if shift_down:
@@ -90,6 +85,20 @@ class MainText(QRstTextEdit):
             return True
 
         return False
+
+    def currentBlockFormat(self):
+        # pylint: disable=invalid-name
+        cursor = self.textCursor()
+        return cursor.blockFormat()
+
+    def dedent(self):
+        block_format = self.currentBlockFormat()
+        indent = block_format.indent()
+        if indent > 0:
+            indent -= 1
+            block_format.setIndent(indent)
+            self.setCurrentBlockFormat(block_format)
+        return indent
 
     def go_to_position(self, position):
         cursor = self.textCursor()
@@ -101,6 +110,12 @@ class MainText(QRstTextEdit):
 
         cursor.setPosition(int(position))
         self.setTextCursor(cursor)
+
+    def indent(self):
+        block_format = self.currentBlockFormat()
+        indent = block_format.indent() + 1
+        block_format.setIndent(indent)
+        self.setCurrentBlockFormat(block_format)
 
     def keyPressEvent(self, event): # pylint: disable=invalid-name
         """
@@ -118,12 +133,14 @@ class MainText(QRstTextEdit):
         super().keyPressEvent(event)
 
     def on_cursor_move(self):
+        block_format = self.currentBlockFormat()
         char_format = self.currentCharFormat()
         style = {
             "bold": char_format.fontWeight() == QFont.Bold,
             "italic": char_format.fontItalic(),
             "underline": char_format.fontUnderline(),
             "strikethrough": char_format.fontStrikeOut(),
+            "indent": block_format.indent(),
         }
         self._toolbar.update_style_buttons(style)
 
@@ -156,6 +173,11 @@ class MainText(QRstTextEdit):
     def scroll(self, step):
         scrollbar = self.verticalScrollBar()
         scrollbar.setValue(scrollbar.value() + step)
+
+    def setCurrentBlockFormat(self, block_format):
+        # pylint: disable=invalid-name
+        cursor = self.textCursor()
+        return cursor.setBlockFormat(block_format)
 
     def setFontBold(self, checked):
         # pylint: disable=invalid-name
