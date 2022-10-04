@@ -67,9 +67,6 @@ class MainToolbar(QToolBar):
         self._actions["zoom_reset"].triggered.connect(textfield.zoom_reset)
         self._actions["source_view"].triggered.connect(self.parent().show_source_view)
 
-    def set_source_view_checked(self, checked):
-        self._actions["source_view"].setChecked(checked)
-
     def set_text_formatting_enabled(self, enabled):
         self._actions["outline"].setEnabled(enabled)
         # It might be nice to not disable the buttons in "source view", but instead add/remove
@@ -97,6 +94,9 @@ class MainToolbar(QToolBar):
 
     def should_show_outline(self):
         return self._actions["outline"].isChecked()
+
+    def update_source_view_checked(self):
+        self._actions["source_view"].setChecked(self.parent().source_view_active)
 
     def update_style_buttons(self, style):
         self._actions["bold"].setChecked(style["bold"])

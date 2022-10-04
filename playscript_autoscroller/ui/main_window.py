@@ -240,9 +240,9 @@ class MainWindow(QMainWindow):
             self.outline_tree.hide()
 
     def show_source_view(self, show):
-        self._source_view_active = True
+        self._source_view_active = show
         self.main_text.show_source_view(show)
-        self.toolbar.set_source_view_checked(show)
+        self.toolbar.update_source_view_checked()
         self.toolbar.set_text_formatting_enabled(not show)
 
         if show:
