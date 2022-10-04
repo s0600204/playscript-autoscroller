@@ -88,6 +88,17 @@ class MainText(QTextEdit):
                 font = char_format.font()
                 level_spacing[block_level] = QFontMetrics(font).height() * 0.5
 
+            # Update the size of monospaced sections
+            for form in block.textFormats():
+                if form.format.font().family() == 'monospace':
+                    start = block.position() + form.start
+                    end = start + form.length
+                    block_cursor.setPosition(start)
+                    block_cursor.setPosition(end, QTextCursor.KeepAnchor)
+                    fmt = form.format
+                    fmt.setFont(self._mono_font)
+                    block_cursor.setCharFormat(fmt)
+
             block_format.setTopMargin(level_spacing[block_level])
             block_cursor.setBlockFormat(block_format)
             block = block.next()
