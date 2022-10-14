@@ -75,13 +75,39 @@ class MainText(QRstTextEdit):
         If Qt ever fixes this, we can remove this work-around.
         """
         cursor = self.textCursor()
-        if cursor.atBlockStart():
-            if shift_down:
-                self.dedent()
-            else:
-                self.indent()
-            self.on_cursor_move()
-            return True
+
+        if self._application.window.source_view_active:
+            # "Source View" active: indent with 2 spaces, per the RST specification
+            ws_len = 0
+            for char in cursor.block().text():
+                if char != ' ':
+                    break
+                ws_len += 1
+
+            if cursor.atBlockStart() or cursor.positionInBlock() <= ws_len:
+                diff = ws_len % 2 or 2
+                if shift_down:
+                    if ws_len:
+                        cursor.movePosition(
+                            QTextCursor.PreviousCharacter,
+                            QTextCursor.KeepAnchor,
+                            diff)
+                        cursor.removeSelectedText()
+                else:
+                    cursor.insertText(' ' * diff)
+                self.on_cursor_move()
+                return True
+
+        else:
+            # "Source View" not active: indent normally
+            if cursor.atBlockStart():
+                if shift_down:
+                    self.dedent()
+                else:
+                    self.indent()
+                self.on_cursor_move()
+                return True
+
 
         if shift_down:
             cursor.movePosition(QTextCursor.Left, n=4)
