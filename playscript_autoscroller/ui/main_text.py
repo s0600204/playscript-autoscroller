@@ -20,18 +20,12 @@ from pyqt5_rst import QRstTextEdit
 class MainText(QRstTextEdit):
 
     DefaultZoom = 1
+    NormalIndentWidth = 4
 
     def __init__(self, application, toolbar, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._application = application
         self._toolbar = toolbar
-
-        # According to the CommonMark MarkDown spec, tabs used at the start of a line as
-        # indentation should each be replaced with an indent of four spaces.
-        # The replacement is done by Qt5, but this also gives a reference for how wide tabs
-        # should be.
-        metrics = QFontMetrics(self.currentFont())
-        self.setTabStopDistance(metrics.horizontalAdvance(" ") * 4)
 
         # See comment of connected method for explanation of this.
         if sys.platform == "linux":
@@ -254,9 +248,11 @@ class MainText(QRstTextEdit):
             self.setCurrentCharFormat(QTextCharFormat())
             self.setPlainText(self.toReStructuredText())
             self.setFont(self._mono_font)
+            self.update_tab_stop_distance(self._mono_font)
         else:
             position /= 1.5
             self.setFont(self._normal_font)
+            self.update_tab_stop_distance(self._normal_font)
             self.setReStructuredText(self.toPlainText())
             self.respace_text()
 
@@ -267,13 +263,24 @@ class MainText(QRstTextEdit):
         cursor.setPosition(int(position))
         self.setTextCursor(cursor)
 
+    def update_tab_stop_distance(self, font):
+        distance = QFontMetrics(font).horizontalAdvance(" ")
+        if self._application.window.source_view_active:
+            # Tab width of 2, per the RST specification
+            distance *= 2
+        else:
+            distance *= self.NormalIndentWidth
+        self.setTabStopDistance(distance)
+
     def zoom(self):
         self._normal_font.setPointSize(self._base_font_size + self._zoom_level())
         self._mono_font.setPointSize(self._base_font_size + self._zoom_level())
         if self._application.window.source_view_active:
             self.setFont(self._mono_font)
+            self.update_tab_stop_distance(self._mono_font)
         else:
             self.setFont(self._normal_font)
+            self.update_tab_stop_distance(self._normal_font)
         self.respace_text()
 
     def zoom_in(self, _):
