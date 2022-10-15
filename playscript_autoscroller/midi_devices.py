@@ -48,7 +48,12 @@ class InPort:
             self._device_num = None
             self._num = int(mido_name[split_point+1:]) + 1
         else:
-            self._device_name, self._name = mido_name[:split_point].split(':')
+            # {device name}:{port name} {dev#}:{port#}
+            # Both device and port names may have colons in.
+            colon_split = mido_name.count(':', 0, split_point) // 2 + 1
+            device = mido_name[:split_point].split(':')
+            self._device_name = ':'.join(device[0:colon_split])
+            self._name = ':'.join(device[colon_split:])
             self._device_num, self._num = mido_name[split_point+1:].split(':')
 
     @property
