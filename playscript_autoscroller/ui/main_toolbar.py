@@ -13,6 +13,7 @@ class MainToolbar(QToolBar):
         self.setFloatable(False)
         self.setMovable(False)
 
+        self._textfield = None
         self._actions = {}
 
         self._actions["outline"] = ToolbarAction(parent=self)
@@ -31,6 +32,15 @@ class MainToolbar(QToolBar):
         self._actions["strikethrough"] = ToolbarAction(parent=self)
         self._actions["strikethrough"].setCheckable(True)
         self._actions["strikethrough"].set_icon('format-text-strikethrough')
+
+        self._actions["dedent"] = ToolbarAction(parent=self)
+        self._actions["dedent"].setEnabled(False)
+        self._actions["dedent"].set_icon('format-indent-less', 'outdent')
+        self._actions["dedent"].triggered.connect(self.dedent)
+
+        self._actions["indent"] = ToolbarAction(parent=self)
+        self._actions["indent"].set_icon('format-indent-more', 'indent')
+        self._actions["indent"].triggered.connect(self.indent)
 
         self._actions["zoom_in"] = ToolbarAction(parent=self)
         self._actions["zoom_in"].set_icon('zoom-in')
@@ -51,6 +61,9 @@ class MainToolbar(QToolBar):
         self.addAction(self._actions["italic"])
         self.addAction(self._actions["strikethrough"])
         self.addSeparator()
+        self.addAction(self._actions["dedent"])
+        self.addAction(self._actions["indent"])
+        self.addSeparator()
         self.addAction(self._actions["zoom_in"])
         self.addAction(self._actions["zoom_out"])
         self.addAction(self._actions["zoom_reset"])
@@ -58,6 +71,7 @@ class MainToolbar(QToolBar):
         self.addAction(self._actions["source_view"])
 
     def connect_textfield(self, textfield):
+        self._textfield = textfield
         self._actions["outline"].triggered.connect(self.parent().show_outline)
         self._actions["bold"].triggered.connect(textfield.setFontBold)
         self._actions["italic"].triggered.connect(textfield.setFontItalic)
@@ -66,6 +80,16 @@ class MainToolbar(QToolBar):
         self._actions["zoom_out"].triggered.connect(textfield.zoom_out)
         self._actions["zoom_reset"].triggered.connect(textfield.zoom_reset)
         self._actions["source_view"].triggered.connect(self.parent().show_source_view)
+
+    def dedent(self):
+        if self._textfield:
+            indent = self._textfield.dedent()
+            self._actions["dedent"].setEnabled(indent)
+
+    def indent(self):
+        if self._textfield:
+            self._textfield.indent()
+            self._actions["dedent"].setEnabled(True)
 
     def set_source_view_checked(self, checked):
         self._actions["source_view"].setChecked(checked)
@@ -89,6 +113,9 @@ class MainToolbar(QToolBar):
 
         self._actions["strikethrough"].setText("Strikethrough")
 
+        self._actions["dedent"].setText("Decrease Indent")
+        self._actions["indent"].setText("Increase Indent")
+
         self._actions["zoom_in"].setText("Zoom In")
         self._actions["zoom_out"].setText("Zoom Out")
         self._actions["zoom_reset"].setText("Zoom Reset")
@@ -98,7 +125,11 @@ class MainToolbar(QToolBar):
     def should_show_outline(self):
         return self._actions["outline"].isChecked()
 
+    def update_source_view_checked(self):
+        self._actions["source_view"].setChecked(self.parent().source_view_active)
+
     def update_style_buttons(self, style):
         self._actions["bold"].setChecked(style["bold"])
         self._actions["italic"].setChecked(style["italic"])
         self._actions["strikethrough"].setChecked(style["strikethrough"])
+        self._actions["dedent"].setEnabled(style["indent"])

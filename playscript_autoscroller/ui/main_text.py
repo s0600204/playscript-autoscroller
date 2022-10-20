@@ -1,31 +1,40 @@
 
+import sys
+
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import (
     QFont,
+    QFontDatabase,
     QFontMetrics,
     QTextCharFormat,
     QTextCursor,
     QTextDocument,
 )
 from PyQt5.QtWidgets import (
-    QTextEdit,
+    QShortcut
 )
 
+from pyqt5_rst import QRstTextEdit
 
-class MainText(QTextEdit):
+
+class MainText(QRstTextEdit):
 
     DefaultZoom = 1
+    NormalIndentWidth = 4
 
     def __init__(self, application, toolbar, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._application = application
         self._toolbar = toolbar
 
-        # According to the CommonMark MarkDown spec, tabs used at the start of a line as
-        # indentation should each be replaced with an indent of four spaces.
-        # The replacement is done by Qt5, but this also gives a reference for how wide tabs
-        # should be.
-        metrics = QFontMetrics(self.currentFont())
-        self.setTabStopDistance(metrics.horizontalAdvance(" ") * 4)
+        # See comment of connected method for explanation of this.
+        if sys.platform == "linux":
+            shifttab_shortcut = QShortcut("Shift+Tab", self)
+            shifttab_shortcut.setContext(Qt.WidgetShortcut)
+            shifttab_shortcut.activated.connect(self._tab_handling)
+
+        self._normal_font = self.font()
+        self._mono_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)
 
         self._base_font_size = self.currentFont().pointSize()
         self._zoom_level = self._application.register_config('zoom', self.DefaultZoom)
@@ -36,7 +45,7 @@ class MainText(QTextEdit):
 
     @property
     def content(self):
-        return self.toMarkdown(QTextDocument.MarkdownDialectCommonMark)
+        return self.toReStructuredText()
 
     @property
     def cursor(self):
@@ -45,6 +54,75 @@ class MainText(QTextEdit):
     @property
     def toolbar(self):
         return self._toolbar
+
+    def _tab_handling(self, shift_down=True):
+        """
+        Does the actual work of tab customisation behaviour.
+
+        This exists because on Linux - even with `self.tabChangesFocus == False` - Shift+Tab
+        changes focus. (Works fine on Windows 10. macOS is untested at this time.)
+
+        Thus: on Linux we setup a widget-level shortcut that intercepts the Shift+Tab key
+        combination and diverts it here. The keyPressEvent method below hands off to this to
+        minimise code duplication.
+
+        If Qt ever fixes this, we can remove this work-around.
+        """
+        cursor = self.textCursor()
+
+        if self._application.window.source_view_active:
+            # "Source View" active: indent with 2 spaces, per the RST specification
+            ws_len = 0
+            for char in cursor.block().text():
+                if char != ' ':
+                    break
+                ws_len += 1
+
+            if cursor.atBlockStart() or cursor.positionInBlock() <= ws_len:
+                diff = ws_len % 2 or 2
+                if shift_down:
+                    if ws_len:
+                        cursor.movePosition(
+                            QTextCursor.PreviousCharacter,
+                            QTextCursor.KeepAnchor,
+                            diff)
+                        cursor.removeSelectedText()
+                else:
+                    cursor.insertText(' ' * diff)
+                self.on_cursor_move()
+                return True
+
+        else:
+            # "Source View" not active: indent normally
+            if cursor.atBlockStart():
+                if shift_down:
+                    self.dedent()
+                else:
+                    self.indent()
+                self.on_cursor_move()
+                return True
+
+
+        if shift_down:
+            cursor.movePosition(QTextCursor.Left, n=4)
+            self.setTextCursor(cursor)
+            return True
+
+        return False
+
+    def currentBlockFormat(self):
+        # pylint: disable=invalid-name
+        cursor = self.textCursor()
+        return cursor.blockFormat()
+
+    def dedent(self):
+        block_format = self.currentBlockFormat()
+        indent = block_format.indent()
+        if indent > 0:
+            indent -= 1
+            block_format.setIndent(indent)
+            self.setCurrentBlockFormat(block_format)
+        return indent
 
     def go_to_position(self, position):
         cursor = self.textCursor()
@@ -57,13 +135,36 @@ class MainText(QTextEdit):
         cursor.setPosition(int(position))
         self.setTextCursor(cursor)
 
+    def indent(self):
+        block_format = self.currentBlockFormat()
+        indent = block_format.indent() + 1
+        block_format.setIndent(indent)
+        self.setCurrentBlockFormat(block_format)
+
+    def keyPressEvent(self, event): # pylint: disable=invalid-name
+        """
+        Function overridden so as to customise tab behaviour:
+
+        * Tabbing when at the *start* of a line will indent the text;
+        * Shift-tabbing when at the *start* of a line will deindent the text;
+        * Shift-tabbing in the *middle* of a line will move the cursor back.
+        """
+        if event.text() == "\t":
+            shift_down = event.modifiers() & Qt.ShiftModifier
+            if self._tab_handling(shift_down):
+                return
+
+        super().keyPressEvent(event)
+
     def on_cursor_move(self):
+        block_format = self.currentBlockFormat()
         char_format = self.currentCharFormat()
         style = {
             "bold": char_format.fontWeight() == QFont.Bold,
             "italic": char_format.fontItalic(),
             "underline": char_format.fontUnderline(),
             "strikethrough": char_format.fontStrikeOut(),
+            "indent": block_format.indent(),
         }
         self._toolbar.update_style_buttons(style)
 
@@ -84,6 +185,17 @@ class MainText(QTextEdit):
                 font = char_format.font()
                 level_spacing[block_level] = QFontMetrics(font).height() * 0.5
 
+            # Update the size of monospaced sections
+            for form in block.textFormats():
+                if form.format.font().family() == 'monospace':
+                    start = block.position() + form.start
+                    end = start + form.length
+                    block_cursor.setPosition(start)
+                    block_cursor.setPosition(end, QTextCursor.KeepAnchor)
+                    fmt = form.format
+                    fmt.setFont(self._mono_font)
+                    block_cursor.setCharFormat(fmt)
+
             block_format.setTopMargin(level_spacing[block_level])
             block_cursor.setBlockFormat(block_format)
             block = block.next()
@@ -96,6 +208,11 @@ class MainText(QTextEdit):
     def scroll(self, step):
         scrollbar = self.verticalScrollBar()
         scrollbar.setValue(scrollbar.value() + step)
+
+    def setCurrentBlockFormat(self, block_format):
+        # pylint: disable=invalid-name
+        cursor = self.textCursor()
+        return cursor.setBlockFormat(block_format)
 
     def setFontBold(self, checked):
         # pylint: disable=invalid-name
@@ -118,6 +235,9 @@ class MainText(QTextEdit):
         position = cursor.position()
         was_dirty = self._application.is_dirty()
 
+        # plaintext pastes only in Source View
+        self.setAcceptRichText(not show)
+
         if show:
             # We have to set the position to 0 before clearing the text formatting, else any
             # text selected before the transition will have its formatting stripped.
@@ -126,10 +246,14 @@ class MainText(QTextEdit):
 
             position *= 1.5
             self.setCurrentCharFormat(QTextCharFormat())
-            self.setPlainText(self.toMarkdown(QTextDocument.MarkdownDialectCommonMark))
+            self.setPlainText(self.toReStructuredText())
+            self.setFont(self._mono_font)
+            self.update_tab_stop_distance(self._mono_font)
         else:
             position /= 1.5
-            self.setMarkdown(self.toPlainText())
+            self.setFont(self._normal_font)
+            self.update_tab_stop_distance(self._normal_font)
+            self.setReStructuredText(self.toPlainText())
             self.respace_text()
 
         # Reset to clean if the document content hadn't actually been changed previously
@@ -139,10 +263,24 @@ class MainText(QTextEdit):
         cursor.setPosition(int(position))
         self.setTextCursor(cursor)
 
+    def update_tab_stop_distance(self, font):
+        distance = QFontMetrics(font).horizontalAdvance(" ")
+        if self._application.window.source_view_active:
+            # Tab width of 2, per the RST specification
+            distance *= 2
+        else:
+            distance *= self.NormalIndentWidth
+        self.setTabStopDistance(distance)
+
     def zoom(self):
-        font = self.document().defaultFont()
-        font.setPointSize(self._base_font_size + self._zoom_level())
-        self.document().setDefaultFont(font)
+        self._normal_font.setPointSize(self._base_font_size + self._zoom_level())
+        self._mono_font.setPointSize(self._base_font_size + self._zoom_level())
+        if self._application.window.source_view_active:
+            self.setFont(self._mono_font)
+            self.update_tab_stop_distance(self._mono_font)
+        else:
+            self.setFont(self._normal_font)
+            self.update_tab_stop_distance(self._normal_font)
         self.respace_text()
 
     def zoom_in(self, _):
