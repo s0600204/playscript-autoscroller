@@ -50,6 +50,10 @@ class PdfView(QScrollArea):
             page_image.setPixmap(QPixmap.fromImage(rendered))
             self.main_container.layout().addWidget(page_image)
 
+    def scroll(self, step):
+        scrollbar = self.verticalScrollBar()
+        scrollbar.setValue(scrollbar.value() + step)
+
     def set_pdf(self, pdf_document):
         pdf_document.setRenderHint(Poppler.Document.RenderHint.Antialiasing, True)
         pdf_document.setRenderHint(Poppler.Document.RenderHint.TextAntialiasing, True)

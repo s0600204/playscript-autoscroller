@@ -216,7 +216,10 @@ class MainWindow(QMainWindow):
 
     def slider_scroll_tick(self):
         difference, interval = self.scroll_controller.value()
-        self.main_text.scroll(difference)
+        if self.pdf_view_active:
+            self.pdf_view.scroll(difference)
+        else:
+            self.main_text.scroll(difference)
         self.text_scroll_timer.setInterval(interval)
 
     def rebuild_outline(self):
