@@ -21,6 +21,7 @@ class MainText(QRstTextEdit):
 
     DefaultZoom = 1
     NormalIndentWidth = 4
+    ZoomConfigKey = 'zoom_text'
 
     def __init__(self, application, toolbar, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,7 +38,7 @@ class MainText(QRstTextEdit):
         self._mono_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)
 
         self._base_font_size = self.currentFont().pointSize()
-        self._zoom_level = self._application.register_config('zoom', self.DefaultZoom)
+        self._zoom_level = self._application.register_config(self.ZoomConfigKey, self.DefaultZoom)
         self._application.config_restored.connect(self.zoom)
 
         self.cursorPositionChanged.connect(self.on_cursor_move)
@@ -283,20 +284,20 @@ class MainText(QRstTextEdit):
             self.update_tab_stop_distance(self._normal_font)
         self.respace_text()
 
-    def zoom_in(self, _):
+    def zoom_in(self):
         level = self._zoom_level()
         if level >= 50:
             return
-        self._application.save_config('zoom', level + 1)
+        self._application.save_config(self.ZoomConfigKey, level + 1)
         self.zoom()
 
-    def zoom_out(self, _):
+    def zoom_out(self):
         level = self._zoom_level()
         if level <= 1:
             return
-        self._application.save_config('zoom', level - 1)
+        self._application.save_config(self.ZoomConfigKey, level - 1)
         self.zoom()
 
-    def zoom_reset(self, _):
-        self._application.save_config('zoom', 1)
+    def zoom_reset(self):
+        self._application.save_config(self.ZoomConfigKey, 1)
         self.zoom()

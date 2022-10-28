@@ -77,9 +77,9 @@ class MainToolbar(QToolBar):
         self._actions["bold"].triggered.connect(textfield.setFontBold)
         self._actions["italic"].triggered.connect(textfield.setFontItalic)
         self._actions["strikethrough"].triggered.connect(textfield.setFontStrikeThrough)
-        self._actions["zoom_in"].triggered.connect(textfield.zoom_in)
-        self._actions["zoom_out"].triggered.connect(textfield.zoom_out)
-        self._actions["zoom_reset"].triggered.connect(textfield.zoom_reset)
+        self._actions["zoom_in"].triggered.connect(self.parent().zoom_in)
+        self._actions["zoom_out"].triggered.connect(self.parent().zoom_out)
+        self._actions["zoom_reset"].triggered.connect(self.parent().zoom_reset)
         self._actions["source_view"].triggered.connect(self.parent().show_source_view)
 
     def dedent(self):
@@ -135,10 +135,9 @@ class MainToolbar(QToolBar):
         self._actions["dedent"].setEnabled(False)
         self._actions["indent"].setEnabled(not pdf_view_active)
 
-        # @todo: Implement zooming a PDF file.
-        self._actions["zoom_in"].setEnabled(not pdf_view_active)
-        self._actions["zoom_out"].setEnabled(not pdf_view_active)
-        self._actions["zoom_reset"].setEnabled(not pdf_view_active)
+        self._actions["zoom_in"].setEnabled(True)
+        self._actions["zoom_out"].setEnabled(True)
+        self._actions["zoom_reset"].setEnabled(True)
 
         self._actions["source_view"].setEnabled(not pdf_view_active)
 

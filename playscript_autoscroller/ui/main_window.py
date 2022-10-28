@@ -82,7 +82,7 @@ class MainWindow(QMainWindow):
         self.toolbar.connect_textfield(self.main_text)
         self.content_holder.layout().addWidget(self.main_text)
 
-        self.pdf_view = PdfView(parent=self.content_holder)
+        self.pdf_view = PdfView(application, parent=self.content_holder)
         self.pdf_view.setVisible(False)
         self.content_holder.layout().addWidget(self.pdf_view)
 
@@ -298,3 +298,21 @@ class MainWindow(QMainWindow):
             message,
             self.STATUSBAR_MSG_DURATION
         )
+
+    def zoom_in(self, _):
+        if self.pdf_view_active:
+            self.pdf_view.zoom_in()
+        else:
+            self.main_text.zoom_in()
+
+    def zoom_out(self, _):
+        if self.pdf_view_active:
+            self.pdf_view.zoom_out()
+        else:
+            self.main_text.zoom_out()
+
+    def zoom_reset(self, _):
+        if self.pdf_view_active:
+            self.pdf_view.zoom_reset()
+        else:
+            self.main_text.zoom_reset()

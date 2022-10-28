@@ -14,7 +14,8 @@ midi:
   device: "DeviceName:PortName DeviceNum:PortNum"
   channel: 1
   control: 7
-zoom: 2
+zoom_pdf: 100
+zoom_text: 2
 """
 
 config_schema = Map({
@@ -29,5 +30,6 @@ config_schema = Map({
       "ignore_note": Int(),
       "pause_note": Int(),
     }),
-    "zoom": Int(),
+    "zoom_pdf": Int(),
+    "zoom_text": Int(),
 })
