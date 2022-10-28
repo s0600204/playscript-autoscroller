@@ -5,6 +5,7 @@ from .file_io import (
     DEFAULT_FILE_TYPE,
     SUPPORTED_FILE_TYPES,
     load_config_file,
+    load_pdf_file,
     read_document_file,
     save_config_file,
     write_document_file,
@@ -51,6 +52,7 @@ class Application(QObject):
             return
 
         self._mainwindow.reset_content()
+        self._mainwindow.toolbar.update_enabled_buttons()
         self._document_filename = None
         self.set_clean()
 
@@ -65,8 +67,12 @@ class Application(QObject):
         if not filename:
             return
 
-        filecontent = read_document_file(filename)
-        self._mainwindow.restore_content(filetype, filecontent)
+        if filetype == 'pdf':
+            filecontent = load_pdf_file(filename)
+            self._mainwindow.show_pdf(filecontent)
+        else:
+            filecontent = read_document_file(filename)
+            self._mainwindow.restore_content(filetype, filecontent)
 
         self._document_filename = filename
         self.set_clean()

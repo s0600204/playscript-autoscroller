@@ -2,6 +2,8 @@
 from datetime import datetime
 from os import makedirs, path, rename
 
+import popplerqt5
+
 from strictyaml import (
     as_document,
     load as yaml_load,
@@ -15,8 +17,12 @@ from .schema import config_schema
 DEFAULT_FILE_TYPE = 'rst'
 SUPPORTED_FILE_TYPES = {
     'markdown': ('Playscripts (*.md)', '.md'),
+    'pdf': ('PDF Documents (*.pdf)', '.pdf'),
     'rst': ('Playscripts (*.rst)', '.rst'),
 }
+
+def load_pdf_file(filename):
+    return popplerqt5.Poppler.Document.load(filename)
 
 def load_yaml_file(filepath, schema):
     """Note: this function does not perform any handling of Errors or Exceptions."""

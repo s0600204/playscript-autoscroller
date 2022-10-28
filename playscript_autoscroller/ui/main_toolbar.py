@@ -119,24 +119,28 @@ class MainToolbar(QToolBar):
         return self._actions["outline"].isChecked()
 
     def update_enabled_buttons(self):
+        pdf_view_active = self.parent().pdf_view_active
         source_view_active = self.parent().source_view_active
 
-        self._actions["outline"].setEnabled(not source_view_active)
+        # @todo: Get a TOC from pdf.
+        self._actions["outline"].setEnabled(not pdf_view_active and not source_view_active)
 
         # It might be nice to not disable the buttons in "source view", but instead add/remove
         # the appropriate character strings around the selected text.
-        self._actions["bold"].setEnabled(not source_view_active)
-        self._actions["italic"].setEnabled(not source_view_active)
-        self._actions["strikethrough"].setEnabled(not source_view_active)
+        self._actions["bold"].setEnabled(not pdf_view_active and not source_view_active)
+        self._actions["italic"].setEnabled(not pdf_view_active and not source_view_active)
+        self._actions["strikethrough"].setEnabled(not pdf_view_active and not source_view_active)
 
-        self._actions["dedent"].setEnabled(True)
-        self._actions["indent"].setEnabled(True)
+        # Dedent starts "off" even in non-pdf mode, as the cursor is at the start of a line.
+        self._actions["dedent"].setEnabled(False)
+        self._actions["indent"].setEnabled(not pdf_view_active)
 
-        self._actions["zoom_in"].setEnabled(True)
-        self._actions["zoom_out"].setEnabled(True)
-        self._actions["zoom_reset"].setEnabled(True)
+        # @todo: Implement zooming a PDF file.
+        self._actions["zoom_in"].setEnabled(not pdf_view_active)
+        self._actions["zoom_out"].setEnabled(not pdf_view_active)
+        self._actions["zoom_reset"].setEnabled(not pdf_view_active)
 
-        self._actions["source_view"].setEnabled(True)
+        self._actions["source_view"].setEnabled(not pdf_view_active)
 
     def update_source_view_checked(self):
         self._actions["source_view"].setChecked(self.parent().source_view_active)

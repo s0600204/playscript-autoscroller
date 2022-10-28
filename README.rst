@@ -33,6 +33,7 @@ Lucide_ (ISC) ::
 
 `Simple Icons`_ (CC0 1.0) ::
 
+  adobeacrobatreader.svg
   markdown.svg
 
 

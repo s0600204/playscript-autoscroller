@@ -25,6 +25,7 @@ from .main_toolbar import MainToolbar
 from .menus.about_menu import AboutMenu
 from .menus.file_menu import FileMenu
 from .outline_tree_view import OutlineTreeView
+from .pdf_view import PdfView
 
 
 class MainWindow(QMainWindow):
@@ -73,10 +74,20 @@ class MainWindow(QMainWindow):
         self.splitter.setStretchFactor(0, 1)
 
         # Content
-        self.main_text = MainText(application, self.toolbar, parent=self.splitter)
-        self.splitter.addWidget(self.main_text)
-        self.splitter.setStretchFactor(1, 5)
+        self.content_holder = QWidget(parent=self.splitter)
+        self.content_holder.setLayout(QVBoxLayout())
+        self.content_holder.layout().setContentsMargins(0, 0, 0, 0)
+
+        self.main_text = MainText(application, self.toolbar, parent=self.content_holder)
         self.toolbar.connect_textfield(self.main_text)
+        self.content_holder.layout().addWidget(self.main_text)
+
+        self.pdf_view = PdfView(parent=self.content_holder)
+        self.pdf_view.setVisible(False)
+        self.content_holder.layout().addWidget(self.pdf_view)
+
+        self.splitter.addWidget(self.content_holder)
+        self.splitter.setStretchFactor(1, 5)
         self.outline_tree.pressed.connect(self.on_outline_press)
 
         self.centralWidget().layout().addWidget(self.splitter)
@@ -90,6 +101,10 @@ class MainWindow(QMainWindow):
         self.text_scroll_timer.setInterval(100)
         self.text_scroll_timer.timeout.connect(self.slider_scroll_tick)
         self.text_scroll_timer.start()
+
+    @property
+    def pdf_view_active(self):
+        return self.pdf_view.isVisible()
 
     @property
     def source_view_active(self):
@@ -209,8 +224,11 @@ class MainWindow(QMainWindow):
         self.outline_tree.expandAll()
 
     def reset_content(self):
+        self.main_text.setVisible(True)
+        self.pdf_view.setVisible(False)
         self.main_text.clear()
         self.outline_model.clear()
+        self.pdf_view.clear()
 
     def restore_content(self, filetype, filecontent):
         self.reset_content()
@@ -220,6 +238,7 @@ class MainWindow(QMainWindow):
         elif filetype == 'rst':
             self.main_text.setReStructuredText(filecontent)
         self.main_text.respace_text()
+        self.toolbar.update_enabled_buttons()
         self.rebuild_outline()
 
     def retranslate_title(self):
@@ -253,7 +272,16 @@ class MainWindow(QMainWindow):
         else:
             self.outline_tree.hide()
 
+    def show_pdf(self, pdf_document):
+        self.reset_content()
+        self.main_text.setVisible(False)
+        self.pdf_view.set_pdf(pdf_document)
+        self.pdf_view.setVisible(True)
+        self.toolbar.update_enabled_buttons() # Must be after pdf_view.setVisible()
+
     def show_source_view(self, show):
+        if self.pdf_view_active:
+            return
         self._source_view_active = show
         self.main_text.show_source_view(show)
         self.toolbar.update_source_view_checked()
