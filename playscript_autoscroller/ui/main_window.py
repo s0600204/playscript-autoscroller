@@ -254,7 +254,7 @@ class MainWindow(QMainWindow):
         self._source_view_active = show
         self.main_text.show_source_view(show)
         self.toolbar.update_source_view_checked()
-        self.toolbar.set_text_formatting_enabled(not show)
+        self.toolbar.update_enabled_buttons()
 
         if show:
             self.outline_tree.hide()

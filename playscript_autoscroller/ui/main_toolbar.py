@@ -94,14 +94,6 @@ class MainToolbar(QToolBar):
     def set_source_view_checked(self, checked):
         self._actions["source_view"].setChecked(checked)
 
-    def set_text_formatting_enabled(self, enabled):
-        self._actions["outline"].setEnabled(enabled)
-        # It might be nice to not disable the buttons in "source view", but instead add/remove
-        # the appropriate character strings around the selected text.
-        self._actions["bold"].setEnabled(enabled)
-        self._actions["italic"].setEnabled(enabled)
-        self._actions["strikethrough"].setEnabled(enabled)
-
     def retranslate_ui(self):
         self._actions["outline"].setText("Toggle Outline")
 
@@ -124,6 +116,26 @@ class MainToolbar(QToolBar):
 
     def should_show_outline(self):
         return self._actions["outline"].isChecked()
+
+    def update_enabled_buttons(self):
+        source_view_active = self.parent().source_view_active
+
+        self._actions["outline"].setEnabled(not source_view_active)
+
+        # It might be nice to not disable the buttons in "source view", but instead add/remove
+        # the appropriate character strings around the selected text.
+        self._actions["bold"].setEnabled(not source_view_active)
+        self._actions["italic"].setEnabled(not source_view_active)
+        self._actions["strikethrough"].setEnabled(not source_view_active)
+
+        self._actions["dedent"].setEnabled(True)
+        self._actions["indent"].setEnabled(True)
+
+        self._actions["zoom_in"].setEnabled(True)
+        self._actions["zoom_out"].setEnabled(True)
+        self._actions["zoom_reset"].setEnabled(True)
+
+        self._actions["source_view"].setEnabled(True)
 
     def update_source_view_checked(self):
         self._actions["source_view"].setChecked(self.parent().source_view_active)
