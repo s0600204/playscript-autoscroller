@@ -101,6 +101,9 @@ class MainWindow(QMainWindow):
             return event.accept()
         return event.ignore()
 
+    def enable_outline(self, enable):
+        self.show_outline(enable and self.toolbar.should_show_outline())
+
     def get_valid_location(self):
         candidate = self._saved_location()
         if not candidate:
@@ -256,12 +259,8 @@ class MainWindow(QMainWindow):
         self.toolbar.update_source_view_checked()
         self.toolbar.update_enabled_buttons()
 
-        if show:
-            self.outline_tree.hide()
-        else:
+        if not show:
             self.rebuild_outline()
-            if self.toolbar.should_show_outline():
-                self.outline_tree.show()
 
     def show_status_message(self, message):
         self.statusBar().showMessage(

@@ -73,6 +73,7 @@ class MainToolbar(QToolBar):
     def connect_textfield(self, textfield):
         self._textfield = textfield
         self._actions["outline"].triggered.connect(self.parent().show_outline)
+        self._actions["outline"].enabled.connect(self.parent().enable_outline)
         self._actions["bold"].triggered.connect(textfield.setFontBold)
         self._actions["italic"].triggered.connect(textfield.setFontItalic)
         self._actions["strikethrough"].triggered.connect(textfield.setFontStrikeThrough)

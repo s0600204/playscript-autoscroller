@@ -1,6 +1,7 @@
 
 from os import path
 
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction
 
@@ -8,6 +9,8 @@ from .palette_icon_engine import PaletteIconEngine
 
 
 class ToolbarAction(QAction):
+
+    enabled = pyqtSignal(bool)
 
     BundledIconSubPath = "icons"
 
@@ -35,6 +38,10 @@ class ToolbarAction(QAction):
             return QIcon.fromTheme(icon_name_symbolic)
 
         return None
+
+    def setEnabled(self, enabled: bool): # pylint: disable=invalid-name
+        super().setEnabled(enabled)
+        self.enabled.emit(enabled)
 
     def set_icon(self, system_name, bundled_name=None, bundled_name_checked=None):
         icon = self._find_icon_system(system_name)
