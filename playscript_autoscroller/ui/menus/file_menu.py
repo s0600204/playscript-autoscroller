@@ -90,3 +90,7 @@ class FileMenu(ApplicationMenu):
         self._actions['exit'].setText(translate("MainWindow", "Exit"))
         self._actions['exit'].setStatusTip(translate("MainWindow", "Exit {}").format(__app_name__))
         self._actions['exit'].setShortcut(QKeySequence.Quit)
+
+    def set_file_save_enabled(self, enabled):
+        self._actions['save'].setEnabled(enabled)
+        self._actions['save_as'].setEnabled(enabled)

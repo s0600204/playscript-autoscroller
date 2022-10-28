@@ -126,10 +126,12 @@ class Application(QObject):
     def set_clean(self):
         self._document_dirty = False
         self._mainwindow.retranslate_title()
+        self._mainwindow.menu_file.set_file_save_enabled(False)
 
     def set_dirty(self):
         self._document_dirty = True
         self._mainwindow.retranslate_title()
+        self._mainwindow.menu_file.set_file_save_enabled(True)
 
     def start(self):
         self._mainwindow.retranslate_ui()
