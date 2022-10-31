@@ -110,6 +110,10 @@ class MainWindow(QMainWindow):
     def source_view_active(self):
         return self._source_view_active
 
+    @property
+    def toc_active(self):
+        return self.outline_model.has_content
+
     def closeEvent(self, event):
         # pylint: disable=invalid-name
         if self.prompt_unsaved():

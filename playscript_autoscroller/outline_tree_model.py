@@ -128,6 +128,10 @@ class OutlineTreeModel(QAbstractItemModel):
     def __len__(self):
         return self._root.child_count()
 
+    @property
+    def has_content(self):
+        return bool(len(self))
+
     def childCount(self, index):
         # pylint: disable=invalid-name
         node = index.internalPointer() if index.isValid() else self._root

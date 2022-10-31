@@ -121,9 +121,14 @@ class MainToolbar(QToolBar):
     def update_enabled_buttons(self):
         pdf_view_active = self.parent().pdf_view_active
         source_view_active = self.parent().source_view_active
+        toc_active = self.parent().toc_active
 
-        # @todo: Get a TOC from pdf.
-        self._actions["outline"].setEnabled(not source_view_active)
+        if source_view_active:
+            self._actions["outline"].setEnabled(False)
+        elif pdf_view_active:
+            self._actions["outline"].setEnabled(toc_active)
+        else:
+            self._actions["outline"].setEnabled(True)
 
         # It might be nice to not disable the buttons in "source view", but instead add/remove
         # the appropriate character strings around the selected text.
