@@ -1,6 +1,11 @@
 
 from PyQt5.QtWidgets import QAction
 
+try:
+    import popplerqt5
+except ModuleNotFoundError:
+    popplerqt5 = None
+
 from playscript_autoscroller import __app_name__
 #from playscript_autoscroller.i18n import translate
 from ..toolbar_action import ToolbarAction
@@ -22,6 +27,7 @@ class ImportMenu(ApplicationMenu):
         self._actions['pdf'] = ToolbarAction(parent=self)
         self._actions['pdf'].triggered.connect(self.import_pdf)
         self._actions['pdf'].set_icon('pdf', 'adobeacrobatreader')
+        self._actions['pdf'].setEnabled(bool(popplerqt5))
         self.addAction(self._actions['pdf'])
 
     def import_markdown(self):

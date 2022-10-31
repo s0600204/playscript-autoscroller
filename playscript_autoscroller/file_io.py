@@ -2,7 +2,10 @@
 from datetime import datetime
 from os import makedirs, path, rename
 
-import popplerqt5
+try:
+    import popplerqt5
+except ModuleNotFoundError:
+    popplerqt5 = None
 
 from strictyaml import (
     as_document,
@@ -22,7 +25,9 @@ SUPPORTED_FILE_TYPES = {
 }
 
 def load_pdf_file(filename):
-    return popplerqt5.Poppler.Document.load(filename)
+    if popplerqt5:
+        return popplerqt5.Poppler.Document.load(filename)
+    return None
 
 def load_yaml_file(filepath, schema):
     """Note: this function does not perform any handling of Errors or Exceptions."""
