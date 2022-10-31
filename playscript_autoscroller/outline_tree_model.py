@@ -240,7 +240,8 @@ class OutlineTreeModel(QAbstractItemModel):
                 new_node = OutlineTreeNode(parent=model_parent)
                 new_node.set_data(toc_elem.nodeName(), Qt.DisplayRole)
                 new_node.set_data(destination and destination.pageNumber() or 1, POSITION_ROLE)
-                new_node.set_data(destination and destination.top() or 0, PAGE_FRACTION)
+                new_node.set_data(destination and destination.top() % 1 or 0, PAGE_FRACTION)
+                # The `% 1` above is for when a target's `Destination` gives a value >= `1.0`.
 
                 rownum = model_parent.child_count()
                 self.beginInsertRows(model_parent.index(), rownum, rownum)
