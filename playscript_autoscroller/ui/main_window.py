@@ -17,7 +17,7 @@ from PyQt5.QtWidgets import (
 from playscript_autoscroller import __app_name__
 # ~ from playscript_autoscroller.i18n import translate
 
-from playscript_autoscroller.outline_tree_model import OutlineTreeModel, POSITION_ROLE
+from playscript_autoscroller.outline_tree_model import OutlineTreeModel, PAGE_FRACTION, POSITION_ROLE
 from playscript_autoscroller.file_io import DEFAULT_FILE_TYPE, SUPPORTED_FILE_TYPES
 from .controller import Controller
 from .main_text import MainText
@@ -132,8 +132,11 @@ class MainWindow(QMainWindow):
         return self.DefaultLocation
 
     def on_outline_press(self, index):
-        self.main_text.go_to_position(
-            self.outline_model.data(index, POSITION_ROLE))
+        idx = self.outline_model.data(index, POSITION_ROLE)
+        if self.pdf_view_active:
+            self.pdf_view.go_to_page(idx, self.outline_model.data(index, PAGE_FRACTION))
+        else:
+            self.main_text.go_to_position(idx)
 
     def open_midi_config(self):
         self._application.runner.open_config_dialog(self)
@@ -280,6 +283,8 @@ class MainWindow(QMainWindow):
         self.main_text.setVisible(False)
         self.pdf_view.set_pdf(pdf_document)
         self.pdf_view.setVisible(True)
+        self.outline_model.determine_from_pdf(pdf_document)
+        self.outline_tree.expandAll()
         self.toolbar.update_enabled_buttons() # Must be after pdf_view.setVisible()
 
     def show_source_view(self, show):

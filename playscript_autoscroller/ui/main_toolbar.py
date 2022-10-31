@@ -123,7 +123,7 @@ class MainToolbar(QToolBar):
         source_view_active = self.parent().source_view_active
 
         # @todo: Get a TOC from pdf.
-        self._actions["outline"].setEnabled(not pdf_view_active and not source_view_active)
+        self._actions["outline"].setEnabled(not source_view_active)
 
         # It might be nice to not disable the buttons in "source view", but instead add/remove
         # the appropriate character strings around the selected text.

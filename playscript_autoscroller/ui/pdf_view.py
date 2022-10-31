@@ -43,6 +43,23 @@ class PdfView(QScrollArea):
             layout_item = layout.takeAt(0)
             layout_item.widget().deleteLater()
 
+    def go_to_page(self, page_index, page_fraction=0):
+        layout = self.main_container.layout()
+        page_index = min(int(page_index) - 1, layout.count())
+
+        # Not sure why the magic number is needed, but without it there's a
+        # decrease in accuracy further down the document one goes.
+        margin = layout.getContentsMargins()
+        margin = max(margin[1], margin[3]) + 1 # max(<top>, <bottom>) + <magic>
+
+        position = 0
+        for idx in range(page_index):
+            position += layout.itemAt(idx).widget().pixmap().height()
+            position += margin
+
+        position += round(layout.itemAt(page_index).widget().pixmap().height() * page_fraction)
+        self.verticalScrollBar().setValue(position)
+
     def render(self):
         if not self._pdf:
             return

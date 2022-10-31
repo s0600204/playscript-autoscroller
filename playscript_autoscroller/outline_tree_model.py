@@ -1,9 +1,14 @@
 
 from PyQt5.QtCore import Qt, QAbstractItemModel, QModelIndex
 
+try:
+    from popplerqt5 import Poppler
+except ModuleNotFoundError:
+    Poppler = None
 
 POSITION_ROLE = Qt.UserRole + 1
 LEVEL_ROLE = Qt.UserRole + 2
+PAGE_FRACTION = Qt.UserRole + 3
 
 
 class OutlineTreeNode:
@@ -16,6 +21,7 @@ class OutlineTreeNode:
         self._text = None
         self._block_index = None
         self._header_level = 0
+        self._page_fraction = 0
 
     @property
     def children(self):
@@ -43,6 +49,9 @@ class OutlineTreeNode:
 
         if role == LEVEL_ROLE:
             return self._header_level
+
+        if role == PAGE_FRACTION:
+            return self._page_fraction
 
         return None
 
@@ -84,6 +93,10 @@ class OutlineTreeNode:
 
         if role == LEVEL_ROLE:
             self._header_level = value
+            return True
+
+        if role == PAGE_FRACTION:
+            self._page_fraction = value
             return True
 
         return False
@@ -199,3 +212,40 @@ class OutlineTreeModel(QAbstractItemModel):
 
             last_node = new_node
             block = block.next()
+
+    def determine_from_pdf(self, pdf_document):
+        self.clear()
+        toc = pdf_document.toc()
+        if not toc:
+            return
+
+        def walk_toc(toc_elem, model_parent):
+            while not toc_elem.isNull():
+
+                # Determine page number to scroll to when selecting this option
+                toc_elem_attrs = toc_elem.attributes()
+                if toc_elem_attrs.contains('Destination'):
+                    destination = toc_elem_attrs.namedItem('Destination')
+                    destination = Poppler.LinkDestination(destination.nodeValue())
+                elif toc_elem_attrs.contains('DestinationName'):
+                    destination = toc_elem_attrs.namedItem('DestinationName')
+                    destination = pdf_document.linkDestination(destination.nodeValue())
+                else:
+                    destination = None
+
+                new_node = OutlineTreeNode(parent=model_parent)
+                new_node.set_data(toc_elem.nodeName(), Qt.DisplayRole)
+                new_node.set_data(destination and destination.pageNumber() or 1, POSITION_ROLE)
+                new_node.set_data(destination and destination.top() or 0, PAGE_FRACTION)
+
+                rownum = model_parent.child_count()
+                self.beginInsertRows(model_parent.index(), rownum, rownum)
+                model_parent.append_child(new_node)
+                self.endInsertRows()
+
+                if toc_elem.hasChildNodes():
+                    walk_toc(toc_elem.firstChild(), new_node)
+
+                toc_elem = toc_elem.nextSibling()
+
+        walk_toc(toc.documentElement(), self._root)
