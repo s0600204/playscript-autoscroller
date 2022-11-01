@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (
 try:
     from popplerqt5 import Poppler
 except ModuleNotFoundError:
+    # pylint: disable=invalid-name
     Poppler = None
 
 
@@ -86,6 +87,7 @@ class PdfView(QScrollArea):
     def set_pdf(self, pdf_document):
         if not Poppler:
             return
+        # pylint: disable=no-member
         pdf_document.setRenderHint(Poppler.Document.RenderHint.Antialiasing, True)
         pdf_document.setRenderHint(Poppler.Document.RenderHint.TextAntialiasing, True)
         self._pdf = pdf_document

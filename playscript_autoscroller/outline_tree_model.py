@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt, QAbstractItemModel, QModelIndex
 try:
     from popplerqt5 import Poppler
 except ModuleNotFoundError:
+    # pylint: disable=invalid-name
     Poppler = None
 
 POSITION_ROLE = Qt.UserRole + 1

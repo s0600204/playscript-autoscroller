@@ -3,9 +3,10 @@ from datetime import datetime
 from os import makedirs, path, rename
 
 try:
-    import popplerqt5
+    from popplerqt5 import Poppler
 except ModuleNotFoundError:
-    popplerqt5 = None
+    # pylint: disable=invalid-name
+    Poppler = None
 
 from strictyaml import (
     as_document,
@@ -25,8 +26,8 @@ SUPPORTED_FILE_TYPES = {
 }
 
 def load_pdf_file(filename):
-    if popplerqt5:
-        return popplerqt5.Poppler.Document.load(filename)
+    if Poppler:
+        return Poppler.Document.load(filename)
     return None
 
 def load_yaml_file(filepath, schema):

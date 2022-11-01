@@ -1,5 +1,6 @@
 [MAIN]
 extension-pkg-allow-list=
+    popplerqt5,
     PyQt5.Qt,
     PyQt5.QtCore,
     PyQt5.QtGui,
