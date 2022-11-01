@@ -8,7 +8,6 @@ from PyQt5.QtGui import (
     QFontMetrics,
     QTextCharFormat,
     QTextCursor,
-    QTextDocument,
 )
 from PyQt5.QtWidgets import (
     QShortcut

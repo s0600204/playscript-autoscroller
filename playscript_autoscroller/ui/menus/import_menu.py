@@ -1,13 +1,10 @@
 
-from PyQt5.QtWidgets import QAction
-
 try:
     import popplerqt5
 except ModuleNotFoundError:
     # pylint: disable=invalid-name
     popplerqt5 = None
 
-from playscript_autoscroller import __app_name__
 #from playscript_autoscroller.i18n import translate
 from ..toolbar_action import ToolbarAction
 from .menu import ApplicationMenu
