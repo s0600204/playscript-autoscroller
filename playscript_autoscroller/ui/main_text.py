@@ -217,15 +217,33 @@ class MainText(QRstTextEdit):
     def setFontBold(self, checked):
         # pylint: disable=invalid-name
         if checked:
-            self.setFontWeight(QFont.Bold)
+            if self.fontWeight() != QFont.Bold:
+                self.setFontWeight(QFont.Bold)
+            self.setFontItalic(False)
+            self.setFontStrikeThrough(False)
         else:
-            self.setFontWeight(QFont.Normal)
+            if self.fontWeight() != QFont.Normal:
+                self.setFontWeight(QFont.Normal)
+        self.on_cursor_move()
+
+    def setFontItalic(self, checked):
+        if self.fontItalic() != checked:
+            super().setFontItalic(checked)
+        if checked:
+            self.setFontBold(False)
+            self.setFontStrikeThrough(False)
+        self.on_cursor_move()
 
     def setFontStrikeThrough(self, checked):
         # pylint: disable=invalid-name
         style = self.currentCharFormat()
-        style.setFontStrikeOut(checked)
-        self.setCurrentCharFormat(style)
+        if style.fontStrikeOut() != checked:
+            style.setFontStrikeOut(checked)
+            self.setCurrentCharFormat(style)
+        if checked:
+            self.setFontBold(False)
+            self.setFontItalic(False)
+        self.on_cursor_move()
 
     def show_source_view(self, show):
         # The position multiplication is used to roughly place the cursor back where it was.
