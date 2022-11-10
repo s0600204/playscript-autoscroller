@@ -110,6 +110,13 @@ class MainText(QRstTextEdit):
 
         return False
 
+    def clear_format(self, _):
+        self.setFontBold(False)
+        self.setFontItalic(False)
+        self.setFontUnderline(False)
+        self.setFontStrikeThrough(False)
+        self.on_cursor_move()
+
     def currentBlockFormat(self):
         # pylint: disable=invalid-name
         cursor = self.textCursor()
