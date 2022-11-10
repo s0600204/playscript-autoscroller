@@ -226,25 +226,28 @@ class MainText(QRstTextEdit):
     def setFontBold(self, checked):
         # pylint: disable=invalid-name
         if checked:
-            if self.fontWeight() != QFont.Bold:
-                self.setFontWeight(QFont.Bold)
             self.setFontItalic(False)
             self.setFontMonospace(False)
             self.setFontStrikeThrough(False)
             self.setFontUnderline(False)
+
+            if self.fontWeight() != QFont.Bold:
+                self.setFontWeight(QFont.Bold)
         else:
             if self.fontWeight() != QFont.Normal:
                 self.setFontWeight(QFont.Normal)
         self.on_cursor_move()
 
     def setFontItalic(self, checked):
-        if self.fontItalic() != checked:
-            super().setFontItalic(checked)
+        # pylint: disable=invalid-name
         if checked:
             self.setFontBold(False)
             self.setFontMonospace(False)
             self.setFontStrikeThrough(False)
             self.setFontUnderline(False)
+
+        if self.fontItalic() != checked:
+            super().setFontItalic(checked)
         self.on_cursor_move()
 
     def setFontMonospace(self, checked):
@@ -255,6 +258,7 @@ class MainText(QRstTextEdit):
             self.setFontItalic(False)
             self.setFontStrikeThrough(False)
             self.setFontUnderline(False)
+
             if font_family != 'monospace':
                 self.setCurrentFont(self._mono_font)
         elif font_family == "monospace":
@@ -263,26 +267,28 @@ class MainText(QRstTextEdit):
 
     def setFontStrikeThrough(self, checked):
         # pylint: disable=invalid-name
-        style = self.currentCharFormat()
-        if style.fontStrikeOut() != checked:
-            style.setFontStrikeOut(checked)
-            self.setCurrentCharFormat(style)
         if checked:
             self.setFontBold(False)
             self.setFontItalic(False)
             self.setFontMonospace(False)
             self.setFontUnderline(False)
+
+        style = self.currentCharFormat()
+        if style.fontStrikeOut() != checked:
+            style.setFontStrikeOut(checked)
+            self.setCurrentCharFormat(style)
         self.on_cursor_move()
 
     def setFontUnderline(self, checked):
         # pylint: disable=invalid-name
-        if self.fontUnderline() != checked:
-            super().setFontUnderline(checked)
         if checked:
             self.setFontBold(False)
             self.setFontItalic(False)
             self.setFontMonospace(False)
             self.setFontStrikeThrough(False)
+
+        if self.fontUnderline() != checked:
+            super().setFontUnderline(checked)
         self.on_cursor_move()
 
     def show_source_view(self, show):
