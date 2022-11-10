@@ -115,6 +115,7 @@ class MainText(QRstTextEdit):
         self.setFontItalic(False)
         self.setFontUnderline(False)
         self.setFontStrikeThrough(False)
+        self.setFontMonospace(False)
         self.on_cursor_move()
 
     def currentBlockFormat(self):
@@ -171,6 +172,7 @@ class MainText(QRstTextEdit):
             "italic": char_format.fontItalic(),
             "underline": char_format.fontUnderline(),
             "strikethrough": char_format.fontStrikeOut(),
+            "monospace": char_format.font().family() == 'monospace',
             "indent": block_format.indent(),
         }
         self._toolbar.update_style_buttons(style)
@@ -227,6 +229,7 @@ class MainText(QRstTextEdit):
             if self.fontWeight() != QFont.Bold:
                 self.setFontWeight(QFont.Bold)
             self.setFontItalic(False)
+            self.setFontMonospace(False)
             self.setFontStrikeThrough(False)
             self.setFontUnderline(False)
         else:
@@ -239,8 +242,23 @@ class MainText(QRstTextEdit):
             super().setFontItalic(checked)
         if checked:
             self.setFontBold(False)
+            self.setFontMonospace(False)
             self.setFontStrikeThrough(False)
             self.setFontUnderline(False)
+        self.on_cursor_move()
+
+    def setFontMonospace(self, checked):
+        # pylint: disable=invalid-name
+        font_family = self.currentFont().family()
+        if checked:
+            self.setFontBold(False)
+            self.setFontItalic(False)
+            self.setFontStrikeThrough(False)
+            self.setFontUnderline(False)
+            if font_family != 'monospace':
+                self.setCurrentFont(self._mono_font)
+        elif font_family == "monospace":
+            self.setCurrentFont(self._normal_font)
         self.on_cursor_move()
 
     def setFontStrikeThrough(self, checked):
@@ -252,6 +270,7 @@ class MainText(QRstTextEdit):
         if checked:
             self.setFontBold(False)
             self.setFontItalic(False)
+            self.setFontMonospace(False)
             self.setFontUnderline(False)
         self.on_cursor_move()
 
@@ -262,6 +281,7 @@ class MainText(QRstTextEdit):
         if checked:
             self.setFontBold(False)
             self.setFontItalic(False)
+            self.setFontMonospace(False)
             self.setFontStrikeThrough(False)
         self.on_cursor_move()
 

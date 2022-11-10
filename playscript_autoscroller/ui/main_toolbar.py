@@ -37,6 +37,10 @@ class MainToolbar(QToolBar):
         self._actions["strikethrough"].setCheckable(True)
         self._actions["strikethrough"].set_icon('format-text-strikethrough')
 
+        self._actions["monospace"] = ToolbarAction(parent=self)
+        self._actions["monospace"].setCheckable(True)
+        self._actions["monospace"].set_icon('text-x-source', 'code')
+
         self._actions["clear_format"] = ToolbarAction(parent=self)
         self._actions["clear_format"].setCheckable(False)
         self._actions["clear_format"].set_icon('edit-clear')
@@ -69,6 +73,7 @@ class MainToolbar(QToolBar):
         self.addAction(self._actions["italic"])
         self.addAction(self._actions["underline"])
         self.addAction(self._actions["strikethrough"])
+        self.addAction(self._actions["monospace"])
         self.addAction(self._actions["clear_format"])
         self.addSeparator()
         self.addAction(self._actions["dedent"])
@@ -88,6 +93,7 @@ class MainToolbar(QToolBar):
         self._actions["italic"].triggered.connect(textfield.setFontItalic)
         self._actions["underline"].triggered.connect(textfield.setFontUnderline)
         self._actions["strikethrough"].triggered.connect(textfield.setFontStrikeThrough)
+        self._actions["monospace"].triggered.connect(textfield.setFontMonospace)
         self._actions["clear_format"].triggered.connect(textfield.clear_format)
         self._actions["zoom_in"].triggered.connect(self.parent().zoom_in)
         self._actions["zoom_out"].triggered.connect(self.parent().zoom_out)
@@ -121,6 +127,8 @@ class MainToolbar(QToolBar):
 
         self._actions["strikethrough"].setText("Strikethrough")
 
+        self._actions["monospace"].setText("Monospace")
+
         self._actions["clear_format"].setText("Clear Character Formatting")
 
         self._actions["dedent"].setText("Decrease Indent")
@@ -153,6 +161,7 @@ class MainToolbar(QToolBar):
         self._actions["italic"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["underline"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["strikethrough"].setEnabled(not pdf_view_active and not source_view_active)
+        self._actions["monospace"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["clear_format"].setEnabled(not pdf_view_active and not source_view_active)
 
         # Dedent starts "off" even in non-pdf mode, as the cursor is at the start of a line.
@@ -173,4 +182,5 @@ class MainToolbar(QToolBar):
         self._actions["italic"].setChecked(style["italic"])
         self._actions["underline"].setChecked(style["underline"])
         self._actions["strikethrough"].setChecked(style["strikethrough"])
+        self._actions["monospace"].setChecked(style["monospace"])
         self._actions["dedent"].setEnabled(style["indent"])

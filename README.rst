@@ -25,6 +25,7 @@ Gnome 3.2 and the ``mask`` icon from the Lucide_ iconset.
 Lucide_ (ISC) ::
 
   x.svg
+  code.svg
   file-code.svg
   indent.svg
   outdent.svg
