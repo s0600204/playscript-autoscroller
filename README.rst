@@ -2,23 +2,41 @@
 Playscript Autoscroller
 =======================
 
-The **Script Scroller** is a utility permitting a play-script to scroll slowly
-up the screen, with the speed and direction controllable via an external MIDI
-controller.
+The **Playscript Autoscroller** is a utility permitting a playscript to scroll
+slowly up the screen, with the speed and direction controllable via an external
+MIDI controller.
 
 Thus, a sound operator may make use of an expression pedal to keep their place
-in the script, whilst keeping both hands on the faders of the sound desk. 
+in the script, freeing up their hands for other tasks such as operating the
+faders of a sound desk.
 
 
 Dependencies
 ------------
 
-As a baseline, you will need ``python`` 3.8 or better, along with ``pip`` for
-that version.
+The dependencies fall roughly into two categories: those that can be installed
+via ``pip``, and those that cannot.
 
-All other dependencies are installed automatically by ``pip``; the full list of
-run-time dependencies may be found in the ``setup.cfg`` file (build dependencies
-in ``pyproject.toml``).
+The latter category currently comprises of the following:
+
+* python (3.8 or better)
+* Qt5
+* Qt5 SVG module
+
+Non-Windows systems also require:
+
+* Poppler
+* Poppler-Qt5 bindings (might be installed as part of Poppler)
+
+(These are for importing of pdf files, a feature not working on Windows at this
+time.)
+
+The dependencies that are installable via ``pip`` are installed thusly (if not
+already); the list of run-time dependencies may be found in the ``setup.cfg``
+file, and build dependencies in ``pyproject.toml``.
+
+On the hardware side, it might be a good idea to have some form of MIDI
+controller, a pedal capable of outputting MIDI, or a controller
 
 
 Installation
@@ -36,16 +54,25 @@ From Source
 From PyPI
 """""""""
 
-Planned, but not yet available.
+Planned, but not yet possible.
 
 
 Running
 -------
 
 Once installed successfully, the program may be run by invoking
-``script-scroller`` from a terminal window.
+``playscript-autoscroller`` from a terminal window.
 
 A linux ``.desktop`` file is planned for a later date.
+
+
+Hardware support
+----------------
+
+This should work with any hardware capable of outputting MIDI Control Change
+Messages. I myself use a `Midi Solutions`_ `Pedal Controller`_ monitoring a
+Zoom `FP02 expression pedal`_, but I have previously used the output from a MIDI
+strip on an Allen & Heath GLD80 sound desk.
 
 
 Icon Credits
@@ -85,6 +112,9 @@ Lucide_ (ISC) ::
   markdown.svg
 
 
+.. _Midi Solutions: https://midisolutions.com/about.htm
+.. _Pedal Controller: https://midisolutions.com/prodped.htm
+.. _FP02 Expression Pedal: https://www.zoom.co.jp/products/fp02m-expression-pedal
 .. _Gnome Project (3.2): https://github.com/GNOME/adwaita-icon-theme/tree/gnome-3-20/src/fullcolor
 .. _Lucide: https://github.com/lucide-icons/lucide
 .. _Simple Icons: https://simpleicons.org/
