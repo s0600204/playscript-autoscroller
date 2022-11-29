@@ -79,50 +79,25 @@ Icon Credits
 ------------
 
 The application icon is a combination of the ``x-office-address-book`` icon from
-Gnome 3.2 and the ``mask`` icon from the Lucide_ iconset.
+the `Gnome Project (3.2)`_ and the ``mask`` icon from the Lucide_ iconset.
 
-`Tango Project`_ (Public Domain) ::
+Brand icons are provided by the `Simple Icons`_ project.
 
-  format-text-bold.svg
-  format-text-italic.svg
-  format-text-strikethrough.svg
-  format-text-underline.svg
-
-`Gnome Project (3.2)`_ (CC BY-SA 3.0) ::
-
-  edit-clear.svg
-  zoom-in.svg
-  zoom-original.svg
-  zoom-out.svg
-
-Lucide_ (ISC) ::
-
-  x.svg
-  code.svg
-  file-code.svg
-  indent.svg
-  outdent.svg
-  pause.svg
-  sidebar-close.svg
-  sidebar-open.svg
-
-`Simple Icons`_ (CC0 1.0) ::
-
-  adobeacrobatreader.svg
-  markdown.svg
+The UI icons are part of the Lucide_ iconset, or created by myself following the
+Lucide style guidelines where a suitable icon was not available in the iconset.
 
 
 Licencing
 ---------
 
 The ``Palette Icon Engine``, originally written in C++ by Nick Korotysh, is
-licenced under the terms of the GNU General Public license version 3. The
-original source may be found at https://github.com/Kolcha/paletteicon.
+licenced under the terms of the GNU General Public license version 3 (GPL-v3).
+The original source may be found at https://github.com/Kolcha/paletteicon.
 
 Icons from the Lucide_ iconset are licenced under the `ISC license`_.
 
-Icons from the `Simple Icons`_ iconset are licenced under the Creative Commons Zero license
-version 1.0 (``CC0 1.0``).
+Icons from the `Simple Icons`_ iconset are licenced under the Creative Commons
+Zero license version 1.0 (``CC0 1.0``).
 
 The ``x-office-address-book`` icon from the `Gnome Project (3.2)`_ is licenced
 under the Creative Commons Share-Alike 3.0 license (``CC BY-SA 3.0``).
@@ -135,4 +110,3 @@ under the Creative Commons Share-Alike 3.0 license (``CC BY-SA 3.0``).
 .. _Lucide: https://github.com/lucide-icons/lucide
 .. _ISC License: https://github.com/lucide-icons/lucide/blob/main/LICENSE
 .. _Simple Icons: https://simpleicons.org/
-.. _Tango Project: https://www.tango-project.org/

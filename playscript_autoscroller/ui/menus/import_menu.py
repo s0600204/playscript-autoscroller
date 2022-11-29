@@ -19,12 +19,12 @@ class ImportMenu(ApplicationMenu):
 
         self._actions['markdown'] = ToolbarAction(parent=self)
         self._actions['markdown'].triggered.connect(self.import_markdown)
-        self._actions['markdown'].set_icon('markdown', 'markdown')
+        self._actions['markdown'].set_icon('markdown')
         self.addAction(self._actions['markdown'])
 
         self._actions['pdf'] = ToolbarAction(parent=self)
         self._actions['pdf'].triggered.connect(self.import_pdf)
-        self._actions['pdf'].set_icon('pdf', 'adobeacrobatreader')
+        self._actions['pdf'].set_icon('adobeacrobatreader')
         self._actions['pdf'].setEnabled(bool(popplerqt5))
         self.addAction(self._actions['pdf'])
 

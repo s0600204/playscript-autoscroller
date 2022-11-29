@@ -19,39 +19,39 @@ class MainToolbar(QToolBar):
         self._actions["outline"] = ToolbarAction(parent=self)
         self._actions["outline"].setCheckable(True)
         self._actions["outline"].setChecked(True)
-        self._actions["outline"].set_icon('sidebar-show', 'sidebar-open', 'sidebar-close')
+        self._actions["outline"].set_icon('sidebar-open', 'sidebar-close')
 
         self._actions["bold"] = ToolbarAction(parent=self)
         self._actions["bold"].setCheckable(True)
-        self._actions["bold"].set_icon('format-text-bold')
+        self._actions["bold"].set_icon('bold')
 
         self._actions["italic"] = ToolbarAction(parent=self)
         self._actions["italic"].setCheckable(True)
-        self._actions["italic"].set_icon('format-text-italic')
+        self._actions["italic"].set_icon('italic')
 
         self._actions["underline"] = ToolbarAction(parent=self)
         self._actions["underline"].setCheckable(True)
-        self._actions["underline"].set_icon('format-text-underline')
+        self._actions["underline"].set_icon('underline')
 
         self._actions["strikethrough"] = ToolbarAction(parent=self)
         self._actions["strikethrough"].setCheckable(True)
-        self._actions["strikethrough"].set_icon('format-text-strikethrough')
+        self._actions["strikethrough"].set_icon('strikethrough')
 
         self._actions["monospace"] = ToolbarAction(parent=self)
         self._actions["monospace"].setCheckable(True)
-        self._actions["monospace"].set_icon('text-x-source', 'code')
+        self._actions["monospace"].set_icon('code')
 
         self._actions["clear_format"] = ToolbarAction(parent=self)
         self._actions["clear_format"].setCheckable(False)
-        self._actions["clear_format"].set_icon('edit-clear')
+        self._actions["clear_format"].set_icon('clear-format')
 
         self._actions["dedent"] = ToolbarAction(parent=self)
         self._actions["dedent"].setEnabled(False)
-        self._actions["dedent"].set_icon('format-indent-less', 'outdent')
+        self._actions["dedent"].set_icon('outdent')
         self._actions["dedent"].triggered.connect(self.dedent)
 
         self._actions["indent"] = ToolbarAction(parent=self)
-        self._actions["indent"].set_icon('format-indent-more', 'indent')
+        self._actions["indent"].set_icon('indent')
         self._actions["indent"].triggered.connect(self.indent)
 
         self._actions["zoom_in"] = ToolbarAction(parent=self)
@@ -61,11 +61,11 @@ class MainToolbar(QToolBar):
         self._actions["zoom_out"].set_icon('zoom-out')
 
         self._actions["zoom_reset"] = ToolbarAction(parent=self)
-        self._actions["zoom_reset"].set_icon('zoom-original')
+        self._actions["zoom_reset"].set_icon('zoom-reset')
 
         self._actions["source_view"] = ToolbarAction(parent=self)
         self._actions["source_view"].setCheckable(True)
-        self._actions["source_view"].set_icon('text-x-source', 'file-code')
+        self._actions["source_view"].set_icon('file-code')
 
         self.addAction(self._actions["outline"])
         self.addSeparator()
