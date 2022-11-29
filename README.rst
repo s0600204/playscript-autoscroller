@@ -103,10 +103,10 @@ The ``x-office-address-book`` icon from the `Gnome Project (3.2)`_ is licenced
 under the Creative Commons Share-Alike 3.0 license (``CC BY-SA 3.0``).
 
 
-.. _Midi Solutions: https://midisolutions.com/about.htm
-.. _Pedal Controller: https://midisolutions.com/prodped.htm
 .. _FP02 Expression Pedal: https://www.zoom.co.jp/products/fp02m-expression-pedal
 .. _Gnome Project (3.2): https://github.com/GNOME/adwaita-icon-theme/tree/gnome-3-20/src/fullcolor
-.. _Lucide: https://github.com/lucide-icons/lucide
 .. _ISC License: https://github.com/lucide-icons/lucide/blob/main/LICENSE
+.. _Lucide: https://github.com/lucide-icons/lucide
+.. _Midi Solutions: https://midisolutions.com/about.htm
+.. _Pedal Controller: https://midisolutions.com/prodped.htm
 .. _Simple Icons: https://simpleicons.org/
