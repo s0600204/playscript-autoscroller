@@ -112,10 +112,27 @@ Lucide_ (ISC) ::
   markdown.svg
 
 
+Licencing
+---------
+
+The ``Palette Icon Engine``, originally written in C++ by Nick Korotysh, is
+licenced under the terms of the GNU General Public license version 3. The
+original source may be found at https://github.com/Kolcha/paletteicon.
+
+Icons from the Lucide_ iconset are licenced under the `ISC license`_.
+
+Icons from the `Simple Icons`_ iconset are licenced under the Creative Commons Zero license
+version 1.0 (``CC0 1.0``).
+
+The ``x-office-address-book`` icon from the `Gnome Project (3.2)`_ is licenced
+under the Creative Commons Share-Alike 3.0 license (``CC BY-SA 3.0``).
+
+
 .. _Midi Solutions: https://midisolutions.com/about.htm
 .. _Pedal Controller: https://midisolutions.com/prodped.htm
 .. _FP02 Expression Pedal: https://www.zoom.co.jp/products/fp02m-expression-pedal
 .. _Gnome Project (3.2): https://github.com/GNOME/adwaita-icon-theme/tree/gnome-3-20/src/fullcolor
 .. _Lucide: https://github.com/lucide-icons/lucide
+.. _ISC License: https://github.com/lucide-icons/lucide/blob/main/LICENSE
 .. _Simple Icons: https://simpleicons.org/
 .. _Tango Project: https://www.tango-project.org/
