@@ -2,12 +2,11 @@
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QToolBar
 
-from .action_classes import ToolbarAction
+from .action_classes import ToolbarAction, ToolButtonAction
+from .menus.heading_submenu import HeadingSubMenu
 
 
 class MainToolbar(QToolBar):
-
-    HeadingLevels = 6
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -22,6 +21,11 @@ class MainToolbar(QToolBar):
         self._actions["outline"].setCheckable(True)
         self._actions["outline"].setChecked(True)
         self._actions["outline"].set_icon('sidebar-open', 'sidebar-close')
+
+        self._actions["heading"] = ToolButtonAction(parent=self)
+        self._actions["heading"].set_icon('heading')
+        self._actions["heading"].setPopupMode(ToolButtonAction.InstantPopup)
+        self._actions["heading"].setMenu(HeadingSubMenu(parent=self._actions["heading"]))
 
         self._actions["bold"] = ToolbarAction(parent=self)
         self._actions["bold"].setCheckable(True)
@@ -47,12 +51,6 @@ class MainToolbar(QToolBar):
         self._actions["clear_format"].setCheckable(False)
         self._actions["clear_format"].set_icon('clear-format')
 
-        for level in range(1, self.HeadingLevels + 1):
-            key = f"heading_{level}"
-            self._actions[key] = ToolbarAction(parent=self)
-            self._actions[key].setCheckable(True)
-            self._actions[key].set_icon(f"heading-{level}")
-
         self._actions["dedent"] = ToolbarAction(parent=self)
         self._actions["dedent"].setEnabled(False)
         self._actions["dedent"].set_icon('outdent')
@@ -77,15 +75,14 @@ class MainToolbar(QToolBar):
 
         self.addAction(self._actions["outline"])
         self.addSeparator()
+        self.addWidget(self._actions["heading"])
+        self.addSeparator()
         self.addAction(self._actions["bold"])
         self.addAction(self._actions["italic"])
         self.addAction(self._actions["underline"])
         self.addAction(self._actions["strikethrough"])
         self.addAction(self._actions["monospace"])
         self.addAction(self._actions["clear_format"])
-        self.addSeparator()
-        for level in range(1, self.HeadingLevels + 1):
-            self.addAction(self._actions[f"heading_{level}"])
         self.addSeparator()
         self.addAction(self._actions["dedent"])
         self.addAction(self._actions["indent"])
@@ -100,15 +97,13 @@ class MainToolbar(QToolBar):
         self._textfield = textfield
         self._actions["outline"].triggered.connect(self.parent().show_outline)
         self._actions["outline"].enabled.connect(self.parent().enable_outline)
+        self._actions["heading"].menu().connect_textfield(textfield)
         self._actions["bold"].triggered.connect(textfield.setFontBold)
         self._actions["italic"].triggered.connect(textfield.setFontItalic)
         self._actions["underline"].triggered.connect(textfield.setFontUnderline)
         self._actions["strikethrough"].triggered.connect(textfield.setFontStrikeThrough)
         self._actions["monospace"].triggered.connect(textfield.setFontMonospace)
         self._actions["clear_format"].triggered.connect(textfield.clear_format)
-        for level in range(1, self.HeadingLevels + 1):
-            self._actions[f"heading_{level}"].triggered.connect(
-                self.build_heading_closure(level))
         self._actions["zoom_in"].triggered.connect(self.parent().zoom_in)
         self._actions["zoom_out"].triggered.connect(self.parent().zoom_out)
         self._actions["zoom_reset"].triggered.connect(self.parent().zoom_reset)
@@ -124,16 +119,14 @@ class MainToolbar(QToolBar):
             self._textfield.indent()
             self._actions["dedent"].setEnabled(True)
 
-    def build_heading_closure(self, level):
-        def _set_heading(checked):
-            self._textfield.setTextHeadingLevel(checked and level or 0)
-        return _set_heading
-
     def set_source_view_checked(self, checked):
         self._actions["source_view"].setChecked(checked)
 
     def retranslate_ui(self):
         self._actions["outline"].setText("Toggle Outline")
+
+        self._actions["heading"].setText("Heading Level")
+        self._actions["heading"].menu().retranslate_ui()
 
         self._actions["bold"].setText("Bold")
         self._actions["bold"].setShortcut(QKeySequence.Bold)
@@ -149,12 +142,6 @@ class MainToolbar(QToolBar):
         self._actions["monospace"].setText("Monospace")
 
         self._actions["clear_format"].setText("Clear Character Formatting")
-
-        self._actions["heading_1"].setText("Heading Level 1 (largest)")
-        for level in range(2, self.HeadingLevels):
-            self._actions[f"heading_{level}"].setText(f"Heading Level {level}")
-        self._actions[f"heading_{self.HeadingLevels}"].setText(
-            f"Heading Level {self.HeadingLevels} (smallest)")
 
         self._actions["dedent"].setText("Decrease Indent")
         self._actions["indent"].setText("Increase Indent")
@@ -182,15 +169,13 @@ class MainToolbar(QToolBar):
 
         # It might be nice to not disable the buttons in "source view", but instead add/remove
         # the appropriate character strings around the selected text.
+        self._actions["heading"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["bold"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["italic"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["underline"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["strikethrough"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["monospace"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["clear_format"].setEnabled(not pdf_view_active and not source_view_active)
-
-        for level in range(1, self.HeadingLevels + 1):
-            self._actions[f"heading_{level}"].setEnabled(not pdf_view_active and not source_view_active)
 
         # Dedent starts "off" even in non-pdf mode, as the cursor is at the start of a line.
         self._actions["dedent"].setEnabled(False)
@@ -206,12 +191,10 @@ class MainToolbar(QToolBar):
         self._actions["source_view"].setChecked(self.parent().source_view_active)
 
     def update_style_buttons(self, style):
+        self._actions["heading"].menu().update_style_buttons(style)
         self._actions["bold"].setChecked(style["bold"])
         self._actions["italic"].setChecked(style["italic"])
         self._actions["underline"].setChecked(style["underline"])
         self._actions["strikethrough"].setChecked(style["strikethrough"])
         self._actions["monospace"].setChecked(style["monospace"])
         self._actions["dedent"].setEnabled(style["indent"])
-
-        for level in range(1, self.HeadingLevels + 1):
-            self._actions[f"heading_{level}"].setChecked(style["heading_level"] == level)

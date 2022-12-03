@@ -3,7 +3,7 @@ from os import path
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction
+from PyQt5.QtWidgets import QAction, QToolButton
 
 from .palette_icon_engine import PaletteIconEngine
 
@@ -53,3 +53,6 @@ class ToolbarAction(QAction, _Action):
     def setEnabled(self, enabled: bool): # pylint: disable=invalid-name
         super().setEnabled(enabled)
         self.enabled.emit(enabled)
+
+class ToolButtonAction(QToolButton, _Action):
+    pass
