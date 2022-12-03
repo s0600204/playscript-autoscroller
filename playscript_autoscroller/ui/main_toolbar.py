@@ -2,7 +2,7 @@
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QToolBar
 
-from .toolbar_action import ToolbarAction
+from .action_classes import ToolbarAction
 
 
 class MainToolbar(QToolBar):
