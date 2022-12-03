@@ -3,12 +3,12 @@ from os import path
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction
+from PyQt5.QtWidgets import QAction, QToolButton
 
 from .palette_icon_engine import PaletteIconEngine
 
 
-class ToolbarAction(QAction):
+class _Action:
 
     enabled = pyqtSignal(bool)
 
@@ -37,14 +37,22 @@ class ToolbarAction(QAction):
         icon_path = path.join(path.dirname(__file__), self.BundledIconSubPath)
         for iconset in self.BundledIconsets:
             search_path = path.join(icon_path, iconset, icon_name + '.svg')
-            
             if path.exists(search_path):
                 return search_path
         return None
+
+    def set_icon(self, name, name_checked=None):
+        self.setIcon(self._build_icon(name, name_checked))
+
+
+class MenuAction(QAction, _Action):
+    pass
+
+class ToolbarAction(QAction, _Action):
 
     def setEnabled(self, enabled: bool): # pylint: disable=invalid-name
         super().setEnabled(enabled)
         self.enabled.emit(enabled)
 
-    def set_icon(self, name, name_checked=None):
-        self.setIcon(self._build_icon(name, name_checked))
+class ToolButtonAction(QToolButton, _Action):
+    pass

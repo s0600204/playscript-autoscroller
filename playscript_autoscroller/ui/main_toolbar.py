@@ -2,7 +2,8 @@
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QToolBar
 
-from .toolbar_action import ToolbarAction
+from .action_classes import ToolbarAction, ToolButtonAction
+from .menus.heading_submenu import HeadingSubMenu
 
 
 class MainToolbar(QToolBar):
@@ -20,6 +21,11 @@ class MainToolbar(QToolBar):
         self._actions["outline"].setCheckable(True)
         self._actions["outline"].setChecked(True)
         self._actions["outline"].set_icon('sidebar-open', 'sidebar-close')
+
+        self._actions["heading"] = ToolButtonAction(parent=self)
+        self._actions["heading"].set_icon('heading')
+        self._actions["heading"].setPopupMode(ToolButtonAction.InstantPopup)
+        self._actions["heading"].setMenu(HeadingSubMenu(parent=self._actions["heading"]))
 
         self._actions["bold"] = ToolbarAction(parent=self)
         self._actions["bold"].setCheckable(True)
@@ -69,6 +75,8 @@ class MainToolbar(QToolBar):
 
         self.addAction(self._actions["outline"])
         self.addSeparator()
+        self.addWidget(self._actions["heading"])
+        self.addSeparator()
         self.addAction(self._actions["bold"])
         self.addAction(self._actions["italic"])
         self.addAction(self._actions["underline"])
@@ -89,6 +97,7 @@ class MainToolbar(QToolBar):
         self._textfield = textfield
         self._actions["outline"].triggered.connect(self.parent().show_outline)
         self._actions["outline"].enabled.connect(self.parent().enable_outline)
+        self._actions["heading"].menu().connect_textfield(textfield)
         self._actions["bold"].triggered.connect(textfield.setFontBold)
         self._actions["italic"].triggered.connect(textfield.setFontItalic)
         self._actions["underline"].triggered.connect(textfield.setFontUnderline)
@@ -115,6 +124,9 @@ class MainToolbar(QToolBar):
 
     def retranslate_ui(self):
         self._actions["outline"].setText("Toggle Outline")
+
+        self._actions["heading"].setText("Heading Level")
+        self._actions["heading"].menu().retranslate_ui()
 
         self._actions["bold"].setText("Bold")
         self._actions["bold"].setShortcut(QKeySequence.Bold)
@@ -157,6 +169,7 @@ class MainToolbar(QToolBar):
 
         # It might be nice to not disable the buttons in "source view", but instead add/remove
         # the appropriate character strings around the selected text.
+        self._actions["heading"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["bold"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["italic"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["underline"].setEnabled(not pdf_view_active and not source_view_active)
@@ -178,6 +191,7 @@ class MainToolbar(QToolBar):
         self._actions["source_view"].setChecked(self.parent().source_view_active)
 
     def update_style_buttons(self, style):
+        self._actions["heading"].menu().update_style_buttons(style)
         self._actions["bold"].setChecked(style["bold"])
         self._actions["italic"].setChecked(style["italic"])
         self._actions["underline"].setChecked(style["underline"])
