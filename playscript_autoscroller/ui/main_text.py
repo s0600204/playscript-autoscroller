@@ -21,6 +21,7 @@ class MainText(QRstTextEdit):
     DefaultZoom = 1
     NormalIndentWidth = 4
     ZoomConfigKey = 'zoom_text'
+    HeadingSizeMagic = 4
 
     def __init__(self, application, toolbar, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -296,6 +297,16 @@ class MainText(QRstTextEdit):
         block_format = self.currentBlockFormat()
         block_format.setHeadingLevel(level)
         self.setCurrentBlockFormat(block_format)
+
+        # Update visual appearance of text
+        char_format = QTextCharFormat()
+        char_format.setProperty(
+            QTextCharFormat.FontSizeAdjustment,
+            level and self.HeadingSizeMagic - level or 0)
+        cursor = self.textCursor()
+        cursor.select(QTextCursor.LineUnderCursor)
+        cursor.mergeCharFormat(char_format)
+
         self.on_cursor_move()
 
     def show_source_view(self, show):
