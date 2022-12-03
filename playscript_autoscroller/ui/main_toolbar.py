@@ -7,6 +7,8 @@ from .toolbar_action import ToolbarAction
 
 class MainToolbar(QToolBar):
 
+    HeadingLevels = 6
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -45,6 +47,12 @@ class MainToolbar(QToolBar):
         self._actions["clear_format"].setCheckable(False)
         self._actions["clear_format"].set_icon('clear-format')
 
+        for level in range(1, self.HeadingLevels + 1):
+            key = f"heading_{level}"
+            self._actions[key] = ToolbarAction(parent=self)
+            self._actions[key].setCheckable(True)
+            self._actions[key].set_icon(f"heading-{level}")
+
         self._actions["dedent"] = ToolbarAction(parent=self)
         self._actions["dedent"].setEnabled(False)
         self._actions["dedent"].set_icon('outdent')
@@ -76,6 +84,9 @@ class MainToolbar(QToolBar):
         self.addAction(self._actions["monospace"])
         self.addAction(self._actions["clear_format"])
         self.addSeparator()
+        for level in range(1, self.HeadingLevels + 1):
+            self.addAction(self._actions[f"heading_{level}"])
+        self.addSeparator()
         self.addAction(self._actions["dedent"])
         self.addAction(self._actions["indent"])
         self.addSeparator()
@@ -95,6 +106,9 @@ class MainToolbar(QToolBar):
         self._actions["strikethrough"].triggered.connect(textfield.setFontStrikeThrough)
         self._actions["monospace"].triggered.connect(textfield.setFontMonospace)
         self._actions["clear_format"].triggered.connect(textfield.clear_format)
+        for level in range(1, self.HeadingLevels + 1):
+            self._actions[f"heading_{level}"].triggered.connect(
+                self.build_heading_closure(level))
         self._actions["zoom_in"].triggered.connect(self.parent().zoom_in)
         self._actions["zoom_out"].triggered.connect(self.parent().zoom_out)
         self._actions["zoom_reset"].triggered.connect(self.parent().zoom_reset)
@@ -109,6 +123,11 @@ class MainToolbar(QToolBar):
         if self._textfield:
             self._textfield.indent()
             self._actions["dedent"].setEnabled(True)
+
+    def build_heading_closure(self, level):
+        def _set_heading(checked):
+            self._textfield.setTextHeadingLevel(checked and level or 0)
+        return _set_heading
 
     def set_source_view_checked(self, checked):
         self._actions["source_view"].setChecked(checked)
@@ -130,6 +149,12 @@ class MainToolbar(QToolBar):
         self._actions["monospace"].setText("Monospace")
 
         self._actions["clear_format"].setText("Clear Character Formatting")
+
+        self._actions["heading_1"].setText("Heading Level 1 (largest)")
+        for level in range(2, self.HeadingLevels):
+            self._actions[f"heading_{level}"].setText(f"Heading Level {level}")
+        self._actions[f"heading_{self.HeadingLevels}"].setText(
+            f"Heading Level {self.HeadingLevels} (smallest)")
 
         self._actions["dedent"].setText("Decrease Indent")
         self._actions["indent"].setText("Increase Indent")
@@ -164,6 +189,9 @@ class MainToolbar(QToolBar):
         self._actions["monospace"].setEnabled(not pdf_view_active and not source_view_active)
         self._actions["clear_format"].setEnabled(not pdf_view_active and not source_view_active)
 
+        for level in range(1, self.HeadingLevels + 1):
+            self._actions[f"heading_{level}"].setEnabled(not pdf_view_active and not source_view_active)
+
         # Dedent starts "off" even in non-pdf mode, as the cursor is at the start of a line.
         self._actions["dedent"].setEnabled(False)
         self._actions["indent"].setEnabled(not pdf_view_active)
@@ -184,3 +212,6 @@ class MainToolbar(QToolBar):
         self._actions["strikethrough"].setChecked(style["strikethrough"])
         self._actions["monospace"].setChecked(style["monospace"])
         self._actions["dedent"].setEnabled(style["indent"])
+
+        for level in range(1, self.HeadingLevels + 1):
+            self._actions[f"heading_{level}"].setChecked(style["heading_level"] == level)
