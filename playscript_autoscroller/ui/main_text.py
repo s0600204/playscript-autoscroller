@@ -294,6 +294,7 @@ class MainText(QRstTextEdit):
         self.on_cursor_move()
 
     def setTextHeadingLevel(self, level):
+        # pylint: disable=invalid-name
         block_format = self.currentBlockFormat()
         block_format.setHeadingLevel(level)
         self.setCurrentBlockFormat(block_format)

@@ -20,7 +20,7 @@ class _Action:
     ]
 
     def _build_icon(self, icon_name, icon_name_checked=None):
-        icon = QIcon(PaletteIconEngine(self.parent().palette))
+        icon = QIcon(PaletteIconEngine(self.parent().palette)) # pylint: disable=no-member
 
         icon_path = self._find_icon(icon_name)
         if icon_path:
@@ -42,7 +42,7 @@ class _Action:
         return None
 
     def set_icon(self, name, name_checked=None):
-        self.setIcon(self._build_icon(name, name_checked))
+        self.setIcon(self._build_icon(name, name_checked)) # pylint: disable=no-member
 
 
 class MenuAction(QAction, _Action):
