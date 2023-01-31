@@ -1,14 +1,19 @@
 
+import sys
+
 from PyQt5.Qt import (
     QSize,
     Qt,
+    qVersion,
 )
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtWidgets import (
     QDialog,
     QDialogButtonBox,
     QGridLayout,
+    QHBoxLayout,
     QLabel,
+    QWidget,
 )
 
 from playscript_autoscroller import (
@@ -17,7 +22,34 @@ from playscript_autoscroller import (
     __doc__,
     __version__,
 )
+from .action_classes import SvgIconWidget
 
+
+class SubIcons(QWidget):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.setLayout(QHBoxLayout())
+
+        self._icon_qt = SvgIconWidget(self)
+        self._icon_qt.set_icon('qt')
+        self._icon_qt.set_size(24)
+        self.layout().addWidget(self._icon_qt)
+
+        self._icon_python = SvgIconWidget(self)
+        self._icon_python.set_icon('python')
+        self._icon_python.set_size(24)
+        self.layout().addWidget(self._icon_python)
+
+        self._icon_midi = SvgIconWidget(self)
+        self._icon_midi.set_icon('midi')
+        self._icon_midi.set_size(24)
+        self.layout().addWidget(self._icon_midi)
+
+    def retranslate_ui(self):
+        self._icon_qt.setToolTip(qVersion())
+        self._icon_python.setToolTip(sys.version)
+        self._icon_midi.setToolTip('1.0')
 
 class AboutDialog(QDialog):
 
@@ -33,6 +65,9 @@ class AboutDialog(QDialog):
         self._icon.setMinimumSize(QSize(128, 128))
         self.layout().addWidget(self._icon, 0, 0, 5, 1)
         self.layout().setAlignment(self._icon, Qt.AlignCenter)
+
+        self._subicons = SubIcons(self)
+        self.layout().addWidget(self._subicons, 5, 0)
 
         self._caption_name = QLabel(self)
         self._caption_name.setAlignment(Qt.AlignHCenter | Qt.AlignBottom)
@@ -51,10 +86,11 @@ class AboutDialog(QDialog):
         self._button_box = QDialogButtonBox(self)
         self._button_box.addButton(QDialogButtonBox.Ok)
         self._button_box.accepted.connect(self.accept)
-        self.layout().addWidget(self._button_box, 4, 1, 1, 1)
+        self.layout().addWidget(self._button_box, 5, 1)
 
     def retranslate_ui(self):
         self.setWindowTitle(f"About {__app_name__}")
         self._caption_name.setText(f"<h2>{__app_name__}</h2>")
         self._caption_desc.setText(__doc__)
         self._caption_version.setText(__version__)
+        self._subicons.retranslate_ui()

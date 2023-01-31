@@ -1,9 +1,9 @@
 
 from os import path
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction, QToolButton
+from PyQt5.QtCore import pyqtSignal, QSize
+from PyQt5.QtGui import QIcon, QPainter
+from PyQt5.QtWidgets import QAction, QToolButton,QWidget
 
 from .palette_icon_engine import PaletteIconEngine
 
@@ -56,3 +56,29 @@ class ToolbarAction(QAction, _Action):
 
 class ToolButtonAction(QToolButton, _Action):
     pass
+
+class SvgIconWidget(QWidget, _Action):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._icon = None
+        self._pixmap = None
+
+    def set_icon(self, name):
+        self._icon = self._build_icon(name, None)
+        self._pixmap = None
+
+    def set_size(self, breadth):
+        size = QSize(breadth, breadth)
+        self.setMinimumSize(size)
+        self.setMaximumSize(size)
+        self._pixmap = None
+
+    def paintEvent(self, event):
+        if not self._pixmap:
+            self._pixmap = self._icon.pixmap(self.size())
+
+        painter = QPainter()
+        painter.begin(self)
+        painter.drawPixmap(0, 0, self.width(), self.height(), self._pixmap)
+        painter.end()
