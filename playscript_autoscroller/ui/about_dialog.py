@@ -16,6 +16,8 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+import rtmidi
+
 from playscript_autoscroller import (
     __app_icon__,
     __app_name__,
@@ -47,9 +49,10 @@ class SubIcons(QWidget):
         self.layout().addWidget(self._icon_midi)
 
     def retranslate_ui(self):
-        self._icon_qt.setToolTip(qVersion())
-        self._icon_python.setToolTip(sys.version)
-        self._icon_midi.setToolTip('1.0')
+        self._icon_qt.setToolTip(f"Qt {qVersion()}")
+        self._icon_python.setToolTip(f"python {sys.version.split(' ')[0]}")
+        self._icon_midi.setToolTip(
+            f"rtmidi {rtmidi.get_rtmidi_version()}\npython-rtmidi {rtmidi.version.version}")
 
 class AboutDialog(QDialog):
 
