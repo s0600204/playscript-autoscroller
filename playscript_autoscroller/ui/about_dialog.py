@@ -18,6 +18,12 @@ from PyQt5.QtWidgets import (
 
 import rtmidi
 
+try:
+    import popplerqt5
+except ModuleNotFoundError:
+    # pylint: disable=invalid-name
+    popplerqt5 = None
+
 from playscript_autoscroller import (
     __app_icon__,
     __app_name__,
@@ -48,11 +54,20 @@ class SubIcons(QWidget):
         self._icon_midi.set_size(24)
         self.layout().addWidget(self._icon_midi)
 
+        if popplerqt5:
+            self._icon_pdf = SvgIconWidget(self)
+            self._icon_pdf.set_icon('adobeacrobatreader')
+            self._icon_pdf.set_size(24)
+            self.layout().addWidget(self._icon_pdf)
+
     def retranslate_ui(self):
         self._icon_qt.setToolTip(f"Qt {qVersion()}")
         self._icon_python.setToolTip(f"python {sys.version.split(' ')[0]}")
         self._icon_midi.setToolTip(
             f"rtmidi {rtmidi.get_rtmidi_version()}\npython-rtmidi {rtmidi.version.version}")
+        if popplerqt5:
+            poppler_version = '.'.join([str(x) for x in popplerqt5.poppler_version()])
+            self._icon_pdf.setToolTip(f"(PDF support by) Poppler {poppler_version}")
 
 class AboutDialog(QDialog):
 
