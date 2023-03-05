@@ -36,6 +36,7 @@ class MainText(QRstTextEdit):
 
         self._normal_font = self.font()
         self._mono_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)
+        self._mono_font.setStyleHint(QFont.Monospace)
 
         self._base_font_size = self.currentFont().pointSize()
         self._zoom_level = self._application.register_config(self.ZoomConfigKey, self.DefaultZoom)
@@ -173,7 +174,7 @@ class MainText(QRstTextEdit):
             "italic": char_format.fontItalic(),
             "underline": char_format.fontUnderline(),
             "strikethrough": char_format.fontStrikeOut(),
-            "monospace": char_format.font().family() == 'monospace',
+            "monospace": char_format.font().styleHint() == QFont.Monospace,
             "indent": block_format.indent(),
             "heading_level": block_format.headingLevel(),
         }
@@ -198,7 +199,7 @@ class MainText(QRstTextEdit):
 
             # Update the size of monospaced sections
             for form in block.textFormats():
-                if form.format.font().family() == 'monospace':
+                if form.format.font().styleHint() == QFont.Monospace:
                     start = block.position() + form.start
                     end = start + form.length
                     block_cursor.setPosition(start)
@@ -254,16 +255,16 @@ class MainText(QRstTextEdit):
 
     def setFontMonospace(self, checked):
         # pylint: disable=invalid-name
-        font_family = self.currentFont().family()
+        font_style_hint = self.currentFont().styleHint()
         if checked:
             self.setFontBold(False)
             self.setFontItalic(False)
             self.setFontStrikeThrough(False)
             self.setFontUnderline(False)
 
-            if font_family != 'monospace':
+            if font_style_hint != QFont.Monospace:
                 self.setCurrentFont(self._mono_font)
-        elif font_family == "monospace":
+        elif font_style_hint == QFont.Monospace:
             self.setCurrentFont(self._normal_font)
         self.on_cursor_move()
 
