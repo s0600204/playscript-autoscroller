@@ -1,0 +1,9 @@
+#!/usr/bin/make -f
+
+# Output every command that modifies files on the build system.
+#export DH_VERBOSE = 1
+
+export PYBUILD_NAME=playscript_autoscroller
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild

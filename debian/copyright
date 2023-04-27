@@ -1,0 +1,106 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Source: https://github.com/s0600204/playscript-autoscroller.git
+Upstream-Name: playscript-autoscroller
+Upstream-Contact: s0600204 <dev@s0600204>
+
+Files:
+ *
+Copyright:
+ 2023 s0600204 <dev@s0600204>
+License: GPL-3.0+
+
+Files:
+ debian/*
+Copyright:
+ 2023 s0600204 <dev@s0600204>
+License: GPL-3.0+
+
+Files:
+ playscript_autoscroller/ui/icons/x.svg
+ playscript_autoscroller/ui/icons/code.svg
+ playscript_autoscroller/ui/icons/file-code.svg
+ playscript_autoscroller/ui/icons/indent.svg
+ playscript_autoscroller/ui/icons/outdent.svg
+ playscript_autoscroller/ui/icons/pause.svg
+ playscript_autoscroller/ui/icons/sidebar-close.svg
+ playscript_autoscroller/ui/icons/sidebar-open.svg
+Copyright:
+ 2013-2022 Cole Bemis
+ 2022 Lucide Contributors
+License: ISC
+
+Files:
+ playscript_autoscroller/ui/icons/adobeacrobatreader.svg
+ playscript_autoscroller/ui/icons/markdown.svg
+Copyright:
+ 2013-2022 Cole Bemis
+ 2022 Lucide Contributors
+License: CC0
+
+Files:
+ playscript_autoscroller/ui/icons/edit-clear.svg
+ playscript_autoscroller/ui/icons/zoom-in.svg
+ playscript_autoscroller/ui/icons/zoom-original.svg
+ playscript_autoscroller/ui/icons/zoom-out.svg
+Copyright:
+ 2014 Gnome Project
+License: CC-BY-SA-3.0
+
+Files:
+ playscript_autoscroller/ui/icons/playscript-autoscroller.svg
+Copyright:
+ 2014 Gnome Project
+License: CC-BY-SA-3.0
+Comment: File is Derived from work released under this licence.
+
+Files:
+ playscript_autoscroller/ui/icons/format-text-bold.svg
+ playscript_autoscroller/ui/icons/format-text-italic.svg
+ playscript_autoscroller/ui/icons/format-text-strikethrough.svg
+ playscript_autoscroller/ui/icons/format-text-underline.svg
+Copyright:
+ 2009 Tango Project
+License: public-domain
+Comment: Released into the Public Domain as of 2009
+
+License: GPL-3.0+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <https://www.gnu.org/licenses/>.
+Comment:
+ On Debian systems, the complete text of the GNU General
+ Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
+
+License: ISC
+ Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022
+ as part of Feather (MIT). All other copyright (c) for Lucide are held
+ by Lucide Contributors 2022.
+ .
+ Permission to use, copy, modify, and/or distribute this software for
+ any purpose with or without fee is hereby granted, provided that the
+ above copyright notice and this permission notice appear in all
+ copies.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+ AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ PERFORMANCE OF THIS SOFTWARE.
+
+License: CC-BY-SA-3.0
+ This work is licenced under the Creative Commons Attribution-Share Alike 3.0
+ United States License. To view a copy of this licence, visit
+ http://creativecommons.org/licenses/by-sa/3.0/ or send a letter to Creative
+ Commons, 171 Second Street, Suite 300, San Francisco, California 94105, USA.
