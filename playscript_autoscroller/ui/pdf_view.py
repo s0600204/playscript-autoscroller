@@ -35,7 +35,8 @@ class PdfView(QScrollArea):
 
         self.page_images = []
         self._pdf = None
-        self._zoom_percentage = self._application.register_config(self.ZoomConfigKey, self.DefaultZoom)
+        self._zoom_percentage = \
+            self._application.register_config(self.ZoomConfigKey, self.DefaultZoom)
 
     def clear(self):
         # @todo: scroll to top of area, (?conditionally - don't want to do that on zoom)

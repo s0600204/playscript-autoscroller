@@ -6,6 +6,7 @@ extension-pkg-allow-list=
     PyQt5.QtGui,
     PyQt5.QtSvg,
     PyQt5.QtWidgets,
+    rtmidi,
 
 ignored-modules=
     mido,

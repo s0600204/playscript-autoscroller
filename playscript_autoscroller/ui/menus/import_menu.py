@@ -37,8 +37,12 @@ class ImportMenu(ApplicationMenu):
     def retranslate_ui(self):
         self.setTitle(translate("MainWindow", "Import"))
 
-        self._actions['markdown'].setText(translate("MainWindow", "Markdown file"))
-        self._actions['markdown'].setStatusTip(translate("MainWindow", "Import from a markdown file"))
+        self._actions['markdown'].setText(
+            translate("MainWindow", "Markdown file"))
+        self._actions['markdown'].setStatusTip(
+            translate("MainWindow", "Import from a markdown file"))
 
-        self._actions['pdf'].setText(translate("MainWindow", "PDF file"))
-        self._actions['pdf'].setStatusTip(translate("MainWindow", "Import from a pdf file"))
+        self._actions['pdf'].setText(
+            translate("MainWindow", "PDF file"))
+        self._actions['pdf'].setStatusTip(
+            translate("MainWindow", "Import from a pdf file"))

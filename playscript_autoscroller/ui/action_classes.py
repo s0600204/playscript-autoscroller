@@ -3,7 +3,7 @@ from os import path
 
 from PyQt5.QtCore import pyqtSignal, QSize
 from PyQt5.QtGui import QIcon, QPainter
-from PyQt5.QtWidgets import QAction, QToolButton,QWidget
+from PyQt5.QtWidgets import QAction, QToolButton, QWidget
 
 from .palette_icon_engine import PaletteIconEngine
 
@@ -64,7 +64,7 @@ class SvgIconWidget(QWidget, _Action):
         self._icon = None
         self._pixmap = None
 
-    def set_icon(self, name):
+    def set_icon(self, name): # pylint: disable=arguments-differ
         self._icon = self._build_icon(name, None)
         self._pixmap = None
 
@@ -74,7 +74,7 @@ class SvgIconWidget(QWidget, _Action):
         self.setMaximumSize(size)
         self._pixmap = None
 
-    def paintEvent(self, event):
+    def paintEvent(self, _): # pylint: disable=invalid-name
         if not self._pixmap:
             self._pixmap = self._icon.pixmap(self.size())
 
