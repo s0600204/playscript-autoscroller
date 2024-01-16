@@ -17,8 +17,15 @@ from PyQt5.QtWidgets import (
 from playscript_autoscroller import __app_name__
 # ~ from playscript_autoscroller.i18n import translate
 
-from playscript_autoscroller.outline_tree_model import OutlineTreeModel, PAGE_FRACTION, POSITION_ROLE
-from playscript_autoscroller.file_io import DEFAULT_FILE_TYPE, SUPPORTED_FILE_TYPES
+from playscript_autoscroller.outline_tree_model import (
+    OutlineTreeModel,
+    PAGE_FRACTION,
+    POSITION_ROLE,
+)
+from playscript_autoscroller.file_io import (
+    DEFAULT_FILE_TYPE,
+    SUPPORTED_FILE_TYPES,
+)
 from .controller import Controller
 from .main_text import MainText
 from .main_toolbar import MainToolbar

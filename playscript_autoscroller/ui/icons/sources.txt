@@ -1,5 +1,0 @@
-format-* - Tango
-zoom-* - Gnome
-edit-clear - Gnome
-sidebar-* - Lucide
-file-code - Lucide

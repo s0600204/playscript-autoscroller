@@ -6,7 +6,7 @@ except ModuleNotFoundError:
     popplerqt5 = None
 
 #from playscript_autoscroller.i18n import translate
-from ..toolbar_action import ToolbarAction
+from ..action_classes import MenuAction
 from .menu import ApplicationMenu
 
 def translate(_, text):
@@ -17,14 +17,14 @@ class ImportMenu(ApplicationMenu):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._actions['markdown'] = ToolbarAction(parent=self)
+        self._actions['markdown'] = MenuAction(parent=self)
         self._actions['markdown'].triggered.connect(self.import_markdown)
-        self._actions['markdown'].set_icon('markdown', 'markdown')
+        self._actions['markdown'].set_icon('markdown')
         self.addAction(self._actions['markdown'])
 
-        self._actions['pdf'] = ToolbarAction(parent=self)
+        self._actions['pdf'] = MenuAction(parent=self)
         self._actions['pdf'].triggered.connect(self.import_pdf)
-        self._actions['pdf'].set_icon('pdf', 'adobeacrobatreader')
+        self._actions['pdf'].set_icon('adobeacrobatreader')
         self._actions['pdf'].setEnabled(bool(popplerqt5))
         self.addAction(self._actions['pdf'])
 
@@ -37,8 +37,12 @@ class ImportMenu(ApplicationMenu):
     def retranslate_ui(self):
         self.setTitle(translate("MainWindow", "Import"))
 
-        self._actions['markdown'].setText(translate("MainWindow", "Markdown file"))
-        self._actions['markdown'].setStatusTip(translate("MainWindow", "Import from a markdown file"))
+        self._actions['markdown'].setText(
+            translate("MainWindow", "Markdown file"))
+        self._actions['markdown'].setStatusTip(
+            translate("MainWindow", "Import from a markdown file"))
 
-        self._actions['pdf'].setText(translate("MainWindow", "PDF file"))
-        self._actions['pdf'].setStatusTip(translate("MainWindow", "Import from a pdf file"))
+        self._actions['pdf'].setText(
+            translate("MainWindow", "PDF file"))
+        self._actions['pdf'].setStatusTip(
+            translate("MainWindow", "Import from a pdf file"))

@@ -2,7 +2,7 @@
 from os import path
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QColor, QIcon
 from PyQt5.QtWidgets import (
     QGridLayout,
     QProgressBar,
@@ -38,23 +38,32 @@ class Controller(QWidget):
         self._midpoint.setTickPosition(QSlider.TicksAbove)
         self.layout().addWidget(self._midpoint, 1, 0)
 
+        button_style = f"\
+            * {{ \
+                color: { self.palette().windowText().color().name(QColor.HexArgb) }; \
+            }} \
+            *:checked {{ \
+                background-color: #f70000; \
+                color: { self.palette().windowText().color().name(QColor.HexArgb) }; \
+            }}"
+
         _ignore_icon = QIcon(PaletteIconEngine(self.palette))
-        _ignore_icon.addFile(path.join(path.dirname(__file__), './icons/x.svg'))
+        _ignore_icon.addFile(path.join(path.dirname(__file__), './icons/lucide/x.svg'))
         self._ignore_button = QPushButton(self)
         self._ignore_button.setCheckable(True)
         self._ignore_button.setChecked(False)
         self._ignore_button.setIcon(_ignore_icon)
-        self._ignore_button.setStyleSheet("QPushButton:checked { background-color: #f70000; }")
+        self._ignore_button.setStyleSheet(button_style)
         self._ignore_button.pressed.connect(self.on_ignore)
         self.layout().addWidget(self._ignore_button, 0, 1)
 
         _pause_icon = QIcon(PaletteIconEngine(self.palette))
-        _pause_icon.addFile(path.join(path.dirname(__file__), './icons/pause.svg'))
+        _pause_icon.addFile(path.join(path.dirname(__file__), './icons/lucide/pause.svg'))
         self._pause_button = QPushButton(self)
         self._pause_button.setCheckable(True)
         self._pause_button.setChecked(True)
         self._pause_button.setIcon(_pause_icon)
-        self._pause_button.setStyleSheet("QPushButton:checked { background-color: #f70000; }")
+        self._pause_button.setStyleSheet(button_style)
         self.layout().addWidget(self._pause_button, 1, 1)
 
         # Default position

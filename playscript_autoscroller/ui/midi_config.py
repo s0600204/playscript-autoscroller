@@ -150,7 +150,7 @@ class MidiConfigDialog(QDialog):
 
     def serialise(self):
         return {
-            'device': self._device_selector.value(),
+            'device': self._device_selector.value() or '',
             'channel': self._channel_selector.value() - 1,
             'scroll_control': self._control_selector.value(),
             'midpoint_control': self._midpoint_selector.value(),
