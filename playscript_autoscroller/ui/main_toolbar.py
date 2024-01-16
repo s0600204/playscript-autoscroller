@@ -1,6 +1,6 @@
 
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtWidgets import QToolBar
+from qtpy.QtGui import QKeySequence
+from qtpy.QtWidgets import QToolBar
 
 from .action_classes import ToolbarAction, ToolButtonAction
 from .menus.heading_submenu import HeadingSubMenu

@@ -1,13 +1,13 @@
 
 import sys
 
-from PyQt5.QtCore import (
+from qtpy.QtCore import (
     QSize,
     Qt,
     qVersion,
 )
-from PyQt5.QtSvg import QSvgWidget
-from PyQt5.QtWidgets import (
+from qtpy.QtSvg import QSvgWidget
+from qtpy.QtWidgets import (
     QDialog,
     QDialogButtonBox,
     QGridLayout,

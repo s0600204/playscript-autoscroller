@@ -1,5 +1,5 @@
 
-from PyQt5.QtWidgets import (
+from qtpy.QtWidgets import (
     QComboBox,
     QDialog,
     QDialogButtonBox,

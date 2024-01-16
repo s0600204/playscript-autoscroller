@@ -1,5 +1,5 @@
 
-from PyQt5.QtCore import pyqtSignal, QObject
+from qtpy.QtCore import QObject, Signal as QSignal
 
 from .file_io import (
     DEFAULT_FILE_TYPE,
@@ -16,7 +16,7 @@ from .ui.main_window import MainWindow
 
 class Application(QObject):
 
-    config_restored = pyqtSignal()
+    config_restored = QSignal()
 
     def __init__(self):
         super().__init__()

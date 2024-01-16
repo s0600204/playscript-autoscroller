@@ -1,15 +1,15 @@
 
 import sys
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import (
+from qtpy.QtCore import Qt
+from qtpy.QtGui import (
     QFont,
     QFontDatabase,
     QFontMetrics,
     QTextCharFormat,
     QTextCursor,
 )
-from PyQt5.QtWidgets import (
+from qtpy.QtWidgets import (
     QShortcut
 )
 

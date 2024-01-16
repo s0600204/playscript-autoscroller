@@ -1,5 +1,5 @@
 
-from PyQt5.QtCore import Qt, QAbstractItemModel, QModelIndex
+from qtpy.QtCore import Qt, QAbstractItemModel, QModelIndex
 
 try:
     from popplerqt5 import Poppler

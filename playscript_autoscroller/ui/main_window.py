@@ -2,8 +2,8 @@
 import os
 from os import path
 
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtWidgets import (
+from qtpy.QtCore import Qt, QTimer
+from qtpy.QtWidgets import (
     QFileDialog,
     QMainWindow,
     QMenuBar,

@@ -1,5 +1,5 @@
 
-from PyQt5.QtWidgets import QMenu
+from qtpy.QtWidgets import QMenu
 
 from ..action_classes import MenuAction
 
