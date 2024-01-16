@@ -16,35 +16,17 @@ Copyright:
 License: GPL-3.0+
 
 Files:
- playscript_autoscroller/ui/icons/x.svg
- playscript_autoscroller/ui/icons/code.svg
- playscript_autoscroller/ui/icons/file-code.svg
- playscript_autoscroller/ui/icons/indent.svg
- playscript_autoscroller/ui/icons/outdent.svg
- playscript_autoscroller/ui/icons/pause.svg
- playscript_autoscroller/ui/icons/sidebar-close.svg
- playscript_autoscroller/ui/icons/sidebar-open.svg
+ playscript_autoscroller/ui/icons/lucide/*
 Copyright:
  2013-2022 Cole Bemis
  2022 Lucide Contributors
 License: ISC
 
 Files:
- playscript_autoscroller/ui/icons/adobeacrobatreader.svg
- playscript_autoscroller/ui/icons/markdown.svg
+ playscript_autoscroller/ui/icons/simpleicons/*
 Copyright:
- 2013-2022 Cole Bemis
- 2022 Lucide Contributors
+ 2016-2024 SimpleIcons Contributors
 License: CC0
-
-Files:
- playscript_autoscroller/ui/icons/edit-clear.svg
- playscript_autoscroller/ui/icons/zoom-in.svg
- playscript_autoscroller/ui/icons/zoom-original.svg
- playscript_autoscroller/ui/icons/zoom-out.svg
-Copyright:
- 2014 Gnome Project
-License: CC-BY-SA-3.0
 
 Files:
  playscript_autoscroller/ui/icons/playscript-autoscroller.svg
@@ -52,16 +34,6 @@ Copyright:
  2014 Gnome Project
 License: CC-BY-SA-3.0
 Comment: File is Derived from work released under this licence.
-
-Files:
- playscript_autoscroller/ui/icons/format-text-bold.svg
- playscript_autoscroller/ui/icons/format-text-italic.svg
- playscript_autoscroller/ui/icons/format-text-strikethrough.svg
- playscript_autoscroller/ui/icons/format-text-underline.svg
-Copyright:
- 2009 Tango Project
-License: public-domain
-Comment: Released into the Public Domain as of 2009
 
 License: GPL-3.0+
  This program is free software: you can redistribute it and/or modify
