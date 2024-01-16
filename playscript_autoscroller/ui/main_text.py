@@ -13,7 +13,7 @@ from qtpy.QtWidgets import (
     QShortcut
 )
 
-from pyqt5_rst import QRstTextEdit
+from rst4qt import QRstTextEdit
 
 
 class MainText(QRstTextEdit):
