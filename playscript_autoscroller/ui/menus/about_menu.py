@@ -1,7 +1,7 @@
 
 from qtpy.QtWidgets import (
     QAction,
-    qApp,
+    QApplication,
 )
 
 from playscript_autoscroller import __app_name__
@@ -24,7 +24,7 @@ class AboutMenu(ApplicationMenu):
         self.addAction(self._actions['about'])
 
         self._actions['aboutQt'] = QAction(self)
-        self._actions['aboutQt'].triggered.connect(qApp.aboutQt)
+        self._actions['aboutQt'].triggered.connect(QApplication.aboutQt)
         self.addAction(self._actions['aboutQt'])
 
     def _open_about(self):

@@ -159,17 +159,11 @@ class MainWindow(QMainWindow):
         if filetype != DEFAULT_FILE_TYPE:
             caption = "Select file to import..."
 
-        # parent = nullptr,
-        # caption = QString(),
-        # directory = QString(),
-        # filter = QString(),
-        # selectedFilter = nullptr,
-        # options = Options()
         response = QFileDialog.getOpenFileName(
-            parent=self,
-            caption=caption,
-            directory=location,
-            filter=filetypedef[0])
+            self,           # parent
+            caption,        # caption
+            location,       # directory / dir [pyqt/pyside]
+            filetypedef[0]) # filter
 
         if not response[0]:
             return None
@@ -183,17 +177,12 @@ class MainWindow(QMainWindow):
     def prompt_save_filename(self):
         location = self.get_valid_location()
         filetypedef = SUPPORTED_FILE_TYPES.get(DEFAULT_FILE_TYPE)
-        # parent = nullptr,
-        # caption = QString()
-        # directory = QString()
-        # filter = QString()
-        # selectedFilter = nullptr
-        # options = Options()
+
         response = QFileDialog.getSaveFileName(
-            parent=self,
-            caption="Save as...",
-            directory=location,
-            filter=filetypedef[0])
+            self,           # parent
+            "Save as...",   # caption
+            location,       # directory / dir [pyqt5/pyside]
+            filetypedef[0]) # filter
 
         if not response[0]:
             return None

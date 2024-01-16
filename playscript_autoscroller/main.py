@@ -32,8 +32,9 @@ def main():
     app.centre_on_screen(qt_app.primaryScreen().geometry())
 
     # Run the application
+    # @note: .exec_() is required for pyside2 only.
     QTimer.singleShot(0, app.start)
-    exit_code = qt_app.exec()
+    exit_code = qt_app.exec() if hasattr(qt_app, "exec") else qt_app.exec_()
 
     # Cleanup
     sys.exit(exit_code)
