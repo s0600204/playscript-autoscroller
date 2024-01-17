@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
 
-  build:
+  debian-build:
 
     docker:
     - image: s0600204/dpkg-build
@@ -36,3 +36,13 @@ jobs:
     ## Upload
     - store_artifacts:
         path: debian/build
+
+workflows:
+
+  create-debian-artifact:
+    jobs:
+    - debian-build:
+        filters:
+          branches:
+            only:
+            - debian
