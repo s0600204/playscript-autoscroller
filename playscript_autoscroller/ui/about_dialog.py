@@ -1,12 +1,16 @@
 
 import sys
 
+import qtpy
 from qtpy.QtCore import (
     QSize,
     Qt,
     qVersion,
 )
-from qtpy.QtSvg import QSvgWidget
+if qtpy.QT5:
+    from qtpy.QtSvg import QSvgWidget
+else:
+    from qtpy.QtSvgWidgets import QSvgWidget
 from qtpy.QtWidgets import (
     QDialog,
     QDialogButtonBox,
