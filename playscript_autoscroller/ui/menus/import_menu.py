@@ -17,12 +17,12 @@ class ImportMenu(ApplicationMenu):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._actions['markdown'] = MenuAction(parent=self)
+        self._actions['markdown'] = MenuAction(self)
         self._actions['markdown'].triggered.connect(self.import_markdown)
         self._actions['markdown'].set_icon('markdown')
         self.addAction(self._actions['markdown'])
 
-        self._actions['pdf'] = MenuAction(parent=self)
+        self._actions['pdf'] = MenuAction(self)
         self._actions['pdf'].triggered.connect(self.import_pdf)
         self._actions['pdf'].set_icon('adobeacrobatreader')
         self._actions['pdf'].setEnabled(bool(popplerqt5))

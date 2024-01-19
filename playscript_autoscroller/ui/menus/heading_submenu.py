@@ -15,7 +15,7 @@ class HeadingSubMenu(QMenu):
 
         for level in range(1, self.HeadingLevels + 1):
             key = f"heading_{level}"
-            self._actions[key] = MenuAction(parent=self)
+            self._actions[key] = MenuAction(self)
             self._actions[key].setCheckable(True)
             self.addAction(self._actions[f"heading_{level}"])
 
