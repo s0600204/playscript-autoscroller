@@ -65,7 +65,11 @@ class SubIcons(QWidget):
             self.layout().addWidget(self._icon_pdf)
 
     def retranslate_ui(self):
-        self._icon_qt.setToolTip(f"Qt {qVersion()}")
+        if qtpy.PYSIDE2 or qtpy.PYSIDE6:
+            binding_version = f"{qtpy.API_NAME} {qtpy.PYSIDE_VERSION}"
+        else:
+            binding_version = f"{qtpy.API_NAME} {qtpy.PYQT_VERSION}"
+        self._icon_qt.setToolTip(f"Qt {qVersion()}\n{binding_version}")
         self._icon_python.setToolTip(f"python {sys.version.split(maxsplit=1)[0]}")
         self._icon_midi.setToolTip(
             f"rtmidi {rtmidi.get_rtmidi_version()}\npython-rtmidi {rtmidi.version.version}")
