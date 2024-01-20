@@ -1,9 +1,12 @@
 
-try:
-    import popplerqt5
-except ModuleNotFoundError:
-    # pylint: disable=invalid-name
-    popplerqt5 = None
+import qtpy
+
+popplerqt5 = None # pylint: disable=invalid-name
+if qtpy.PYQT5:
+    try:
+        import popplerqt5
+    except ModuleNotFoundError:
+        pass
 
 #from playscript_autoscroller.i18n import translate
 from ..action_classes import MenuAction

@@ -23,13 +23,11 @@ The latter category currently comprises of the following:
 * Qt5
 * Qt5 SVG module
 
-Non-Windows systems also require:
+The program also supports importing of PDF documents on non-Windows systems when
+running with the PyQt5 bindings. This may be enabled by also installing:
 
 * Poppler
 * Poppler-Qt5 bindings (might be installed as part of Poppler)
-
-(These are for importing of pdf files, a feature not working on Windows at this
-time.)
 
 The dependencies that are installable via ``pip`` are installed thusly (if not
 already); the list of run-time dependencies may be found in the ``setup.cfg``

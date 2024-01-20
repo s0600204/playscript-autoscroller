@@ -2,11 +2,14 @@
 from datetime import datetime
 from os import makedirs, path, rename
 
-try:
-    from popplerqt5 import Poppler
-except ModuleNotFoundError:
-    # pylint: disable=invalid-name
-    Poppler = None
+import qtpy
+
+Poppler = None # pylint: disable=invalid-name
+if qtpy.PYQT5:
+    try:
+        from popplerqt5 import Poppler
+    except ModuleNotFoundError:
+        pass
 
 from strictyaml import (
     as_document,

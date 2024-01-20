@@ -1,4 +1,5 @@
 
+import qtpy
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import (
@@ -9,11 +10,12 @@ from qtpy.QtWidgets import (
     QWidget,
 )
 
-try:
-    from popplerqt5 import Poppler
-except ModuleNotFoundError:
-    # pylint: disable=invalid-name
-    Poppler = None
+Poppler = None # pylint: disable=invalid-name
+if qtpy.PYQT5:
+    try:
+        from popplerqt5 import Poppler
+    except ModuleNotFoundError:
+        pass
 
 
 class PdfView(QScrollArea):

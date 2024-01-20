@@ -22,11 +22,12 @@ from qtpy.QtWidgets import (
 
 import rtmidi
 
-try:
-    import popplerqt5
-except ModuleNotFoundError:
-    # pylint: disable=invalid-name
-    popplerqt5 = None
+popplerqt5 = None # pylint: disable=invalid-name
+if qtpy.PYQT5:
+    try:
+        import popplerqt5
+    except ModuleNotFoundError:
+        pass
 
 from playscript_autoscroller import (
     __app_icon__,

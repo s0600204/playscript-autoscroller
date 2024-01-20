@@ -1,11 +1,13 @@
 
+import qtpy
 from qtpy.QtCore import Qt, QAbstractItemModel, QModelIndex
 
-try:
-    from popplerqt5 import Poppler
-except ModuleNotFoundError:
-    # pylint: disable=invalid-name
-    Poppler = None
+Poppler = None # pylint: disable=invalid-name
+if qtpy.PYQT5:
+    try:
+        from popplerqt5 import Poppler
+    except ModuleNotFoundError:
+        pass
 
 POSITION_ROLE = Qt.UserRole + 1
 LEVEL_ROLE = Qt.UserRole + 2
