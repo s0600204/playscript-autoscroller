@@ -4,6 +4,8 @@ from qtpy.QtCore import Qt, QAbstractItemModel, QModelIndex
 from .pdf import PDF_SUPPORT, PdfLibrary
 if PDF_SUPPORT is PdfLibrary.Poppler:
     from popplerqt5 import Poppler
+if PDF_SUPPORT is PdfLibrary.QtPdf:
+    from qtpy.QtPdf import QPdfBookmarkModel
 
 POSITION_ROLE = Qt.UserRole + 1
 LEVEL_ROLE = Qt.UserRole + 2
@@ -217,6 +219,12 @@ class OutlineTreeModel(QAbstractItemModel):
             block = block.next()
 
     def determine_from_pdf(self, pdf_document):
+        if PDF_SUPPORT is PdfLibrary.Poppler:
+            self.determine_from_pdf_poppler(pdf_document)
+        elif PDF_SUPPORT is PdfLibrary.QtPdf:
+            self.determine_from_pdf_qt6(pdf_document)
+
+    def determine_from_pdf_poppler(self, pdf_document):
         self.clear()
         toc = pdf_document.toc()
         if not toc:
@@ -253,3 +261,30 @@ class OutlineTreeModel(QAbstractItemModel):
                 toc_elem = toc_elem.nextSibling()
 
         walk_toc(toc.documentElement(), self._root)
+
+    def determine_from_pdf_qt6(self, pdf_document):
+        self.clear()
+        bookmarkModel = QPdfBookmarkModel(self)
+        bookmarkModel.setDocument(pdf_document)
+
+        def walk_bookmarks(bookmark_parent_index, outline_parent):
+
+            for rownum in range(bookmarkModel.rowCount()):
+                new_node = OutlineTreeNode(parent=outline_parent)
+
+                index = bookmarkModel.index(rownum, 0, bookmark_parent_index)
+                if not index.isValid():
+                    continue
+
+                new_node.set_data(bookmarkModel.data(index, QPdfBookmarkModel.Role.Title), Qt.DisplayRole)
+                new_node.set_data(bookmarkModel.data(index, QPdfBookmarkModel.Role.Page), POSITION_ROLE)
+                new_node.set_data(bookmarkModel.data(index, QPdfBookmarkModel.Role.Location), PAGE_FRACTION)
+
+                self.beginInsertRows(outline_parent.index(), rownum, rownum)
+                outline_parent.append_child(new_node)
+                self.endInsertRows()
+
+                if bookmarkModel.hasChildren(index):
+                    walk_bookmarks(index, new_node)
+
+        walk_bookmarks(QModelIndex(), self._root)
