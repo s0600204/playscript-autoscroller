@@ -1,13 +1,9 @@
 
-import qtpy
 from qtpy.QtCore import Qt, QAbstractItemModel, QModelIndex
 
-Poppler = None # pylint: disable=invalid-name
-if qtpy.PYQT5:
-    try:
-        from popplerqt5 import Poppler
-    except ModuleNotFoundError:
-        pass
+from .pdf import PDF_SUPPORT, PdfLibrary
+if PDF_SUPPORT is PdfLibrary.Poppler:
+    from popplerqt5 import Poppler
 
 POSITION_ROLE = Qt.UserRole + 1
 LEVEL_ROLE = Qt.UserRole + 2

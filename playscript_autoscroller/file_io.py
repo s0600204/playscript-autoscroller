@@ -2,14 +2,9 @@
 from datetime import datetime
 from os import makedirs, path, rename
 
-import qtpy
-
-Poppler = None # pylint: disable=invalid-name
-if qtpy.PYQT5:
-    try:
-        from popplerqt5 import Poppler
-    except ModuleNotFoundError:
-        pass
+from .pdf import PDF_SUPPORT, PdfLibrary
+if PDF_SUPPORT is PdfLibrary.Poppler:
+    from popplerqt5 import Poppler
 
 from strictyaml import (
     as_document,
@@ -29,7 +24,7 @@ SUPPORTED_FILE_TYPES = {
 }
 
 def load_pdf_file(filename):
-    if Poppler:
+    if PDF_SUPPORT is PdfLibrary.Poppler:
         return Poppler.Document.load(filename)
     return None
 

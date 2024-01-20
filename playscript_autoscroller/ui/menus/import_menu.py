@@ -1,14 +1,6 @@
 
-import qtpy
-
-popplerqt5 = None # pylint: disable=invalid-name
-if qtpy.PYQT5:
-    try:
-        import popplerqt5
-    except ModuleNotFoundError:
-        pass
-
 #from playscript_autoscroller.i18n import translate
+from ...pdf import PDF_SUPPORT, PdfLibrary
 from ..action_classes import MenuAction
 from .menu import ApplicationMenu
 
@@ -28,7 +20,7 @@ class ImportMenu(ApplicationMenu):
         self._actions['pdf'] = MenuAction(self)
         self._actions['pdf'].triggered.connect(self.import_pdf)
         self._actions['pdf'].set_icon('adobeacrobatreader')
-        self._actions['pdf'].setEnabled(bool(popplerqt5))
+        self._actions['pdf'].setEnabled(bool(PDF_SUPPORT is not PdfLibrary.Disabled))
         self.addAction(self._actions['pdf'])
 
     def import_markdown(self):
