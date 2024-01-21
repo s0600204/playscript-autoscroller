@@ -1,9 +1,9 @@
 
 import sys
 
-from PyQt5.QtCore import QTimer
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication
+from qtpy.QtCore import QTimer
+from qtpy.QtGui import QIcon
+from qtpy.QtWidgets import QApplication
 
 import qdarktheme
 
@@ -32,8 +32,9 @@ def main():
     app.centre_on_screen(qt_app.primaryScreen().geometry())
 
     # Run the application
+    # @note: .exec_() is required for pyside2 only.
     QTimer.singleShot(0, app.start)
-    exit_code = qt_app.exec()
+    exit_code = qt_app.exec() if hasattr(qt_app, "exec") else qt_app.exec_()
 
     # Cleanup
     sys.exit(exit_code)

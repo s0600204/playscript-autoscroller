@@ -1,6 +1,6 @@
 
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtWidgets import QAction
+from qtpy.QtGui import QKeySequence
+from qtpy.QtWidgets import QAction
 
 from playscript_autoscroller import __app_name__
 #from playscript_autoscroller.i18n import translate

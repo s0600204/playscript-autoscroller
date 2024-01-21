@@ -19,12 +19,12 @@
 
 from os import path
 
-from PyQt5.QtCore import (
+from qtpy.QtCore import (
     QRect,
     QSize,
     Qt,
 )
-from PyQt5.QtGui import (
+from qtpy.QtGui import (
     QBrush,
     QColor,
     QIcon,
@@ -34,7 +34,7 @@ from PyQt5.QtGui import (
     QPixmap,
     QPixmapCache,
 )
-from PyQt5.QtSvg import (
+from qtpy.QtSvg import (
     QSvgRenderer,
 )
 

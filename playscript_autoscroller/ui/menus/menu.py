@@ -1,5 +1,5 @@
 
-from PyQt5.QtWidgets import QMenu
+from qtpy.QtWidgets import QMenu
 
 
 class ApplicationMenu(QMenu):

@@ -1,7 +1,7 @@
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import (
+from qtpy.QtCore import Qt
+from qtpy.QtGui import QPixmap
+from qtpy.QtWidgets import (
     QLabel,
     QScrollArea,
     QSizePolicy,
@@ -9,11 +9,9 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-try:
+from ..pdf import PDF_SUPPORT, PdfLibrary
+if PDF_SUPPORT is PdfLibrary.Poppler:
     from popplerqt5 import Poppler
-except ModuleNotFoundError:
-    # pylint: disable=invalid-name
-    Poppler = None
 
 
 class PdfView(QScrollArea):
@@ -86,7 +84,7 @@ class PdfView(QScrollArea):
         scrollbar.setValue(scrollbar.value() + step)
 
     def set_pdf(self, pdf_document):
-        if not Poppler:
+        if PDF_SUPPORT is not PdfLibrary.Poppler:
             return
         # pylint: disable=no-member
         pdf_document.setRenderHint(Poppler.Document.RenderHint.Antialiasing, True)
