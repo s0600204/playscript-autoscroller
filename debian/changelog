@@ -1,3 +1,9 @@
+playscript-autoscroller (0.1.0~alpha.6) UNRELEASED; urgency=medium
+
+  * Use qtpy instead of PyQt5
+
+ -- s0600204 <dev@s0600204>  Sun, 21 Jan 2024 16:45:00 +0000
+
 playscript-autoscroller (0.1.0~alpha.5) UNRELEASED; urgency=medium
 
   * Improve theming and styling of application
@@ -5,7 +11,6 @@ playscript-autoscroller (0.1.0~alpha.5) UNRELEASED; urgency=medium
   * Fill out the README
 
  -- s0600204 <dev@s0600204>  Tue, 16 Jan 2024 21:14:00 +0000
-
 
 playscript-autoscroller (0.1.0~alpha.4) UNRELEASED; urgency=medium
 

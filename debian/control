@@ -8,7 +8,13 @@ Build-Depends:
  pybuild-plugin-pyproject,
  python3-all,
  python3-appdirs,
- python3-setuptools
+ python3-mido,
+ python3-pyqtdarktheme,
+ python3-qtpy,
+ python3-rst4qt,
+ python3-rtmidi,
+ python3-setuptools,
+ python3-strictyaml
 Standards-Version: 4.6.2
 Homepage: https://github.com/s0600204/playscript-autoscroller.git
 
@@ -17,5 +23,7 @@ Architecture: all
 Depends:
  ${misc:Depends},
  ${python3:Depends}
+Suggests:
+ python3-poppler-qt5
 Description: Scrolls a playscript up the screen
  Speed and direction controllable via MIDI commands.
