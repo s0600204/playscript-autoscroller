@@ -1,6 +1,6 @@
 
-from PyQt5.QtGui import QStandardItem
-from PyQt5.QtWidgets import QComboBox
+from qtpy.QtGui import QStandardItem
+from qtpy.QtWidgets import QComboBox
 
 from playscript_autoscroller.midi_devices import MidiDevices
 

@@ -1,16 +1,16 @@
 
 from os import path
 
-from PyQt5.QtCore import pyqtSignal, QSize
-from PyQt5.QtGui import QIcon, QPainter
-from PyQt5.QtWidgets import QAction, QToolButton, QWidget
+from qtpy.QtCore import Signal as QSignal, QSize
+from qtpy.QtGui import QIcon, QPainter
+from qtpy.QtWidgets import QAction, QToolButton, QWidget
 
 from .palette_icon_engine import PaletteIconEngine
 
 
 class _Action:
 
-    enabled = pyqtSignal(bool)
+    enabled = QSignal(bool)
 
     BundledIconSubPath = "icons"
     BundledIconsets = [

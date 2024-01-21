@@ -1,6 +1,6 @@
 
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtWidgets import QToolBar
+from qtpy.QtGui import QKeySequence
+from qtpy.QtWidgets import QToolBar
 
 from .action_classes import ToolbarAction, ToolButtonAction
 from .menus.heading_submenu import HeadingSubMenu
@@ -17,59 +17,59 @@ class MainToolbar(QToolBar):
         self._textfield = None
         self._actions = {}
 
-        self._actions["outline"] = ToolbarAction(parent=self)
+        self._actions["outline"] = ToolbarAction(self)
         self._actions["outline"].setCheckable(True)
         self._actions["outline"].setChecked(True)
         self._actions["outline"].set_icon('sidebar-open', 'sidebar-close')
 
-        self._actions["heading"] = ToolButtonAction(parent=self)
+        self._actions["heading"] = ToolButtonAction(self)
         self._actions["heading"].set_icon('heading')
         self._actions["heading"].setPopupMode(ToolButtonAction.InstantPopup)
         self._actions["heading"].setMenu(HeadingSubMenu(parent=self._actions["heading"]))
 
-        self._actions["bold"] = ToolbarAction(parent=self)
+        self._actions["bold"] = ToolbarAction(self)
         self._actions["bold"].setCheckable(True)
         self._actions["bold"].set_icon('bold')
 
-        self._actions["italic"] = ToolbarAction(parent=self)
+        self._actions["italic"] = ToolbarAction(self)
         self._actions["italic"].setCheckable(True)
         self._actions["italic"].set_icon('italic')
 
-        self._actions["underline"] = ToolbarAction(parent=self)
+        self._actions["underline"] = ToolbarAction(self)
         self._actions["underline"].setCheckable(True)
         self._actions["underline"].set_icon('underline')
 
-        self._actions["strikethrough"] = ToolbarAction(parent=self)
+        self._actions["strikethrough"] = ToolbarAction(self)
         self._actions["strikethrough"].setCheckable(True)
         self._actions["strikethrough"].set_icon('strikethrough')
 
-        self._actions["monospace"] = ToolbarAction(parent=self)
+        self._actions["monospace"] = ToolbarAction(self)
         self._actions["monospace"].setCheckable(True)
         self._actions["monospace"].set_icon('code')
 
-        self._actions["clear_format"] = ToolbarAction(parent=self)
+        self._actions["clear_format"] = ToolbarAction(self)
         self._actions["clear_format"].setCheckable(False)
         self._actions["clear_format"].set_icon('clear-format')
 
-        self._actions["dedent"] = ToolbarAction(parent=self)
+        self._actions["dedent"] = ToolbarAction(self)
         self._actions["dedent"].setEnabled(False)
         self._actions["dedent"].set_icon('outdent')
         self._actions["dedent"].triggered.connect(self.dedent)
 
-        self._actions["indent"] = ToolbarAction(parent=self)
+        self._actions["indent"] = ToolbarAction(self)
         self._actions["indent"].set_icon('indent')
         self._actions["indent"].triggered.connect(self.indent)
 
-        self._actions["zoom_in"] = ToolbarAction(parent=self)
+        self._actions["zoom_in"] = ToolbarAction(self)
         self._actions["zoom_in"].set_icon('zoom-in')
 
-        self._actions["zoom_out"] = ToolbarAction(parent=self)
+        self._actions["zoom_out"] = ToolbarAction(self)
         self._actions["zoom_out"].set_icon('zoom-out')
 
-        self._actions["zoom_reset"] = ToolbarAction(parent=self)
+        self._actions["zoom_reset"] = ToolbarAction(self)
         self._actions["zoom_reset"].set_icon('zoom-reset')
 
-        self._actions["source_view"] = ToolbarAction(parent=self)
+        self._actions["source_view"] = ToolbarAction(self)
         self._actions["source_view"].setCheckable(True)
         self._actions["source_view"].set_icon('file-code')
 

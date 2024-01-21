@@ -1,7 +1,7 @@
 
 import mido
 
-from PyQt5.QtCore import pyqtSignal, QObject
+from qtpy.QtCore import QObject, Signal as QSignal
 
 from .ui.midi_config import MidiConfigDialog
 
@@ -9,10 +9,10 @@ from .ui.midi_config import MidiConfigDialog
 class MidiRunner(QObject):
 
     ConfigKey = 'midi'
-    ScrollUpdate = pyqtSignal(int, name='scrollUpdate')
-    MidpointUpdate = pyqtSignal(int, name='midpointUpdate')
-    PauseToggled = pyqtSignal(name='pauseToggled')
-    IgnoreToggled = pyqtSignal(name='ignoreToggled')
+    ScrollUpdate = QSignal(int, name='scrollUpdate')
+    MidpointUpdate = QSignal(int, name='midpointUpdate')
+    PauseToggled = QSignal(name='pauseToggled')
+    IgnoreToggled = QSignal(name='ignoreToggled')
 
     def __init__(self, application):
         super().__init__()

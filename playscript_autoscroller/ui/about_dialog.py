@@ -1,13 +1,17 @@
 
 import sys
 
-from PyQt5.QtCore import (
+import qtpy
+from qtpy.QtCore import (
     QSize,
     Qt,
     qVersion,
 )
-from PyQt5.QtSvg import QSvgWidget
-from PyQt5.QtWidgets import (
+if qtpy.QT5:
+    from qtpy.QtSvg import QSvgWidget
+else:
+    from qtpy.QtSvgWidgets import QSvgWidget
+from qtpy.QtWidgets import (
     QDialog,
     QDialogButtonBox,
     QGridLayout,
@@ -18,11 +22,9 @@ from PyQt5.QtWidgets import (
 
 import rtmidi
 
-try:
+from ..pdf import PDF_SUPPORT, PdfLibrary
+if PDF_SUPPORT is PdfLibrary.Poppler:
     import popplerqt5
-except ModuleNotFoundError:
-    # pylint: disable=invalid-name
-    popplerqt5 = None
 
 from playscript_autoscroller import (
     __app_icon__,
@@ -54,18 +56,22 @@ class SubIcons(QWidget):
         self._icon_midi.set_size(24)
         self.layout().addWidget(self._icon_midi)
 
-        if popplerqt5:
+        if PDF_SUPPORT is not PdfLibrary.Disabled:
             self._icon_pdf = SvgIconWidget(self)
             self._icon_pdf.set_icon('adobeacrobatreader')
             self._icon_pdf.set_size(24)
             self.layout().addWidget(self._icon_pdf)
 
     def retranslate_ui(self):
-        self._icon_qt.setToolTip(f"Qt {qVersion()}")
+        if qtpy.PYSIDE2 or qtpy.PYSIDE6:
+            binding_version = f"{qtpy.API_NAME} {qtpy.PYSIDE_VERSION}"
+        else:
+            binding_version = f"{qtpy.API_NAME} {qtpy.PYQT_VERSION}"
+        self._icon_qt.setToolTip(f"Qt {qVersion()}\n{binding_version}")
         self._icon_python.setToolTip(f"python {sys.version.split(maxsplit=1)[0]}")
         self._icon_midi.setToolTip(
             f"rtmidi {rtmidi.get_rtmidi_version()}\npython-rtmidi {rtmidi.version.version}")
-        if popplerqt5:
+        if PDF_SUPPORT is PdfLibrary.Poppler:
             poppler_version = '.'.join([str(x) for x in popplerqt5.poppler_version()])
             self._icon_pdf.setToolTip(f"(PDF support by) Poppler {poppler_version}")
 
