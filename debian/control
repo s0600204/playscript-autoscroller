@@ -18,7 +18,7 @@ Build-Depends:
 Standards-Version: 4.6.2
 Homepage: https://github.com/s0600204/playscript-autoscroller.git
 
-Package: python3-playscript-autoscroller
+Package: playscript-autoscroller
 Architecture: all
 Depends:
  ${misc:Depends},
