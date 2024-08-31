@@ -181,14 +181,25 @@ class MainText(QRstTextEdit):
         self._toolbar.update_style_buttons(style)
 
     def respace_text(self):
+        document = self.document()
+
+        # Remove the ability for the user to "undo" the respacing.
+        prevUndoRedoState = document.isUndoRedoEnabled()
+        document.setUndoRedoEnabled(False)
+
+        block = document.begin()
+        block_cursor = QTextCursor(block)
+
+        # Group the entire respacing work into one "edit block", greatly reducing the time taken
+        # by this method to complete (~6.5-7.9s ==> ~0.08-0.10s).
+        block_cursor.beginEditBlock()
+
         # Set Paragraph Spacing
         #   This is dependant on each paragraph's formatting (header, normal text).
         #   A better way of doing this might be to subclass QAbstractTextDocumentLayout.
-        block = self.document().begin()
         level_spacing = {}
         was_dirty = self._application.is_dirty()
         while block.isValid():
-            block_cursor = QTextCursor(block)
             block_format = block.blockFormat()
             block_level = block_format.headingLevel()
 
@@ -211,6 +222,10 @@ class MainText(QRstTextEdit):
             block_format.setTopMargin(level_spacing[block_level])
             block_cursor.setBlockFormat(block_format)
             block = block.next()
+            block_cursor = QTextCursor(block)
+
+        block_cursor.endEditBlock()
+        document.setUndoRedoEnabled(prevUndoRedoState)
 
         # Annoyingly, the above is considered "changing the text", thus when the above is run
         # as part of the application init, the supposedly "new" document is considered dirty.
