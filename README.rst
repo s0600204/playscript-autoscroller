@@ -20,14 +20,16 @@ via ``pip``, and those that cannot.
 The latter category currently comprises of the following:
 
 * python (3.8 or better)
-* Qt5
-* Qt5 SVG module
+* either Qt5 or Qt6
+* the matching Qt5/Qt6 SVG module
 
-The program also supports importing of PDF documents on non-Windows systems when
-running with the PyQt5 bindings. This may be enabled by also installing:
+The program optionally supports the import and displaying of PDF documents. To
+use this functionality:
 
-* Poppler
-* Poppler-Qt5 bindings (might be installed as part of Poppler)
+* If using Qt6, then the ``Qt6 WebEngine`` module will be needed.
+
+* If using PyQt5, then both ``Poppler`` and its Qt5 bindings (which might be
+  installed as part of ``Poppler``) will be needed.
 
 The dependencies that are installable via ``pip`` are installed thusly (if not
 already); the list of run-time dependencies may be found in the ``setup.cfg``
