@@ -50,6 +50,7 @@ class MainWindow(QMainWindow):
         self.centralWidget().setLayout(QVBoxLayout())
         self.centralWidget().layout().setContentsMargins(4, 4, 4, 4)
         self._was_maximized = None
+        self._content_loading = False
 
         self._application = application
         self._saved_location = self._application.register_config(
@@ -87,6 +88,7 @@ class MainWindow(QMainWindow):
 
         self.main_text = MainText(application, self.toolbar, parent=self.content_holder)
         self.toolbar.connect_textfield(self.main_text)
+        self.main_text.textChanged.connect(self.on_textcontent_change)
         self.content_holder.layout().addWidget(self.main_text)
 
         self.pdf_view = PdfView(application, parent=self.content_holder)
@@ -148,6 +150,11 @@ class MainWindow(QMainWindow):
             self.pdf_view.go_to_page(idx, self.outline_model.data(index, PAGE_FRACTION))
         else:
             self.main_text.go_to_position(idx)
+
+    def on_textcontent_change(self):
+        if self.pdf_view_active or self._source_view_active or self._content_loading:
+            return
+        self.rebuild_outline()
 
     def open_midi_config(self):
         self._application.runner.open_config_dialog(self)
@@ -237,6 +244,7 @@ class MainWindow(QMainWindow):
         self.pdf_view.clear()
 
     def restore_content(self, filetype, filecontent):
+        self._content_loading = True
         self.reset_content()
         self.show_source_view(False)
         if filetype == 'markdown':
@@ -246,6 +254,7 @@ class MainWindow(QMainWindow):
         self.main_text.respace_text()
         self.toolbar.update_enabled_buttons()
         self.rebuild_outline()
+        self._content_loading = False
 
     def retranslate_title(self):
         filename = self._application.current_filename

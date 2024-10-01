@@ -68,7 +68,7 @@ class Application(QObject):
             return
 
         if filetype == 'pdf':
-            filecontent = load_pdf_file(filename)
+            filecontent = load_pdf_file(filename, self)
             if not filecontent:
                 print("PDF Module not installed!")
                 return

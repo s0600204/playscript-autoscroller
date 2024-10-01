@@ -20,18 +20,27 @@ via ``pip``, and those that cannot.
 The latter category currently comprises of the following:
 
 * python (3.8 or better)
-* Qt5
-* Qt5 SVG module
+* either Qt5 or Qt6
+* the matching Qt5/Qt6 SVG module
 
-The program also supports importing of PDF documents on non-Windows systems when
-running with the PyQt5 bindings. This may be enabled by also installing:
+The program optionally supports the import and displaying of PDF documents
+(except when running under PySide2). To use this functionality:
 
-* Poppler
-* Poppler-Qt5 bindings (might be installed as part of Poppler)
+* If using Qt6 and...
 
-The dependencies that are installable via ``pip`` are installed thusly (if not
-already); the list of run-time dependencies may be found in the ``setup.cfg``
-file, and build dependencies in ``pyproject.toml``.
+  - *ArchLinux*: ``qt6-webengine``
+  - *Debian*: either ``python3-pyqt6.qtpdf`` or ``python3-pyside6.qtpdf``
+    depending on whether you intend to use the PyQt6 or PySide6 bindings
+  - *MSys2*: ``qt6-pdf``
+  - *Anything else*: determine which package(s) provide QtPdf and/or their
+    PyQt6/PySide6 bindings (then report back, so it can be added to this list)
+
+* If using PyQt5, then both ``Poppler`` and its Qt5 bindings (which might be
+  installed as part of ``Poppler``) will be needed.
+
+The dependencies that are installable via ``pip`` are installed through that
+(if they are not already); the list of run-time dependencies may be found in
+the ``setup.cfg`` file, and build dependencies in ``pyproject.toml``.
 
 On the hardware side, it might be a good idea to have some form of MIDI
 controller, a pedal capable of outputting MIDI, or a controller
