@@ -27,5 +27,7 @@ Suggests:
  python3-poppler-qt5,
  python3-pyqt6.qtpdf,
  python3-pyside6.qtpdf
+Conflicts:
+ python3-playscript-autoscroller
 Description: Scrolls a playscript up the screen
  Speed and direction controllable via MIDI commands.
