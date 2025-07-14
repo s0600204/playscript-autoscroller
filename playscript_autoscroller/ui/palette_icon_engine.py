@@ -1,20 +1,22 @@
 # "Palette Icon Engine"; transcoded and adapted from the original C++.
+#
 # Original source: https://github.com/Kolcha/paletteicon
 #
-# Copyright (C) 2017-2020  Nick Korotysh <nick.korotysh@gmail.com>
+# Original licence:
+#   Copyright (C) 2017-2023  Nick Korotysh <nick.korotysh@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from os import path
@@ -165,14 +167,10 @@ class PaletteIconEngine(QIconEngine):
         #   "direct rendereng" using given painter is not possible
         #   because colorization logic modifies already painted area
         #   such behavior is not acceptable, so render icon to pixmap first
-        filename = self._get_icon_src(mode, state)
-        color = self._get_icon_color(mode)
-        out = self._render_icon(
-            filename,
-            rect.size() * painter.device().devicePixelRatioF(),
-            color)
-        out.setDevicePixelRatio(painter.device().devicePixelRatioF())
-        painter.drawPixmap(rect, out)
+        size = rect.size() * painter.device().devicePixelRatioF()
+        pxm = self.pixmap(size, mode, state)
+        pxm.setDevicePixelRatio(painter.device().devicePixelRatioF())
+        painter.drawPixmap(rect, pxm)
 
     def pixmap(self,
                size: QSize,
