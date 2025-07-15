@@ -63,56 +63,43 @@ class PaletteIconEngine(QIconEngine):
             color_group = QPalette.Disabled
         return self._palette().color(color_group, QPalette.WindowText)
 
-    def _get_icon_src(self,
+    def _get_icon_filename(self,
                       mode: QIcon.Mode,
                       state: QIcon.State) -> str:
-        # pylint: disable=too-many-branches, too-many-return-statements
 
-        def _find(key, icon):
-            if key in self._src_files:
-                icon.append(self._src_files[key])
-            return icon
-
-        response = []
         # If we have a specific image to have, use it.
-        if _find((mode, state), response):
-            return response[0]
+        key = (mode, state)
+        if key in self._src_files:
+            return self._src_files[key]
 
         # Else find a suitable alternative, based on the table found on
         # https://doc.qt.io/qt-5/qtwidgets-widgets-icons-example.html
         opposite_state = QIcon.Off if state == QIcon.On else QIcon.Off
         if mode in (QIcon.Normal, QIcon.Active):
             opposite_mode = QIcon.Active if mode == QIcon.Normal else QIcon.Normal
-            if _find((opposite_mode, state), response):
-                return response[0]
-            if _find((mode, opposite_state), response):
-                return response[0]
-            if _find((opposite_mode, opposite_state), response):
-                return response[0]
-            if _find((QIcon.Disabled, state), response):
-                return response[0]
-            if _find((QIcon.Selected, state), response):
-                return response[0]
-            if _find((QIcon.Disabled, opposite_state), response):
-                return response[0]
-            if _find((QIcon.Selected, opposite_state), response):
-                return response[0]
+            search_keys = [
+                (opposite_mode, state),
+                (mode, opposite_state),
+                (opposite_mode, opposite_state),
+                (QIcon.Disabled, state),
+                (QIcon.Selected, state),
+                (QIcon.Disabled, opposite_state),
+                (QIcon.Selected, opposite_state),
+            ]
         else:
             opposite_mode = QIcon.Disabled if QIcon.Selected else QIcon.Selected
-            if _find((QIcon.Normal, state), response):
-                return response[0]
-            if _find((QIcon.Active, state), response):
-                return response[0]
-            if _find((mode, opposite_state), response):
-                return response[0]
-            if _find((QIcon.Normal, opposite_state), response):
-                return response[0]
-            if _find((QIcon.Active, opposite_state), response):
-                return response[0]
-            if _find((opposite_mode, state), response):
-                return response[0]
-            if _find((opposite_mode, opposite_state), response):
-                return response[0]
+            search_keys = [
+                (QIcon.Normal, state),
+                (QIcon.Active, state),
+                (mode, opposite_state),
+                (QIcon.Normal, opposite_state),
+                (QIcon.Active, opposite_state),
+                (opposite_mode, state),
+                (opposite_mode, opposite_state),
+            ]
+        for key in search_keys:
+            if key in self._src_files:
+                return self._src_files[key]
 
         return None
 
@@ -176,7 +163,7 @@ class PaletteIconEngine(QIconEngine):
                size: QSize,
                mode: QIcon.Mode,
                state: QIcon.State) -> QPixmap:
-        filename = self._get_icon_src(mode, state)
+        filename = self._get_icon_filename(mode, state)
         color = self._get_icon_color(mode)
 
         # pylint: disable=consider-using-f-string
