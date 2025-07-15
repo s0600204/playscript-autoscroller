@@ -1,3 +1,4 @@
+# pylint: disable=unused-import
 
 from ..pdf import PDF_SUPPORT, PdfLibrary
 

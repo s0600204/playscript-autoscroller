@@ -1,5 +1,4 @@
 
-from qtpy.QtCore import QPointF
 from qtpy.QtPdf import QPdfDocument
 from qtpy.QtPdfWidgets import QPdfView
 

@@ -2,17 +2,17 @@
 from datetime import datetime
 from os import makedirs, path, rename
 
-from .pdf import PDF_SUPPORT, PdfLibrary
-if PDF_SUPPORT is PdfLibrary.Poppler:
-    from popplerqt5 import Poppler
-if PDF_SUPPORT is PdfLibrary.QtPdf:
-    from qtpy.QtPdf import QPdfDocument
-
 from strictyaml import (
     as_document,
     load as yaml_load,
     YAMLValidationError,
 )
+
+from .pdf import PDF_SUPPORT, PdfLibrary
+if PDF_SUPPORT is PdfLibrary.Poppler:
+    from popplerqt5 import Poppler
+if PDF_SUPPORT is PdfLibrary.QtPdf:
+    from qtpy.QtPdf import QPdfDocument
 
 from . import __config_file__
 from .schema import config_schema

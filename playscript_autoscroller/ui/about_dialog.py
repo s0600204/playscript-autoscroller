@@ -26,7 +26,7 @@ from ..pdf import PDF_SUPPORT, PdfLibrary
 if PDF_SUPPORT is PdfLibrary.Poppler:
     import popplerqt5
 
-from playscript_autoscroller import (
+from playscript_autoscroller import ( # pylint: disable=wrong-import-order
     __app_icon__,
     __app_name__,
     __doc__,

@@ -184,7 +184,7 @@ class MainText(QRstTextEdit):
         document = self.document()
 
         # Remove the ability for the user to "undo" the respacing.
-        prevUndoRedoState = document.isUndoRedoEnabled()
+        previous_undo_redo_state = document.isUndoRedoEnabled()
         document.setUndoRedoEnabled(False)
 
         block = document.begin()
@@ -225,7 +225,7 @@ class MainText(QRstTextEdit):
             block_cursor = QTextCursor(block)
 
         block_cursor.endEditBlock()
-        document.setUndoRedoEnabled(prevUndoRedoState)
+        document.setUndoRedoEnabled(previous_undo_redo_state)
 
         # Annoyingly, the above is considered "changing the text", thus when the above is run
         # as part of the application init, the supposedly "new" document is considered dirty.

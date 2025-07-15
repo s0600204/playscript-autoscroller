@@ -1,3 +1,4 @@
+# pylint: disable=ungrouped-imports
 
 from qtpy.QtCore import Qt, QAbstractItemModel, QModelIndex
 
@@ -237,6 +238,7 @@ class OutlineTreeModel(QAbstractItemModel):
                 toc_elem_attrs = toc_elem.attributes()
                 if toc_elem_attrs.contains('Destination'):
                     destination = toc_elem_attrs.namedItem('Destination')
+                    # pylint: disable=possibly-used-before-assignment
                     destination = Poppler.LinkDestination(destination.nodeValue())
                 elif toc_elem_attrs.contains('DestinationName'):
                     destination = toc_elem_attrs.namedItem('DestinationName')
@@ -264,27 +266,28 @@ class OutlineTreeModel(QAbstractItemModel):
 
     def determine_from_pdf_qt6(self, pdf_document):
         self.clear()
-        bookmarkModel = QPdfBookmarkModel(self)
-        bookmarkModel.setDocument(pdf_document)
+        # pylint: disable=possibly-used-before-assignment
+        bookmark_model = QPdfBookmarkModel(self)
+        bookmark_model.setDocument(pdf_document)
 
         def walk_bookmarks(bookmark_parent_index, outline_parent):
 
-            for rownum in range(bookmarkModel.rowCount()):
+            for rownum in range(bookmark_model.rowCount()):
                 new_node = OutlineTreeNode(parent=outline_parent)
 
-                index = bookmarkModel.index(rownum, 0, bookmark_parent_index)
+                index = bookmark_model.index(rownum, 0, bookmark_parent_index)
                 if not index.isValid():
                     continue
 
-                new_node.set_data(bookmarkModel.data(index, QPdfBookmarkModel.Role.Title), Qt.DisplayRole)
-                new_node.set_data(bookmarkModel.data(index, QPdfBookmarkModel.Role.Page), POSITION_ROLE)
-                new_node.set_data(bookmarkModel.data(index, QPdfBookmarkModel.Role.Location), PAGE_FRACTION)
+                new_node.set_data(bookmark_model.data(index, QPdfBookmarkModel.Role.Title), Qt.DisplayRole)
+                new_node.set_data(bookmark_model.data(index, QPdfBookmarkModel.Role.Page), POSITION_ROLE)
+                new_node.set_data(bookmark_model.data(index, QPdfBookmarkModel.Role.Location), PAGE_FRACTION)
 
                 self.beginInsertRows(outline_parent.index(), rownum, rownum)
                 outline_parent.append_child(new_node)
                 self.endInsertRows()
 
-                if bookmarkModel.hasChildren(index):
+                if bookmark_model.hasChildren(index):
                     walk_bookmarks(index, new_node)
 
         walk_bookmarks(QModelIndex(), self._root)

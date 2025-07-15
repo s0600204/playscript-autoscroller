@@ -6,6 +6,9 @@ extension-pkg-allow-list=
     PyQt5.QtGui,
     PyQt5.QtSvg,
     PyQt5.QtWidgets,
+    PyQt6.QtPdf,
+    PyQt6.QtPdfWidgets,
+    PyQt6.QtSvgWidgets,
     rtmidi,
 
 ignored-modules=
@@ -20,3 +23,4 @@ disable=
     missing-class-docstring,
     missing-module-docstring,
     missing-function-docstring,
+    wrong-import-position,
